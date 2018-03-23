@@ -5,20 +5,6 @@ var bootStrap = document.createElement('script');
 bootStrap.src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js';
 document.body.appendChild(bootStrap);
 
-// var slickScript = document.createElement('script');
-// slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
-// document.body.appendChild(slickScript);
-
-// var slickScriptCss = document.createElement('link');
-// slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
-// slickScriptCss.rel = 'stylesheet';
-// document.body.appendChild(slickScriptCss);
-
-// var slickScriptTheme = document.createElement('link');
-// slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
-// slickScriptTheme.rel = 'stylesheet';
-// document.body.appendChild(slickScriptTheme);
-
 $(document).ready(function () {
     var courseNumber = document.location.pathname.split('/')[2];
     var courseClass = $('#breadcrumbs ul li:nth-child(2)').text().split('.');
