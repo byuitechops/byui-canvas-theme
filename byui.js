@@ -24,11 +24,11 @@ $(document).ready(function () {
     /* Generate course home pages */
     if ($('#navigation .steps').length !== 0) {
         // TODO create tutorial link!
-
+        var iLearnTutorial = $('#tutorial');
         
         var start = $('#start');
         var instructor = $('#instructor');
-        var syllabus = $('#syllabus'); 
+        // var syllabus = $('#syllabus'); 
         var resources = $('#resources');
         $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', function (modules) {
             var resourcesId;
@@ -56,7 +56,8 @@ $(document).ready(function () {
             });
 
             start.prop('href', '/courses/' + courseNumber + '/modules#module_' + modules[0].id);
-            syllabus.prop('href', '/courses/' + courseNumber + '/assignments/syllabus');
+            // syllabus.prop('href', '/courses/' + courseNumber + '/assignments/syllabus');
+            iLearnTutorial.prop('href', 'TODO enter href here');
             resources.prop('href', '/courses/' + courseNumber + '/modules#module_' + resourcesId);
 
             /* Generate Module links */
