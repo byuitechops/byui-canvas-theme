@@ -23,12 +23,10 @@ $(document).ready(function () {
 
     /* Generate course home pages */
     if ($('#navigation .steps').length !== 0) {
-        // TODO create tutorial link!
         var iLearnTutorial = $('#tutorial');
-        
         var start = $('#start');
         var instructor = $('#instructor');
-        // var syllabus = $('#syllabus'); 
+        var syllabus = $('#syllabus'); 
         var resources = $('#resources');
         $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', function (modules) {
             var resourcesId;
@@ -49,15 +47,15 @@ $(document).ready(function () {
                     return false;
                 }
                 /* if the module is a week/lesson & generate is true */
-                if (/(Week|Lesson)\s*(\d[0-4]+|0?\d\D)/gi.test(module.name) && generate) {
+                if (/(Week|Lesson)\s*(1[0-4]|0?\d(\D|$))/gi.test(module.name) && generate) {
                     generateModuleLink(module.id, lessonCounter);
                     lessonCounter++;
                 }
             });
 
             start.prop('href', '/courses/' + courseNumber + '/modules#module_' + modules[0].id);
-            // syllabus.prop('href', '/courses/' + courseNumber + '/assignments/syllabus');
-            iLearnTutorial.prop('href', 'TODO enter href here');
+            syllabus.prop('href', '/courses/' + courseNumber + '/assignments/syllabus');
+            iLearnTutorial.prop('href', 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw');
             resources.prop('href', '/courses/' + courseNumber + '/modules#module_' + resourcesId);
 
             /* Generate Module links */

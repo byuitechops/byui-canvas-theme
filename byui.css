@@ -381,6 +381,7 @@ span.caption {
   display: flex;
   flex-grow: 1;
   flex-wrap: nowrap;
+  width: 100%;
 }
 
 .byui .lessons a {
@@ -412,6 +413,10 @@ span.caption {
   text-transform: uppercase;
   padding-top: 5px;
   color: var(--color24); /* md2 */
+}
+
+.byui #navigation .ui-icon-extlink {
+  display: none;
 }
 
 /******************************************
