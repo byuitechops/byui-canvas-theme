@@ -32,34 +32,41 @@
 /*These are the default theme colors, to be overridden by individual courses */
 
 .byui {
-  --color24: #525252; /* dark */
-  --color35: #0076C6; /* md1 */
-  --button-color: #525252; /* md2 */
+  --color24: #525252;
+  /* dark */
+  --color35: #0076C6;
+  /* md1 */
+  --button-color: #525252;
+  /* md2 */
 }
 
 .byui h2,
 .byui h4 {
-  color: var(--color24); /* md1 */
+  color: var(--color24);
+  /* md1 */
 }
 
 .byui h3,
 .byui h5 {
-  color: var(--color35); /* md2 */
+  color: var(--color35);
+  /* md2 */
 }
 
 .byui .Button--primary {
-  background: var(--button-color); /* md1 */
+  background: var(--button-color);
+  /* md1 */
   border: none;
 }
 
 .byui .ui-accordion .ui-accordion-header.ui-state-default.ui-state-active,
 .byui .ui-accordion .ui-accordion-header.ui-state-default {
-  background: var(--color35); /* md1 */
+  background: var(--color35);
+  /* md1 */
   color: #fff;
 }
 
 .byui .pad-box-mini {
-  color: var(--color24) /* dark */
+  color: var(--color24)/* dark */
 }
 
 .byui .caption {
@@ -71,7 +78,8 @@
   font-style: normal;
   font-size: .9rem;
   border-radius: 0 0 4px 4px;
-  color: var(--color24); /* dark */
+  color: var(--color24);
+  /* dark */
 }
 
 .byui #header img {
@@ -91,7 +99,8 @@
   font-weight: 400;
   text-transform: uppercase;
   color: #555;
-  border: var(--color24) solid; /* md1 */
+  border: var(--color24) solid;
+  /* md1 */
   border-width: 3px 0;
   position: relative;
   padding: 4px 20px 3px 100px;
@@ -109,8 +118,10 @@
   background-size: cover;
   border-radius: 50%;
   border: solid 3px;
-  background-color: var(--color24); /* md1 */
-  border-color: var(--color24); /* md1 */
+  background-color: var(--color24);
+  /* md1 */
+  border-color: var(--color24);
+  /* md1 */
 }
 
 .byui h2.activity::after {
@@ -348,7 +359,8 @@ span.caption {
 .byui .welcome,
 .byui .title,
 .byui .copyright {
-  border: solid var(--color24); /* dark */
+  border: solid var(--color24);
+  /* dark */
   border-width: 2px 0 0 0;
 }
 
@@ -388,7 +400,8 @@ span.caption {
   padding: 5px 5px 3px;
   width: 30px;
   flex-grow: 1;
-  background: var(--button-color); /* md1 */
+  background: var(--button-color);
+  /* md1 */
   color: #fff;
   font-size: 1.8em;
   text-decoration: none !important;
@@ -412,7 +425,8 @@ span.caption {
   font-size: .7em;
   text-transform: uppercase;
   padding-top: 5px;
-  color: var(--color24); /* md2 */
+  color: var(--color24);
+  /* md2 */
 }
 
 .byui #navigation .ui-icon-extlink {
@@ -430,7 +444,8 @@ span.caption {
   }
   30%,
   100% {
-    box-shadow: var(--color24) 0 0 15px; /* md2 */
+    box-shadow: var(--color24) 0 0 15px;
+    /* md2 */
   }
 }
 
@@ -445,7 +460,8 @@ span.caption {
 
 .byui .slick-prev:before,
 .byui .slick-next:before {
-  color: var(--color35); /* md1 */
+  color: var(--color35);
+  /* md1 */
 }
 
 .byui .slick-slider {
@@ -454,4 +470,14 @@ span.caption {
 
 .byui .slick-slide img {
   width: 100%;
+}
+
+/*****************************
+ * testing
+ ****************************/
+
+.discussion-title,
+.pages.show .page-title,
+.quiz-header>h1 {
+  color: red;
 }
