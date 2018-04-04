@@ -473,11 +473,23 @@ span.caption {
 }
 
 /*****************************
- * testing
+ * Can we change item titles?
  ****************************/
-
+/* 
 .discussion-title,
 .pages.show .page-title,
 .quiz-header>h1 {
   color: red;
-}
+} */
+
+/************************
+ * course nav
+ ************************/
+ @media screen and (min-width: 790px) {
+
+   #left-side {
+     position: fixed;
+     top: 63px;
+     left: 84px;
+    }
+  }
