@@ -472,9 +472,12 @@ span.caption {
   width: 100%;
 }
 
-/*****************************
- * Can we change item titles?
- ****************************/
+/***************************************************************
+ * The following selectors will alter heading for the following:
+ * discussion boards
+ * pages
+ * quizzes
+ ****************************************************************/
 /* 
 .discussion-title,
 .pages.show .page-title,
@@ -482,9 +485,9 @@ span.caption {
   color: red;
 } */
 
-/************************
- * course nav
- ************************/
+/*****************************
+ * course nav - experimental
+ *****************************/
  @media screen and (min-width: 790px) {
 
    #left-side {

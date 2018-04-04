@@ -93,6 +93,13 @@ $(document).ready(function () {
         paragraph.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
     });
 
+    /* Move course banner - experimental  */
+    $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
+
+    // /* hide middle breadcrumb - experimental. i don't like it */
+    // if ($('#breadcrumbs ul li').length === 4) {
+    //     $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
+    // }
 });
 
 $(window).on('load', function () {
