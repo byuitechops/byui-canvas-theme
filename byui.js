@@ -47,7 +47,7 @@ $(document).ready(function () {
                     return false;
                 }
                 /* if the module is a week/lesson & generate is true */
-                if (/(Week|Lesson)\s*(1[0-4]|0?\d(\D|$))/gi.test(module.name) && generate) {
+                if (/(Weeks?|Lesson)\s*(1[0-4]|0?\d(\D|$))/gi.test(module.name) && generate) {
                     generateModuleLink(module.id, lessonCounter);
                     lessonCounter++;
                 }
@@ -87,6 +87,12 @@ $(document).ready(function () {
         $(hashId).parent().addClass('focus');
         $(hashId).parent().addClass(courseClass);
     }
+
+    /* Populate copyright class */
+    document.querySelectorAll('p.copyright').forEach(paragraph => {
+        paragraph.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
+    });
+
 });
 
 $(window).on('load', function () {
