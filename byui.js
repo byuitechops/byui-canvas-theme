@@ -53,10 +53,10 @@ $(document).ready(function () {
                 }
             });
 
-            start.prop('href', '/courses/' + courseNumber + '/modules#module_' + modules[0].id);
-            syllabus.prop('href', '/courses/' + courseNumber + '/assignments/syllabus');
+            start.prop('href', `/courses/${courseNumber}/modules#module_${modules[0].id}`);
+            syllabus.prop('href', `/courses/${courseNumber}/assignments/syllabus`);
             iLearnTutorial.prop('href', 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw');
-            resources.prop('href', '/courses/' + courseNumber + '/modules#module_' + resourcesId);
+            resources.prop('href', `/courses/${courseNumber}/modules#module_${resourcesId}`);
 
             /* Generate Module links */
             function generateModuleLink(id, index) {
@@ -72,11 +72,11 @@ $(document).ready(function () {
             }
         });
         //make the api call to get enrollments
-        $.get('https://byui.instructure.com/api/v1/courses/' + courseNumber + '/enrollments', function (people) {
+        $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments`, function (people) {
             people.forEach(function (person) {
                 //if we have a teacher fix the button
                 if (person.type === 'TeacherEnrollment') {
-                    instructor.prop('href', '/courses/' + courseNumber + '/users/' + person.user_id);
+                    instructor.prop('href', `/courses/${courseNumber}/users/${person.user_id}`);
                 }
             });
         });
@@ -117,8 +117,8 @@ $(window).on('load', function () {
 var videos = document.getElementsByClassName('byui-video');
 for (var i = 0; i < videos.length; i++) {
     if (videos[i].dataset.source == 'youtube') {
-        videos[i].innerHTML = '<iframe width="' + videos[i].dataset.width + 'px" height="' + videos[i].dataset.height + 'px" src="https://www.youtube.com/embed/' + videos[i].dataset.vidid + '" frameborder="0" allowfullscreen></iframe>';
+        videos[i].innerHTML = `<iframe width="${videos[i].dataset.width}px" height="${videos[i].dataset.height}px" src="https://www.youtube.com/embed/${videos[i].dataset.vidid}" frameborder="0" allowfullscreen></iframe>`;
     } else if (videos[i].dataset.source == 'kaltura') {
-        videos[i].innerHTML = '<iframe width="' + videos[i].dataset.width + 'px" height="' + videos[i].dataset.height + 'px"  src="https://cdnapisec.kaltura.com/p/1157612/sp/115761200/embedIframeJs/uiconf_id/29018071/partner_id/1157612?iframeembed=true&amp;playerId=kaltura_player_1485805514&amp;entry_id=' + videos[i].dataset.vidid + '&amp;flashvars[streamerType]=auto" frameborder="0" allowfullscreen></iframe>';
+        videos[i].innerHTML = `<iframe width="${videos[i].dataset.width}px" height="${videos[i].dataset.height}px" src="https://cdnapisec.kaltura.com/p/1157612/sp/115761200/embedIframeJs/uiconf_id/29018071/partner_id/1157612?iframeembed=true&amp;playerId=kaltura_player_1485805514&amp;entry_id=${videos[i].dataset.vidid}&amp;flashvars[streamerType]=auto" frameborder="0" allowfullscreen></iframe>`;
     }
 }
