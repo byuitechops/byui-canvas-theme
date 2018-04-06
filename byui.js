@@ -66,8 +66,9 @@ $(document).ready(function () {
                 } else {
                     selector = '#navigation .lessons div:last-child';
                 }
-
-                $(selector).append('<a href=\'/courses/' + courseNumber + '/modules#module_' + id + '\'>' + (index + 1) + '</a>');
+                var modNum = index + 1;
+                if (index + 1 < 10) modNum = `0${index + 1}`;
+                $(selector).append(`<a href='/courses/${courseNumber}/modules#module_${id}'>${modNum}</a>`);
             }
         });
         //make the api call to get enrollments
