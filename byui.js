@@ -121,3 +121,12 @@ for (var i = 0; i < videos.length; i++) {
         videos[i].innerHTML = '<iframe width="' + videos[i].dataset.width + 'px" height="' + videos[i].dataset.height + 'px"  src="https://cdnapisec.kaltura.com/p/1157612/sp/115761200/embedIframeJs/uiconf_id/29018071/partner_id/1157612?iframeembed=true&amp;playerId=kaltura_player_1485805514&amp;entry_id=' + videos[i].dataset.vidid + '&amp;flashvars[streamerType]=auto" frameborder="0" allowfullscreen></iframe>';
     }
 }
+
+/* Insert copyright footer */
+var div = document.createElement('div');
+div.className = 'copyright-footer';
+var p = document.createElement('p');
+p.innerHTML = 'Copyright BYU-Idaho';
+div.appendChild(p);
+var parent = document.getElementById('content');
+parent.appendChild(div);
