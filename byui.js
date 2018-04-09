@@ -135,3 +135,10 @@ parent.appendChild(div);
 var parent = document.getElementsByClassName('entry-content')[0];
 var banner = document.getElementsByClassName('activity')[0];
 parent.insertBefore(banner, parent.firstChild);
+
+/* Remove breadcrumbs */
+
+var breadcrumbs = document.getElementById('breadcrumbs').firstChild;
+while (breadcrumbs.childNodes.length > 2) {
+    breadcrumbs.removeChild(breadcrumbs.lastChild);
+}
