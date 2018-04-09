@@ -496,3 +496,8 @@ span.caption {
      left: 84px;
     }
   }
+
+  .page-title {
+      color: #000000;
+      font-weight: 400;
+  }
