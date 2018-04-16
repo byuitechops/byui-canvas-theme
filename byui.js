@@ -111,8 +111,8 @@ $(document).ready(function () {
     // $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
 
     // // another way to do it // TODO will this work?
-    // var bannerParent = document.querySelectorAll('entry-content')[0];
-    // var banner = document.querySelectorAll('activity')[0];
+    // var bannerParent = document.querySelectorAll('.entry-content')[0];
+    // var banner = document.querySelectorAll('.activity')[0];
     // bannerParent.insertBefore(banner, bannerParent.firstChild);
 
 
@@ -134,14 +134,14 @@ $(document).ready(function () {
 
 
 // TODO shouldn't this be removed?
-$(window).on('load', function () {
-    /* Initialize carousels*/
-    if ($('.carousel').length !== 0) {
-        $('.carousel').slick({
-            dots: true
-        });
-    }
-});
+// $(window).on('load', function () {
+//     /* Initialize carousels*/
+//     if ($('.carousel').length !== 0) {
+//         $('.carousel').click({
+//             dots: true
+//         });
+//     }
+// });
 
 /* Keep the nav even on scroll down */
 document.addEventListener('scroll', () => {
