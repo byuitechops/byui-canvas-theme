@@ -484,20 +484,3 @@ span.caption {
 .quiz-header>h1 {
   color: red;
 } */
-
-/*****************************
- * course nav - experimental
- *****************************/
- @media screen and (min-width: 790px) {
-
-   #left-side {
-     position: fixed;
-     top: 63px;
-     left: 84px;
-    }
-  }
-
-  .page-title {
-      color: #000000;
-      font-weight: 400;
-  }

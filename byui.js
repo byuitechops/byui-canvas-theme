@@ -30,7 +30,7 @@ $(document).ready(function () {
         var iLearnTutorial = $('#tutorial');
         var start = $('#start');
         var instructor = $('#instructor');
-        var syllabus = $('#syllabus'); 
+        var syllabus = $('#syllabus');
         var resources = $('#resources');
         $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', function (modules) {
             var resourcesId;
@@ -93,20 +93,47 @@ $(document).ready(function () {
         $(hashId).parent().addClass(courseClass);
     }
 
-    /* Populate copyright class */
-    document.querySelectorAll('p.copyright').forEach(paragraph => {
+    /* Populate existing copyright class */
+    var paragraph = document.querySelector('p.copyright');
+    if (paragraph === null) {
+        /* Insert copyright footer */
+        var p = document.createElement('p');
+        p.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
+        p.classList.add('copyright');
+        var page = document.getElementById('content'); // TODO is parent any good?
+        page.appendChild(p);
+    } else {
         paragraph.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
-    });
+    }
+
 
     /* Move course banner - experimental  */
-    $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
+    // $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
 
-    // /* hide middle breadcrumb - experimental. i don't like it */
-    // if ($('#breadcrumbs ul li').length === 4) {
-    //     $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
-    // }
+    // // another way to do it // TODO will this work?
+    // var bannerParent = document.querySelectorAll('entry-content')[0];
+    // var banner = document.querySelectorAll('activity')[0];
+    // bannerParent.insertBefore(banner, bannerParent.firstChild);
+
+
+
+    /* hide middle breadcrumb - experimental. problematic */
+    /* if ($('#breadcrumbs ul li').length === 4) {
+        $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
+    } */
+
+    // Another way to do it // TODO I think I like this way more. Does it work?
+    var breadcrumbs = document.getElementById('breadcrumbs').firstChild;
+    while (breadcrumbs.childNodes.length > 2) {
+        breadcrumbs.removeChild(breadcrumbs.lastChild);
+    }
 });
 
+
+// TODO create event listener for nav minimizing which moves course nav to left
+
+
+// TODO shouldn't this be removed?
 $(window).on('load', function () {
     /* Initialize carousels*/
     if ($('.carousel').length !== 0) {
@@ -116,34 +143,26 @@ $(window).on('load', function () {
     }
 });
 
+/* Keep the nav even on scroll down */
+document.addEventListener('scroll', () => {
+    var height;
+    if (window.scrollY < 55) {
+        height = `${0}px`;
+    } else {
+        height = `${window.scrollY - 55}px`;
+    }
+
+    document.getElementById('left-side').style.top = height;
+});
+
 
 /* Insert custom video tag generation scripts */
-var videos = document.getElementsByClassName('byui-video');
+var videos = document.querySelectorAll('byui-video');
 for (var i = 0; i < videos.length; i++) {
     if (videos[i].dataset.source == 'youtube') {
         videos[i].innerHTML = `<iframe width="${videos[i].dataset.width}px" height="${videos[i].dataset.height}px" src="https://www.youtube.com/embed/${videos[i].dataset.vidid}" frameborder="0" allowfullscreen></iframe>`;
     } else if (videos[i].dataset.source == 'kaltura') {
         videos[i].innerHTML = `<iframe width="${videos[i].dataset.width}px" height="${videos[i].dataset.height}px" src="https://cdnapisec.kaltura.com/p/1157612/sp/115761200/embedIframeJs/uiconf_id/29018071/partner_id/1157612?iframeembed=true&amp;playerId=kaltura_player_1485805514&amp;entry_id=${videos[i].dataset.vidid}&amp;flashvars[streamerType]=auto" frameborder="0" allowfullscreen></iframe>`;
     }
-}
 
-/* Insert copyright footer */
-var div = document.createElement('div');
-div.className = 'copyright-footer';
-var p = document.createElement('p');
-p.innerHTML = 'Copyright BYU-Idaho';
-div.appendChild(p);
-var parent = document.getElementById('content');
-parent.appendChild(div);
-
-/* Insert course banner above title */
-var parent = document.getElementsByClassName('entry-content')[0];
-var banner = document.getElementsByClassName('activity')[0];
-parent.insertBefore(banner, parent.firstChild);
-
-/* Remove breadcrumbs */
-
-var breadcrumbs = document.getElementById('breadcrumbs').firstChild;
-while (breadcrumbs.childNodes.length > 2) {
-    breadcrumbs.removeChild(breadcrumbs.lastChild);
 }
