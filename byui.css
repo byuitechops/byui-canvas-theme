@@ -478,9 +478,10 @@ span.caption {
  * pages
  * quizzes
  ****************************************************************/
-/* 
+
 .discussion-title,
 .pages.show .page-title,
 .quiz-header>h1 {
-  color: red;
-} */
+  color: #000000;
+  font-weight: 400;
+}

@@ -130,9 +130,6 @@ $(document).ready(function () {
 });
 
 
-// TODO create event listener for nav minimizing which moves course nav to left
-
-
 // TODO shouldn't this be removed?
 // $(window).on('load', function () {
 //     /* Initialize carousels*/
