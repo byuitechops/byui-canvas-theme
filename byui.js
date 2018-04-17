@@ -135,7 +135,7 @@ $(document).ready(function () {
 // });
 
 /* Keep the nav even on scroll down */
-var filesPage = /(\.com|\d+)\/files$/i.test(window.location.href);
+var filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href);
 document.addEventListener('scroll', () => {
     var height;
     if (filesPage) {
