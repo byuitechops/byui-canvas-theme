@@ -118,15 +118,9 @@ $(document).ready(function () {
 
 
     /* hide middle breadcrumb - experimental. problematic */
-    if ($('#breadcrumbs ul li').length === 4) {
+    if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\//i.test(window.location.href)) {
         $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
     }
-
-    // Another way to do it // TODO I think I like this way more. Does it work?
-    // var breadcrumbs = document.getElementById('breadcrumbs').firstChild;
-    // while (breadcrumbs.childNodes.length > 2) {
-    //     breadcrumbs.removeChild(breadcrumbs.lastChild);
-    // }
 });
 
 
@@ -141,7 +135,7 @@ $(document).ready(function () {
 // });
 
 /* Keep the nav even on scroll down */
-var filesPage = !/(\.com|\d+)\/files$/i.test(window.location.href);
+var filesPage = /(\.com|\d+)\/files$/i.test(window.location.href);
 document.addEventListener('scroll', () => {
     var height;
     if (filesPage) {
