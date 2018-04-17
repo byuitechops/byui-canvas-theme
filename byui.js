@@ -100,7 +100,7 @@ $(document).ready(function () {
         var p = document.createElement('p');
         p.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
         p.classList.add('copyright');
-        var page = document.getElementById('content'); // TODO is parent any good?
+        var page = document.getElementById('content'); // TODO is page any good?
         page.appendChild(p);
     } else {
         paragraph.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
@@ -110,7 +110,7 @@ $(document).ready(function () {
     /* Move course banner - experimental  */
     // $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
 
-    // // another way to do it // TODO will this work?
+    // another way to do it TODO will this work?
     // var bannerParent = document.querySelectorAll('.entry-content')[0];
     // var banner = document.querySelectorAll('.activity')[0];
     // bannerParent.insertBefore(banner, bannerParent.firstChild);
@@ -118,15 +118,15 @@ $(document).ready(function () {
 
 
     /* hide middle breadcrumb - experimental. problematic */
-    /* if ($('#breadcrumbs ul li').length === 4) {
+    if ($('#breadcrumbs ul li').length === 4) {
         $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
-    } */
+    }
 
     // Another way to do it // TODO I think I like this way more. Does it work?
-    var breadcrumbs = document.getElementById('breadcrumbs').firstChild;
-    while (breadcrumbs.childNodes.length > 2) {
-        breadcrumbs.removeChild(breadcrumbs.lastChild);
-    }
+    // var breadcrumbs = document.getElementById('breadcrumbs').firstChild;
+    // while (breadcrumbs.childNodes.length > 2) {
+    //     breadcrumbs.removeChild(breadcrumbs.lastChild);
+    // }
 });
 
 
@@ -141,12 +141,15 @@ $(document).ready(function () {
 // });
 
 /* Keep the nav even on scroll down */
+var filesPage = !/(\.com|\d+)\/files$/i.test(window.location.href);
 document.addEventListener('scroll', () => {
     var height;
-    if (window.scrollY < 55) {
+    if (filesPage) {
+        height = `${window.scrollY}px`;
+    } else if (window.scrollY < 63) {
         height = `${0}px`;
     } else {
-        height = `${window.scrollY - 55}px`;
+        height = `${window.scrollY - 63}px`;
     }
 
     document.getElementById('left-side').style.top = height;
