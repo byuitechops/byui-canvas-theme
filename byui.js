@@ -93,18 +93,12 @@ $(document).ready(function () {
         $(hashId).parent().addClass(courseClass);
     }
 
-    /* Populate existing copyright class */
-    var paragraph = document.querySelector('p.copyright');
-    if (paragraph === null) {
-        /* Insert copyright footer */
-        var p = document.createElement('p');
-        p.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
-        p.classList.add('copyright');
-        var page = document.getElementById('content'); // TODO is page any good?
-        page.appendChild(p);
-    } else {
-        paragraph.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
-    }
+    /* Insert copyright footer */
+    var p = document.createElement('p');
+    p.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
+    p.classList.add('copyright');
+    var page = document.getElementById('content'); // TODO This places the copyright at the bottom of EVERY page in canvas
+    page.appendChild(p);
 
 
     /* Move course banner - experimental  */
@@ -117,24 +111,22 @@ $(document).ready(function () {
 
 
 
-    /* hide middle breadcrumb - experimental. problematic */
-    if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\//i.test(window.location.href)) {
-        $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
+    /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
+
+    // TODO check to see we're not inside of people > group
+    if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href) ) {
+        $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
+        $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
+
+
+        // $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
+        // WARNING breaks breadcrumb on groups. Doesn't break files b\c it only checks onLoad
     }
 });
 
 
-// TODO shouldn't this be removed?
-// $(window).on('load', function () {
-//     /* Initialize carousels*/
-//     if ($('.carousel').length !== 0) {
-//         $('.carousel').click({
-//             dots: true
-//         });
-//     }
-// });
-
 /* Keep the nav even on scroll down */
+/* scroll differently if you're managing a files page */
 var filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href);
 document.addEventListener('scroll', () => {
     var height;
