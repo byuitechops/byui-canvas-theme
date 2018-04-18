@@ -24,7 +24,6 @@ $(document).ready(function () {
     /* Initialize tabs */
     $('#styleguide-tabs-demo-minimal').tabs();
 
-
     /* Generate course home pages */
     if ($('#navigation .steps').length !== 0) {
         var iLearnTutorial = $('#tutorial');
@@ -101,26 +100,10 @@ $(document).ready(function () {
     page.appendChild(p);
 
 
-    /* Move course banner - experimental  */
-    // $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
-
-    // another way to do it TODO will this work?
-    // var bannerParent = document.querySelectorAll('.entry-content')[0];
-    // var banner = document.querySelectorAll('.activity')[0];
-    // bannerParent.insertBefore(banner, bannerParent.firstChild);
-
-
-
     /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
-
-    // TODO check to see we're not inside of people > group
     if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href) ) {
         $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
         $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
-
-
-        // $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
-        // WARNING breaks breadcrumb on groups. Doesn't break files b\c it only checks onLoad
     }
 });
 
