@@ -97,26 +97,15 @@ $(document).ready(function () {
         $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
     }
 
-
-    /* Move course banner - experimental  */
-    // $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
-
-    // another way to do it
-    // var bannerParent = document.querySelectorAll('.entry-content')[0];
-    // var banner = document.querySelectorAll('.activity')[0];
-    // bannerParent.insertBefore(banner, bannerParent.firstChild);
-
-
-
-    // TODO accessibility is ugly...
-    if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) { 
-        $('#wrapper').prepend($(`<img id='overallCourseBanner' alt='' src='https://byui.instructure.com/courses/${courseNumber}/file_contents/course%20files/template/courseBanner.jpg'>`));
+    /* If we know the course number And we're inside a course */
+    if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) {
+        $.getJSON(`https://byui.instructure.com/api/v1/courses/${courseNumber}`, (response) => {
+            if (response.name && response.course_code) {
+                // $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}: ${response.course_code}</div>`));
+                $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}</div>`));
+            }
+        });
     }
-
-    // TODO responsiveness is ugly
-    // $('#wrapper').prepend($('<div id=\'overallCourseBanner\' style=\'background-image:url(https://byui.instructure.com/courses/10590/file_contents/course%20files/template/courseBanner.jpg);\'></div>'));
-
-
 });
 
 

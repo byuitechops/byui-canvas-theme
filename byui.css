@@ -487,13 +487,11 @@ span.caption {
 }
 
 div#overallCourseBanner {
-  height:100px;
+  height:50px;
   width: 100%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position-x: left;
-}
-
-img#overallCourseBanner {
-  max-height: 100px;
+  color: white;
+  background-color: var(--button-color, #0076C6);
+  line-height: 50px;
+  padding-left: 25px;
+  box-sizing: border-box;
 }
