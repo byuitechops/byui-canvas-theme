@@ -90,13 +90,6 @@ $(document).ready(function () {
     var page = document.getElementById('content');
     page.appendChild(p);
 
-<<<<<<< HEAD
-
-    /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
-    if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href) ) {
-        $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
-        $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
-=======
     /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
     if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href)) {
         $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
@@ -111,7 +104,6 @@ $(document).ready(function () {
                 $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}</div>`));
             }
         });
->>>>>>> dev
     }
 });
 
