@@ -471,3 +471,27 @@ span.caption {
 .byui .slick-slide img {
   width: 100%;
 }
+
+/***************************************************************
+ * The following selectors will alter heading for the following:
+ * discussion boards
+ * pages
+ * quizzes
+ ****************************************************************/
+
+/* .discussion-title,
+.pages.show .page-title,
+.quiz-header>h1 {
+  color: #000000;
+  font-weight: 400;
+} */
+
+div#overallCourseBanner {
+  height:50px;
+  width: 100%;
+  color: white;
+  background-color: var(--button-color, #0076C6);
+  line-height: 50px;
+  padding-left: 25px;
+  box-sizing: border-box;
+}
