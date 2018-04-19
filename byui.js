@@ -87,14 +87,31 @@ $(document).ready(function () {
     var p = document.createElement('p');
     p.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
     p.classList.add('copyright');
-    var page = document.getElementById('content'); // TODO This places the copyright at the bottom of EVERY page in canvas
+    var page = document.getElementById('content');
     page.appendChild(p);
 
+<<<<<<< HEAD
 
     /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
     if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href) ) {
         $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
         $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
+=======
+    /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
+    if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href)) {
+        $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
+        $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
+    }
+
+    /* If we know the course number And we're inside a course */
+    if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) {
+        $.getJSON(`https://byui.instructure.com/api/v1/courses/${courseNumber}`, (response) => {
+            if (response.name && response.course_code) {
+                // $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}: ${response.course_code}</div>`));
+                $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}</div>`));
+            }
+        });
+>>>>>>> dev
     }
 });
 
