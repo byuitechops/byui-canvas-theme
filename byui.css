@@ -485,3 +485,15 @@ span.caption {
   color: #000000;
   font-weight: 400;
 }
+
+div#overallCourseBanner {
+  height:100px;
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-x: left;
+}
+
+img#overallCourseBanner {
+  max-height: 100px;
+}

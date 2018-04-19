@@ -1,14 +1,5 @@
 /*eslint-env node, browser, jquery*/
 
-/* Inject necessary scripts */
-var jquery = document.createElement('script');
-jquery.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js';
-document.body.appendChild(jquery);
-
-var bootStrap = document.createElement('script');
-bootStrap.src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js';
-document.body.appendChild(bootStrap);
-
 $(document).ready(function () {
     var courseNumber = document.location.pathname.split('/')[2];
     var courseClass = $('#breadcrumbs ul li:nth-child(2)').text().split('.');
@@ -97,31 +88,35 @@ $(document).ready(function () {
     var p = document.createElement('p');
     p.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
     p.classList.add('copyright');
-    var page = document.getElementById('content'); // TODO This places the copyright at the bottom of EVERY page in canvas
+    var page = document.getElementById('content');
     page.appendChild(p);
+
+    /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
+    if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href)) {
+        $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
+        $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
+    }
 
 
     /* Move course banner - experimental  */
     // $('img[alt="courseBanner.jpg"]').prependTo('#content .show-content');
 
-    // another way to do it TODO will this work?
+    // another way to do it
     // var bannerParent = document.querySelectorAll('.entry-content')[0];
     // var banner = document.querySelectorAll('.activity')[0];
     // bannerParent.insertBefore(banner, bannerParent.firstChild);
 
 
 
-    /* Hide the 3rd breadcrumb IF there are 4 total, AND we're inside a course AND we're not in a group tab */
-
-    // TODO check to see we're not inside of people > group
-    if ($('#breadcrumbs ul li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href) ) {
-        $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
-        $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
-
-
-        // $('#breadcrumbs ul li:nth-child(3)').css('display', 'none');
-        // WARNING breaks breadcrumb on groups. Doesn't break files b\c it only checks onLoad
+    // TODO accessibility is ugly...
+    if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) { 
+        $('#wrapper').prepend($(`<img id='overallCourseBanner' alt='' src='https://byui.instructure.com/courses/${courseNumber}/file_contents/course%20files/template/courseBanner.jpg'>`));
     }
+
+    // TODO responsiveness is ugly
+    // $('#wrapper').prepend($('<div id=\'overallCourseBanner\' style=\'background-image:url(https://byui.instructure.com/courses/10590/file_contents/course%20files/template/courseBanner.jpg);\'></div>'));
+
+
 });
 
 
