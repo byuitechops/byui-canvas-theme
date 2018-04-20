@@ -1,13 +1,37 @@
+/* default styling for h1 */
+h1,
+.quiz-header h1,
+.pages.show h1.page-title {
+  color:var(--color1);
+  font-weight: 300;
+}
+
+/* styling of course banner */
+div#overallCourseBanner {
+  height:50px;
+  width: 100%;
+  color: white;
+  background-color: var(--banner-color, var(--button-color, #0076C6));
+  line-height: 50px;
+  padding-left: 25px;
+  box-sizing: border-box;
+}
+
+/* Course styling for BYU-Idaho Online */
+
 .acctg205 {
+    --color1: #666;
     --color24: #416d86;
     --color35: #7c7c7c;
     --button-color: #416d86;
+    --banner-color: var(--button-color);
 }
 
 .anth101 {
     --color24: #84624a;
     --color35: #6a6a6a;
     --button-color: #796659;
+    --banner-color: var(--button-color);
 }
 
 /*ART 230 CSS*/
