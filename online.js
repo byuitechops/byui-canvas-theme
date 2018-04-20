@@ -76,6 +76,17 @@ $(document).ready(function () {
         });
     }
 
+    /* If we know the course number And we're inside a course */
+    if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) {
+        // $('#wrapper').prepend($('<div id=\'overallCourseBanner\'></div>'));
+        $.getJSON(`https://byui.instructure.com/api/v1/courses/${courseNumber}`, (response) => {
+            if (response.name) {
+                $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}: ${response.course_code}</div>`));
+                // $('#overallCourseBanner').html(response.name);
+            }
+        });
+    }
+
     /* Highlight Modules on navigation */
     if (document.location.hash.includes('module_')) {
         var hashId = document.location.hash;
@@ -95,16 +106,6 @@ $(document).ready(function () {
         $('#breadcrumbs ul li:nth-child(3) span')[0].innerHTML = 'Modules';
         $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
     }
-
-    /* If we know the course number And we're inside a course */
-    if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) {
-        $.getJSON(`https://byui.instructure.com/api/v1/courses/${courseNumber}`, (response) => {
-            if (response.name && response.course_code) {
-                // $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}: ${response.course_code}</div>`));
-                $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}</div>`));
-            }
-        });
-    }
 });
 
 
@@ -112,13 +113,14 @@ $(document).ready(function () {
 /* scroll differently if you're managing a files page */
 var filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href);
 document.addEventListener('scroll', () => {
+    // height without banner is 63px. Had to add 50px for the banner
     var height;
     if (filesPage) {
         height = `${window.scrollY}px`;
-    } else if (window.scrollY < 63) {
+    } else if (window.scrollY < 113) {
         height = `${0}px`;
     } else {
-        height = `${window.scrollY - 63}px`;
+        height = `${window.scrollY - 113}px`;
     }
 
     document.getElementById('left-side').style.top = height;
