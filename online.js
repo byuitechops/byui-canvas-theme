@@ -20,9 +20,11 @@ $(document).ready(function () {
     /* Course Banner */
     /* If we know the course number And we're inside a course */
     if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) {
-        $.getJSON(`https://byui.instructure.com/api/v1/courses/${courseNumber}`, (response) => {
-            if (response.name) {
-                $('#wrapper').prepend($(`<div id='overallCourseBanner'>${response.name}</div>`));
+//        $.getJSON(`https://byui.instructure.com/api/v1/courses/${courseNumber}`, (response) => {
+        $.getJSON(`https://${window.location.hostname}/api/v1/courses/${courseNumber}`, (response) => {
+            if (response.name && response.course_code) {
+                var courseCode = response.course_code.toLowerCase().replace(/\s/g, '').split(':')[0];
+                $('#wrapper').prepend($(`<div id='overallCourseBanner' class='byui ${courseCode}'>${response.name}</div>`));
             }
         });
     }
