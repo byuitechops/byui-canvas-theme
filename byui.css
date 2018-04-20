@@ -32,12 +32,9 @@
 /*These are the default theme colors, to be overridden by individual courses */
 
 .byui {
-  --color-1: #666;
-
   --color24: #525252;
   --color35: #0076C6;
   --button-color: #525252;
-  --banner-color: #0076C6;
 }
 
 .byui h2,
@@ -459,23 +456,4 @@ span.caption {
 
 .byui .slick-slide img {
   width: 100%;
-}
-
-/* default styling for h1 */
-h1,
-.quiz-header h1,
-.pages.show h1.page-title {
-  color:var(--color-1, #666);
-  font-weight: 300;
-}
-
-/* styling of course banner */
-div#overallCourseBanner {
-  height:50px;
-  width: 100%;
-  color: white;
-  background-color: var(--banner-color, var(--button-color, #0076C6));
-  line-height: 50px;
-  padding-left: 25px;
-  box-sizing: border-box;
 }
