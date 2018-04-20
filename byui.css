@@ -32,41 +32,37 @@
 /*These are the default theme colors, to be overridden by individual courses */
 
 .byui {
+  --color-1: #666;
+
   --color24: #525252;
-  /* dark */
   --color35: #0076C6;
-  /* md1 */
   --button-color: #525252;
-  /* md2 */
+  --banner-color: #0076C6;
 }
 
 .byui h2,
 .byui h4 {
   color: var(--color24);
-  /* md1 */
 }
 
 .byui h3,
 .byui h5 {
   color: var(--color35);
-  /* md2 */
 }
 
 .byui .Button--primary {
   background: var(--button-color);
-  /* md1 */
   border: none;
 }
 
 .byui .ui-accordion .ui-accordion-header.ui-state-default.ui-state-active,
 .byui .ui-accordion .ui-accordion-header.ui-state-default {
   background: var(--color35);
-  /* md1 */
   color: #fff;
 }
 
 .byui .pad-box-mini {
-  color: var(--color24)/* dark */
+  color: var(--color24)
 }
 
 .byui .caption {
@@ -79,7 +75,6 @@
   font-size: .9rem;
   border-radius: 0 0 4px 4px;
   color: var(--color24);
-  /* dark */
 }
 
 .byui #header img {
@@ -100,7 +95,6 @@
   text-transform: uppercase;
   color: #555;
   border: var(--color24) solid;
-  /* md1 */
   border-width: 3px 0;
   position: relative;
   padding: 4px 20px 3px 100px;
@@ -119,9 +113,7 @@
   border-radius: 50%;
   border: solid 3px;
   background-color: var(--color24);
-  /* md1 */
   border-color: var(--color24);
-  /* md1 */
 }
 
 .byui h2.activity::after {
@@ -360,7 +352,6 @@ span.caption {
 .byui .title,
 .byui .copyright {
   border: solid var(--color24);
-  /* dark */
   border-width: 2px 0 0 0;
 }
 
@@ -401,7 +392,6 @@ span.caption {
   width: 30px;
   flex-grow: 1;
   background: var(--button-color);
-  /* md1 */
   color: #fff;
   font-size: 1.8em;
   text-decoration: none !important;
@@ -426,7 +416,6 @@ span.caption {
   text-transform: uppercase;
   padding-top: 5px;
   color: var(--color24);
-  /* md2 */
 }
 
 .byui #navigation .ui-icon-extlink {
@@ -470,4 +459,23 @@ span.caption {
 
 .byui .slick-slide img {
   width: 100%;
+}
+
+/* default styling for h1 */
+h1,
+.quiz-header h1,
+.pages.show h1.page-title {
+  color:var(--color-1, #666);
+  font-weight: 300;
+}
+
+/* styling of course banner */
+div#overallCourseBanner {
+  height:50px;
+  width: 100%;
+  color: white;
+  background-color: var(--banner-color, var(--button-color, #0076C6));
+  line-height: 50px;
+  padding-left: 25px;
+  box-sizing: border-box;
 }
