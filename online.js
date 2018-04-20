@@ -7,10 +7,10 @@ $(document).ready(function () {
         /* Generate Course Banner at the top of the page */
         /* If we know the course number And we're inside a course */
         if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) {
-            $.getJSON(`https://${window.location.hostname}/api/v1/courses/${courseNumber}`, (response) => {
+            $.getJSON('https://' + window.location.hostname + '/api/v1/courses/' + courseNumber, function (response) {
                 if (response.name && response.course_code) {
                     var courseCode = response.course_code.toLowerCase().replace(/\s/g, '').split(':')[0];
-                    $('#wrapper').prepend($(`<div id='overallCourseBanner' class='${courseCode}'>${response.name}</div>`));
+                    $('#wrapper').prepend($('<div id=\'overallCourseBanner\' class=\'' + courseCode + '\'>' + response.name + '</div>'));
                 }
             });
         }
@@ -18,11 +18,10 @@ $(document).ready(function () {
         console.error(bannerErr);
     }
 
-
     try {
         /* Insert copyright footer */
         var p = document.createElement('p');
-        p.innerHTML = `Copyright ${new Date().getFullYear()} Brigham Young University-Idaho`;
+        p.innerHTML = 'Copyright ' + new Date().getFullYear() + ' Brigham Young University-Idaho';
         p.classList.add('copyright');
         var page = document.getElementById('content');
         page.appendChild(p);
@@ -40,23 +39,21 @@ $(document).ready(function () {
     } catch (breadcrumbErr) {
         console.error(breadcrumbErr);
     }
-
-
 });
 
 try {
     /* Keep the course nav even on scroll down */
     /* scroll differently if you're managing a files page */
     var filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href);
-    document.addEventListener('scroll', () => {
+    document.addEventListener('scroll', function () {
         // height without banner is 63px. Had to add 50px for the banner
         var height;
         if (filesPage) {
-            height = `${window.scrollY}px`;
+            height = window.scrollY + 'px';
         } else if (window.scrollY < 113) {
-            height = `${0}px`;
+            height = 0 + 'px';
         } else {
-            height = `${window.scrollY - 113}px`;
+            height = window.scrollY - 113 + 'px';
         }
 
         document.getElementById('left-side').style.top = height;
