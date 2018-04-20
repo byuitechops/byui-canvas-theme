@@ -17,10 +17,9 @@ $(document).ready(function () {
         $('#breadcrumbs ul li:nth-child(3) a')[0].href = $('#breadcrumbs ul li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
     }
 
-    /* Course Banner */
+    /* Generate Course Banner at the top of the page */
     /* If we know the course number And we're inside a course */
     if (courseNumber && /\.com\/courses\/\d+/i.test(window.location.href)) {
-//        $.getJSON(`https://byui.instructure.com/api/v1/courses/${courseNumber}`, (response) => {
         $.getJSON(`https://${window.location.hostname}/api/v1/courses/${courseNumber}`, (response) => {
             if (response.name && response.course_code) {
                 var courseCode = response.course_code.toLowerCase().replace(/\s/g, '').split(':')[0];
@@ -30,7 +29,7 @@ $(document).ready(function () {
     }
 });
 
-/* Keep the nav even on scroll down */
+/* Keep the course nav even on scroll down */
 /* scroll differently if you're managing a files page */
 var filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href);
 document.addEventListener('scroll', () => {
