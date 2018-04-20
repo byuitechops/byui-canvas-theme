@@ -1,0 +1,402 @@
+/* default styling for h1 */
+h1,
+.quiz-header h1,
+.pages.show h1.page-title {
+  color:var(--color1);
+  font-weight: 300;
+}
+
+/* styling of course banner */
+div#overallCourseBanner {
+  height:50px;
+  width: 100%;
+  color: white;
+  background-color: var(--banner-color, var(--button-color, #0076C6));
+  line-height: 50px;
+  padding-left: 25px;
+  box-sizing: border-box;
+}
+
+/* Course styling for BYU-Idaho Online */
+
+.acctg205 {
+    --color1: #666;
+    --color24: #416d86;
+    --color35: #7c7c7c;
+    --button-color: #416d86;
+    --banner-color: var(--button-color);
+}
+
+.anth101 {
+    --color24: #84624a;
+    --color35: #6a6a6a;
+    --button-color: #796659;
+    --banner-color: var(--button-color);
+}
+
+/*ART 230 CSS*/
+
+.art230 {
+    font-family: sans-serif, Verdana, Helvetica, Arial;
+    font-weight: normal;
+    padding: 10px;
+    text-align: left;
+    line-height: 1.5em;
+    font-size: 16px;
+    background-color: white;
+    max-width: 75%;
+    --color24: #96887a;
+    --color35: #7c7c7c;
+    --button-color: #b0a8a1;
+}
+
+/*Heading Styles*/
+
+.art230 h2 {
+    color: #cb5417;
+    font-size: 1.25em;
+    padding-bottom: .5em;
+    margin-bottom: .5em;
+    border-bottom-color: #dedbd1;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    clear: both;
+    padding-top: 1.5em;
+}
+
+.art230 h3 {
+    margin-top: 1em;
+    margin-bottom: .5em;
+    font-size: 1.12em;
+    color: black;
+    letter-spacing: 1px;
+    clear: both;
+}
+
+.art230 h4 {
+    font-size: 1em;
+    margin-bottom: 0.5em;
+    margin-top: 1em;
+}
+
+.art230 h5 {
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 0.25em;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+/*Paragraph Styling*/
+
+.art230 p {
+    margin-bottom: 0.65em;
+    line-height: 1.5em;
+    font-size: 1.15em;
+}
+.art230 p.intro {
+    margin-bottom: 0.75em;
+    margin-top: 0em;
+    color: black;
+    font-style: normal;
+    line-height: 1.5em;
+    font-size: 1.5em;
+    margin-left: 0px;
+}
+
+.art230 p.caption {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-bottom-color: #cfcecc;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding-bottom: 20px;
+    padding-top: 0px;
+    line-height: 1.25em;
+    font-size: 0.65em;
+    text-transform: none;
+}
+
+.art230 p.time {
+    font-style: normal;
+    margin-top: .5em;
+    padding-bottom: .5em;
+    font-size: 1em;
+    color: #9aa44c;
+    border-bottom: #dedbd1;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    background-size: 1em;
+    background-repeat: no-repeat;
+    background-position: 1px 3px;
+    background-image: url(time.png);
+    padding-left: 1.5em;
+}
+
+.art230 p.assessment {
+    font-style: normal;
+    margin-top: -0.35em;
+    padding-bottom: .35em;
+    font-size: .8em;
+    color: #a2987b;
+    border-bottom: #dedbd1;
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    background-size: 1em;
+    background-repeat: no-repeat;
+    background-position: 1px 3px;
+}
+
+/*Link Styling*/
+
+.art230 a:link {
+    color: #cb5417;
+    text-decoration: none;
+    padding-left: 0px;
+    padding-right: 0px;
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+}
+
+/*List Styling*/
+
+.art230 ul {
+    margin-left: 1em;
+    margin-bottom: 1.25em;
+    margin-right: 1em;
+    margin-top: .5em;
+}
+
+.art230 li {
+    list-style-position: outside;
+    margin-top: 0px;
+    margin-left: .5em;
+    margin-bottom: .25em;
+    list-style-type: square;
+    line-height: 1.5em;
+    font-size: 0.9em;
+}
+
+.art230 li.Checklists {
+
+    list-style-position: outside;
+    margin-top: 2px;
+    margin-left: .5em;
+    margin-bottom: .5em;
+    list-style-type: square;
+    line-height: 1.5em;
+    font-size: 1em;
+}
+
+/*Other Styling*/
+
+.art230 blockquote {
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+    margin-left: 0px;
+    color: #cb5417;
+    line-height: 1.5em;
+    font-size: 2em;
+}
+
+.art230 img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #cfcecc;
+    float: left;
+    margin-right: 1em;
+    max-width: 100%;
+    clear: both;
+}
+
+.art230 .attrib {
+    margin-bottom: 0.75em;
+    margin-top: 0em;
+    color: black;
+    font-style: normal;
+    line-height: 1.5em;
+    margin-left: 0px;
+    font-size: 1em;
+    color: #877058;
+}
+
+.art230 .important {
+    margin-bottom: 1.em;
+    margin-top: 1.em;
+    margin-left: 0em;
+    color: #cb5417;
+    line-height: 1.em;
+    font-size: 1em;
+}
+
+/*End of Art Styling*/
+
+.auto125 {
+    --color24: #3d6a49;
+    --color35: #7c7c7c;
+    --button-color: #135625;
+}
+
+.auto231 {
+    --color24: #880f81;
+    --color35: #7c7c7c;
+    --button-color: #81437d;
+}
+
+.b380 {
+    --color24: #35393c;
+    --color35: #0a70b0;
+    --button-color: #2573a4;
+}
+
+.b383 {
+    --color24: #355ba5;
+    --color35: #8d6d9e;
+    --button-color: #3f5f9e;
+}
+
+.b351 {
+    --color24: #ce5a52;
+    --color35: #7c7c7c;
+    --button-color: #ce6760;
+}
+
+.bio230 {
+    --color24: #355ba5;
+    --color35: #7c7c7c;
+    --button-color: #3f5f9e;
+}
+
+.child300 {
+    --color24: #47494b;
+    --color35: #1e63b2;
+    --button-color: #1e63b2;
+}
+
+.cit270 {
+    --color24: #47494b;
+    --color35: #1e63b2;
+    --button-color: #1e63b2;
+}
+
+.cit353 {
+    --color24: #1d69a1;
+    --color35: #7c7c7c;
+    --button-color: #1d69a1;
+}
+
+.comm310 {
+    --color24: #8d4a50;
+    --color35: #00807f;
+    --button-color: #927d3e;
+}
+
+.const330 {
+    --color24: #3d5893;
+    --color35: #7c7c7c;
+    --button-color: #3d5893;
+}
+
+.cs235 {
+    --color24: #47494b;
+    --color35: #3e4ca5;
+    --button-color: #3e4ca5;
+}
+
+.cs246 {
+    --color24: #494d4f;
+    --color35: #0873a1;
+    --button-color: #2496c3;
+}
+
+.ed202 {
+    --color24: #47494b;
+    --color35: #0e84b4;
+    --button-color: #104e67;
+}
+
+.eng251 {
+    --color24: #7b675b;
+    --color35: #7f7c4a;
+    --button-color: #82805e;
+}
+
+.fdrel324 {
+    --color24: #611f24;
+    --color35: #2d4c85;
+    --button-color: #5c3639;
+}
+
+.fdsci205 {
+    --color24: #0a4057;
+    --color35: #4ca70c;
+    --button-color: #3091be;
+}
+
+.fhgen130 {
+    --color24: #585146;
+    --color35: #926011;
+    --button-color: #9f7d49;
+}
+
+.fhgen140 {
+    --color24: #4b4132;
+    --color35: #8e6628;
+    --button-color: #928a7a;
+}
+
+.gs105 {
+    --color24: #286177;
+    --color35: #7c7c7c;
+    --button-color: #376070;
+}
+
+.hs460 {
+    --color24: #363939;
+    --color35: #289995;
+    --button-color: #39b9b4;
+}
+
+.intst100 {
+    --color24: #1a44aa;
+    --color35: #bd181b;
+    --button-color: #224a9a;
+}
+
+.ma106 {
+    --color24: #0070b2;
+    --color35: #2aa0b4;
+    --button-color: #154b7f;
+}
+
+.math221b {
+    --color24: #0070b2;
+    --color35: #994682;
+    --button-color: #88557a;
+}
+
+.me250 {
+    --color24: #0079be;
+    --color35: #7c7c7c;
+    --button-color: #1f63a6;
+}
+
+.ol111 {
+    --color24: #0076c6;
+    --color35: #7c7c7c;
+    --button-color: #0076c6;
+}
+
+.psych111 {
+    --color24: #25130e;
+    --color35: #7c7c7c;
+    --button-color: #601f19;
+}
+
+.wdd331 {
+    --color24: #05647f;
+    --color35: #67696a;
+    --button-color: #003544;
+}
