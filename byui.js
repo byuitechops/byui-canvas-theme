@@ -1,8 +1,8 @@
 /*eslint-env node, browser, jquery*/
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', () => {
     var courseNumber = document.location.pathname.split('/')[2];
-    var courseClass = $('#breadcrumbs ul li:nth-child(2)').text().split('.');
+    var courseClass = $('#breadcrumbs ul li:nth-child(2) span').innerHTML.split('.');
     courseClass = courseClass[courseClass.length - 1].toLowerCase().replace(' ', '');
 
     /* Initialize accordion*/
@@ -16,12 +16,12 @@ $(document).ready(function () {
     $('#styleguide-tabs-demo-minimal').tabs();
 
     /* Generate course home pages */
-    if ($('#navigation .steps').length !== 0) {
-        var iLearnTutorial = $('#tutorial');
-        var start = $('#start');
-        var instructor = $('#instructor');
-        var syllabus = $('#syllabus');
-        var resources = $('#resources');
+    if (document.querySelectorAll('#navigation .steps').length !== 0) {
+        var iLearnTutorial = document.querySelector('#tutorial');
+        var start = document.querySelector('#start');
+        var instructor = document.querySelector('#instructor');
+        var syllabus = document.querySelector('#syllabus');
+        var resources = document.querySelector('#resources');
         $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', function (modules) {
             var resourcesId;
             var generate = false;
@@ -47,10 +47,10 @@ $(document).ready(function () {
                 }
             });
 
-            start.prop('href', `/courses/${courseNumber}/modules#module_${modules[0].id}`);
-            syllabus.prop('href', `/courses/${courseNumber}/assignments/syllabus`);
-            iLearnTutorial.prop('href', 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw');
-            resources.prop('href', `/courses/${courseNumber}/modules#module_${resourcesId}`);
+            start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
+            syllabus.href = `/courses/${courseNumber}/assignments/syllabus`;
+            iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+            resources.href = `/courses/${courseNumber}/modules#module_${resourcesId}`;
 
             /* Generate Module links */
             function generateModuleLink(id, index) {
@@ -65,7 +65,7 @@ $(document).ready(function () {
                 $(selector).append(`<a href='/courses/${courseNumber}/modules#module_${id}'>${modNum}</a>`);
             }
         });
-        //make the api call to get enrollments
+        /* make the api call to get enrollments */
         $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments`, function (people) {
             people.forEach(function (person) {
                 //if we have a teacher fix the button

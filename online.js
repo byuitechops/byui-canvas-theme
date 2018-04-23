@@ -24,7 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
         p.innerHTML = 'Copyright ' + new Date().getFullYear() + ' Brigham Young University-Idaho';
         p.classList.add('copyright');
         var page = document.getElementById('content');
-        page.appendChild(p);
+        if (page) {
+            page.appendChild(p);
+        } else {
+            console.log('unable to add copyright footer to page');
+        }
     } catch (copyrightErr) {
         console.error(copyrightErr);
     }
