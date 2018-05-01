@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* handles all functions required to generate the course homepage */
     function generateHomePage() {
         /* quit if we are not on the course homepage OR the page is missing the expected format */
-        if (!/^\/courses\/\d+(\?|#)?$/g.test(window.location.pathname) || document.querySelectorAll('#navigation .steps').length === 0) {
+        if (document.querySelectorAll('#navigation .steps').length === 0) {
             return;
         }
         var iLearnTutorial = document.querySelector('#tutorial');
