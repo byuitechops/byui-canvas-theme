@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
         /* make the api call to get enrollments */
-        $.get('https://byui.instructure.com/api/v1/courses/' + courseNumber + '/enrollments', function (people) {
+        $.get('https://byui.instructure.com/api/v1/courses/' + courseNumber + '/enrollments?per_page=100', function (people) {
             people.forEach(function (person) {
                 // if we have a teacher fix the button
                 if (person.type === 'TeacherEnrollment') {
