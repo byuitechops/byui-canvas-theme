@@ -406,6 +406,11 @@ span.caption {
   justify-content: center;
   align-items: center;
   height: 56px;
+
+}
+
+.byui .steps .external span {
+  text-decoration: none;
 }
 
 .byui .copyright {
