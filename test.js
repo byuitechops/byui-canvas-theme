@@ -13,7 +13,7 @@ try {
 
         /* set width dynamically */
         document.querySelector('html').style.setProperty('--banner-fade-width', `calc(${breadcrumbWidth}px + 450px)`);
-
+        /* For browsers without CSS variable support. Thank you Edge. */
         document.querySelector('head').insertAdjacentHTML('beforeend', `<style type='text/css'>
         .ic-app-nav-toggle-and-crumbs::before {
             width: calc(${breadcrumbWidth}px + 450px);

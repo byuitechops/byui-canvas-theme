@@ -18,6 +18,7 @@ html {
     height: 71px;
     position: absolute;
     left: 0;
+    top:0;
     width: var(--banner-fade-width, 700px);
 }
 
