@@ -1,3 +1,7 @@
+html {
+    --banner-fade-width: 700px;
+}
+
 #courseBanner {
     padding: 0 24px;
     margin: 0;
@@ -14,7 +18,7 @@
     height: 71px;
     position: absolute;
     left: 0;
-    width: 700px;
+    width: var(--banner-fade-width);
 }
 
 .ic-app-nav-toggle-and-crumbs>.ic-app-crumbs {

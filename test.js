@@ -10,9 +10,8 @@ try {
         var breadcrumbWidth = document.getElementById('breadcrumbs').offsetWidth;
 
         document.getElementById('courseBanner').style.backgroundImage = `url(https://byui.instructure.com/courses/${courseNumber}/file_contents/course%20files/template/courseBanner.jpg)`;
-        document.getElementById('courseBanner').style.width = `calc(${breadcrumbWidth} + 350)`;
 
-
+        document.querySelector('html').style.setProperty('--banner-fade-width', `calc(${breadcrumbWidth}px + 450px)`);
     }
 } catch (bannerErr) {
     console.error(bannerErr);
