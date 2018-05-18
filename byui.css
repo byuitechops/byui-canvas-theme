@@ -252,6 +252,10 @@
 
 /*Images and Callouts*/
 
+.shaded {
+  background-color: #D8D8D8;
+}
+
 /* Images / Floating */
 
 .left {
