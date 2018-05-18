@@ -312,6 +312,7 @@ span.caption {
 .right+span.caption {
   clear: both;
   float: right;
+  text-align: right;
   margin: 0 0 12px 15px;
 }
 
@@ -323,6 +324,7 @@ span.caption {
 .left+span.caption {
   clear: both;
   float: left;
+  text-align: left;
   margin: 0 15px 12px 0;
 }
 
