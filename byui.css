@@ -386,8 +386,6 @@ span.caption {
   padding: 5px 5px 3px;
   text-align: center;
   text-decoration: none !important;
-  width: calc(100% / 7 - 20px);
-  max-width: calc(100% / 7 - 20px);
   word-wrap: normal;
 }
 

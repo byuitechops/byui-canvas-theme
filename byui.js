@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         /* append leading 0 */
                         if (moduleCount + 1 < 10)
                             modNum = `0${moduleCount + 1}`;
-                        document.querySelector(selector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}'>${modNum}</a>`);
+                        document.querySelector(selector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${modNum}</a>`);
                     }
                     /* clear lesson div & set generate variable */
                     if ($('#navigation .lessons').hasClass('generate')) {
@@ -76,13 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     /* only generate module links if generate class exists */
                     if (generate) {
 
+                        /* remove modules with invalid names & get modulesPerRow (limit 7) */
+                        var validModules = modules.filter(canvasModule => /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name)),
+                            modulesPerRow =  validModules.length > 7? 7: validModules.length;
+                        
                         /* generate module links */
-                        modules.forEach((module) => {
-                            /* Module must be named Week, Lesson, OR Unit, followed by 0 - 19. leading 0's optional */
-                            if (/(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(module.name)) {
-                                generateModuleLink(module.id, lessonCounter);
-                                lessonCounter++;
-                            }
+                        validModules.forEach((canvasModule) => {
+                            generateModuleLink(canvasModule.id, lessonCounter);
+                            lessonCounter++;
                         });
                     }
                     /* set home page buttons */
