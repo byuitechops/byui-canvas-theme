@@ -69,6 +69,7 @@ function onScroll() {
 
 function updateMenuPosition() {
     requestAnimationFrame(() => {
+        busy = false;
         courseMenu.style.top = height;
     });
 }
