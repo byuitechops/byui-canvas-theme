@@ -31,31 +31,51 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* Keep the course nav even on scroll down */
-try {
-    /* scroll differently if you're on a manage files page */
-    var filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href);
-    document.addEventListener('scroll', () => {
-        var height;
-        var offsetHeight = 113; // 113px is height of courseBanner(50px) + canvas breadcrumb nav(63px)
+/********************************************
+ * Keep the course nav even on scroll down 
+ *******************************************/
 
-        /* Calculating this value by hand requires a dependency on complex CSS selectors 
-        every time the event fires, which is why it's hard coded */
+/* scroll differently if you're on a manage files page */
+const filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href),
+    courseMenu = document.getElementById('left-side');
+/* Calculating this value by hand requires a dependency on complex CSS selectors 
+every time the event fires, which is why it's hard coded */
+var offsetHeight = 63, // 113px is height of courseBanner(50px) + canvas breadcrumb nav(63px)
+    busy = false,
+    height;
 
-        /* set nav offset */
-        if (filesPage) {
-            /* nav offset is different for files pages */
-            height = `${window.scrollY}px`;
-        } else if (window.scrollY < offsetHeight) {
-            /* if you're at the top of the page don't mess with the offset */
-            height = '0px';
-        } else {
-            /* height = scroll position - height of menus */
-            height = `${window.scrollY - offsetHeight}px`;
-        }
+function calcHeight() {
+    /* Set the height */
+    if (filesPage) {
+        /* nav offset is different for files pages */
+        height = `${window.scrollY}px`;
+    } else if (window.scrollY < offsetHeight) {
+        /* if you're at the top of the page don't mess with the offset */
+        height = '0px';
+    } else {
+        /* height = scroll position - height of menus */
+        height = `${window.scrollY - offsetHeight}px`;
+    }
+}
 
-        document.getElementById('left-side').style.top = height;
+function onScroll() {
+    calcHeight();
+    /* check if busy */
+    if (!busy) {
+        updateMenuPosition();
+    }
+    busy = true;
+}
+
+function updateMenuPosition() {
+    requestAnimationFrame(() => {
+        courseMenu.style.top = height;
     });
+}
+
+try {
+    document.addEventListener('scroll', onScroll);
+    /* set nav offset */
 } catch (stickyNavErr) {
     console.error(stickyNavErr);
 }
