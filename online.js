@@ -3,14 +3,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     /* Insert copyright footer */
     try {
-        var p = document.createElement('p');
-        p.innerHTML = 'Copyright ' + new Date().getFullYear() + ' Brigham Young University-Idaho';
-        p.classList.add('copyright');
         var page = document.getElementById('content');
         if (page) {
-            page.appendChild(p);
+            page.insertAdjacentHTML('beforeend', `<p class='copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
         } else {
-            console.log('unable to add copyright footer to page');
+            console.error('unable to add copyright footer to page');
         }
     } catch (copyrightErr) {
         console.error(copyrightErr);
@@ -38,14 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
 /* scroll differently if you're on a manage files page */
 const filesPage = /(\.com|\d+)\/files($|\/folder)/i.test(window.location.href),
     courseMenu = document.getElementById('left-side');
-/* Calculating this value by hand requires a dependency on complex CSS selectors 
-every time the event fires, which is why it's hard coded */
+
+// offsetHeight isn't worth trying to calculate
 var offsetHeight = 63, // 113px is height of courseBanner(50px) + canvas breadcrumb nav(63px)
     busy = false,
     height;
 
+/*********************************
+ * Calc the top value of the nav
+ *********************************/
 function calcHeight() {
-    /* Set the height */
     if (filesPage) {
         /* nav offset is different for files pages */
         height = `${window.scrollY}px`;
@@ -53,20 +52,26 @@ function calcHeight() {
         /* if you're at the top of the page don't mess with the offset */
         height = '0px';
     } else {
-        /* height = scroll position - height of menus */
+        /* height = scroll position - height of any items above nav */
         height = `${window.scrollY - offsetHeight}px`;
     }
 }
 
+/*********************************************************
+ * Calc the new height of the nav.
+ * Update page if not already waiting for the next frame
+ *********************************************************/
 function onScroll() {
     calcHeight();
-    /* check if busy */
     if (!busy) {
         updateMenuPosition();
     }
     busy = true;
 }
 
+/***********************************************
+ * Update top value when the next frame loads
+ **********************************************/
 function updateMenuPosition() {
     requestAnimationFrame(() => {
         busy = false;
