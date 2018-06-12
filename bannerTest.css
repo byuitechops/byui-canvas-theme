@@ -1,0 +1,46 @@
+/* TOP BANNER */
+body.topBanner .ic-app-nav-toggle-and-crumbs {
+    background-position: right;
+    box-sizing: border-box;
+    color: white;
+    height: 50px;
+    line-height: 50px;
+    max-width: 100vw;
+    padding-left: 25px;
+    position: absolute;
+    width: 100%;
+}
+
+body.topBanner .ic-app-nav-toggle-and-crumbs {
+    margin-top: 50px;
+}
+
+/* BREADCRUMB BANNER */
+
+html body.breadcrumbBanner {
+    --banner-fade-width: 700px;
+}
+
+body.breadcrumbBanner .ic-app-nav-toggle-and-crumbs {
+    padding: 0 24px;
+    margin: 0;
+    background-size: cover;
+}
+
+body.breadcrumbBanner .ic-app-nav-toggle-and-crumbs::before {
+    content: "";
+    background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 70%, rgba(255, 255, 255, 0) 100%);
+    background: -moz-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 70%, rgba(255, 255, 255, 0) 100%);
+    background: -webkit-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 70%, rgba(255, 255, 255, 0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=1);
+    display: block;
+    height: 71px;
+    position: absolute;
+    left: 0;
+    top:0;
+    width: var(--banner-fade-width, 700px);
+}
+
+body.breadcrumbBanner .ic-app-nav-toggle-and-crumbs>.ic-app-crumbs {
+    z-index: 1;
+}
