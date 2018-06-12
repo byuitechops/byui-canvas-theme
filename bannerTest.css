@@ -1,5 +1,5 @@
 /* TOP BANNER */
-body.topBanner .ic-app-nav-toggle-and-crumbs {
+body.topBanner #courseBanner {
     background-position: right;
     box-sizing: border-box;
     color: white;
