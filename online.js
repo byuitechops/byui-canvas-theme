@@ -1,7 +1,5 @@
 /*eslint-env node, browser, jquery, es6*/
-
-document.addEventListener('DOMContentLoaded', () => {
-    /* Insert copyright footer */
+function addCopyrightFooter() {
     try {
         var page = document.getElementById('content');
         if (page) {
@@ -12,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (copyrightErr) {
         console.error(copyrightErr);
     }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    /* Insert copyright footer */
+    addCopyrightFooter();
+
 
 
     /* Hide the 3rd breadcrumb */
@@ -24,6 +28,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } catch (breadcrumbErr) {
         console.error(breadcrumbErr);
+    }
+
+
+    /* Add pre > code highlighting */
+    try {
+        var meh = document.querySelector('code[class*="language-"]');
+        if (meh) {
+            var jsEle = document.createElement('script');
+            var cssEle = document.createElement('link');
+            jsEle.src = 'https://byuitechops.github.io/sandboxness/prism.js';
+            cssEle.href = 'https://byuitechops.github.io/sandboxness/prism.css';
+            cssEle.rel = 'stylesheet';
+            document.head.appendChild(jsEle);
+            document.head.appendChild(cssEle);
+        }
+    } catch (preCodeErr) {
+        console.error(preCodeErr);
     }
 });
 
