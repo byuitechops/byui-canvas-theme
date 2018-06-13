@@ -383,24 +383,15 @@ span.caption {
   padding: 5px;
 }
 
-.lessons>div {
-  display: flex;
-  flex-grow: 1;
-  flex-wrap: nowrap;
-  width: 100%;
-}
-
 .byui .lessons a {
   background: var(--button-color);
   border-radius: 3px;
   color: #fff;
-  flex-grow: 1;
   font-size: 1.8em;
   margin: 5px;
   padding: 5px 5px 3px;
   text-align: center;
   text-decoration: none !important;
-  width: 30px;
   word-wrap: normal;
 }
 
