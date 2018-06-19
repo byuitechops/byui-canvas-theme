@@ -6,8 +6,7 @@ const asyncLib = require('async');
 const chalk = require('chalk');
 const babel = require('babel-core');
 
-
-const ignoredJSFiles = ['compile.js'];
+const whitelist = ['byui.js', 'byui.css', 'online.js', 'online.css'];
 const outputLocation = './production/';
 const fileLimit = 2;
 const babelOpts = {
@@ -42,7 +41,6 @@ function babelifyFile(fileName, eachCB) {
 
 
 function copyFile(fileName, cb) {
-    // TODO idk how to do this off the top of my head
     fs.readFile(fileName, (readErr, fileGuts) => {
         if (readErr) {
             console.error(chalk.red(readErr));
@@ -74,9 +72,9 @@ function readDirectory() {
 
         /* create obj with all JS files & all CSS files */
         files.forEach(file => {
-            if (path.extname(file) === '.js' && !ignoredJSFiles.includes(file)) {
+            if (path.extname(file) === '.js' && whitelist.includes(file)) {
                 jsFiles.push(file);
-            } else if (path.extname(file) === '.css') {
+            } else if (path.extname(file) === '.css' && whitelist.includes(file)) {
                 cssFiles.push(file);
             }
         });
