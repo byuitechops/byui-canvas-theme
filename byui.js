@@ -1,6 +1,10 @@
 /*eslint-env node, browser, jquery*/
 
-document.addEventListener('DOMContentLoaded', () => {
+if (localStorage.getItem('devAccount') !== 'true') {
+    document.addEventListener('DOMContentLoaded', main);
+}
+
+function main() {
     var courseNumber = document.location.pathname.split('/')[2];
 
     /* Initialize accordion - JQUERY UI */
@@ -125,4 +129,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
     insertVideoTag();
     generateHomePage();
-});
+}
