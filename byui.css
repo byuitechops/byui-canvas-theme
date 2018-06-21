@@ -464,14 +464,19 @@ span.caption {
 /******************************************
                  Callouts
 ********************************************/
-/* .shaded::before {
+.callout {
+  border: solid 1px #F2F2F2;
+  padding-left: 5px;
+  position: relative;
+}
+
+.callout::before {
   content: "";
   width: 5px;
   height: 100%;
   position: absolute;
   left: 0;
-  top: 0;
-} */
+}
 
 .callout-header {
   padding: 5px 10px;
@@ -479,72 +484,78 @@ span.caption {
   font-weight: bold;
 }
 
-/* Blue shaded */
-/* .shaded.blue::before {
-  background-color: #3A929D;
-} */
+.callout p {
+  padding: 10px;
+  margin: 0;
+  font-style: italic;
+}
 
-.shaded.blue .callout-header {
+/* Blue Callout */
+.callout.blue::before {
+  background-color: #3A929D;
+}
+
+.callout.blue .callout-header {
   background-color: #A7CDD4;
 }
 
-.shaded.blue {
+.callout.blue {
   background-color: #E2EEF1;
 }
 
-/* Green shaded */
-/* .shaded.green::before {
+/* Green Callout */
+.callout.green::before {
   background-color: #8B9531;
-} */
+}
 
-.shaded.green .callout-header {
+.callout.green .callout-header {
   background-color: #D9E69E;
 }
 
-.shaded.green {
+.callout.green {
   background-color: #EFF5D6;
 }
 
-/* Orange shaded */
-/* .shaded.orange::before {
+/* Orange Callout */
+.callout.orange::before {
   background-color: #CB4A27;
-} */
+}
 
-.shaded.orange .callout-header {
+.callout.orange .callout-header {
   background-color: #F9BA90;
 }
 
-.shaded.orange {
+.callout.orange {
   background-color: #FEF0E7;
 }
 
-/* Grey shaded */
-/* .shaded.grey::before {
+/* Grey Callout */
+.callout.grey::before {
   background-color: #065577;
-} */
+}
 
-.shaded.grey .callout-header {
+.callout.grey .callout-header {
   background-color: #F1F2F2;
 }
 
-.shaded.grey {
+.callout.grey {
   background-color: #FFFFFF;
 }
 
-/* Simple shaded */
-.shaded.simple {
+/* Simple Callout */
+.callout.simple {
   padding: 0;
 }
-/* 
-.shaded.simple::before {
+
+.callout.simple::before {
   display: none;
   background-color: #065577;
-} */
+}
 
-.shaded.simple .callout-header {
+.callout.simple .callout-header {
   background-color: #F1F2F2;
 }
 
-.shaded.simple {
+.callout.simple {
   background-color: #FFFFFF;
 }
