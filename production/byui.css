@@ -383,24 +383,15 @@ span.caption {
   padding: 5px;
 }
 
-.lessons>div {
-  display: flex;
-  flex-grow: 1;
-  flex-wrap: nowrap;
-  width: 100%;
-}
-
 .byui .lessons a {
   background: var(--button-color);
   border-radius: 3px;
   color: #fff;
-  flex-grow: 1;
   font-size: 1.8em;
   margin: 5px;
   padding: 5px 5px 3px;
   text-align: center;
   text-decoration: none !important;
-  width: 30px;
   word-wrap: normal;
 }
 
@@ -468,4 +459,92 @@ span.caption {
 
 .byui .slick-slide img {
   width: 100%;
+}
+
+/******************************************
+                 Callouts
+********************************************/
+/* .shaded::before {
+  content: "";
+  width: 5px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+} */
+
+.callout-header {
+  padding: 5px 10px;
+  margin: 0;
+  font-weight: bold;
+}
+
+/* Blue shaded */
+/* .shaded.blue::before {
+  background-color: #3A929D;
+} */
+
+.shaded.blue .callout-header {
+  background-color: #A7CDD4;
+}
+
+.shaded.blue {
+  background-color: #E2EEF1;
+}
+
+/* Green shaded */
+/* .shaded.green::before {
+  background-color: #8B9531;
+} */
+
+.shaded.green .callout-header {
+  background-color: #D9E69E;
+}
+
+.shaded.green {
+  background-color: #EFF5D6;
+}
+
+/* Orange shaded */
+/* .shaded.orange::before {
+  background-color: #CB4A27;
+} */
+
+.shaded.orange .callout-header {
+  background-color: #F9BA90;
+}
+
+.shaded.orange {
+  background-color: #FEF0E7;
+}
+
+/* Grey shaded */
+/* .shaded.grey::before {
+  background-color: #065577;
+} */
+
+.shaded.grey .callout-header {
+  background-color: #F1F2F2;
+}
+
+.shaded.grey {
+  background-color: #FFFFFF;
+}
+
+/* Simple shaded */
+.shaded.simple {
+  padding: 0;
+}
+/* 
+.shaded.simple::before {
+  display: none;
+  background-color: #065577;
+} */
+
+.shaded.simple .callout-header {
+  background-color: #F1F2F2;
+}
+
+.shaded.simple {
+  background-color: #FFFFFF;
 }

@@ -1,0 +1,25 @@
+{
+  "name": "byui-canvas-theme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "byui.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byuitechops/byui-canvas-theme.git"
+  },
+  "author": "Daniel Green",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/byuitechops/byui-canvas-theme/issues"
+  },
+  "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
+  "dependencies": {
+    "async": "^2.6.1",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "chalk": "^2.4.1"
+  }
+}

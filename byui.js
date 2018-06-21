@@ -1,6 +1,10 @@
 /*eslint-env node, browser, jquery*/
 
-document.addEventListener('DOMContentLoaded', () => {
+if (localStorage.getItem('devAccount') !== 'true') {
+    document.addEventListener('DOMContentLoaded', main);
+}
+
+function main() {
     var courseNumber = document.location.pathname.split('/')[2];
 
     /* Initialize accordion - JQUERY UI */
@@ -56,36 +60,18 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 /* get modules */
                 $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
-                    var resourcesId;
-                    var generate = false;
-                    var lessonCounter = 0;
+                    var resourcesId,
+                        lessonWrapperSelector = '#navigation .lessons',
+                        lessonCounter = 0;
                     /* Generate a Module link - called by above try statement */
                     function generateModuleLink(moduleId, moduleCount) {
-                        var selector = '#navigation .lessons';
                         var modNum = moduleCount + 1;
                         /* append leading 0 */
                         if (moduleCount + 1 < 10)
                             modNum = `0${moduleCount + 1}`;
-                        document.querySelector(selector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${modNum}</a>`);
+                        document.querySelector(lessonWrapperSelector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${modNum}</a>`);
                     }
-                    /* clear lesson div & set generate variable */
-                    if ($('#navigation .lessons').hasClass('generate')) {
-                        $('#navigation .lessons').html('');
-                        generate = true;
-                    }
-                    /* only generate module links if generate class exists */
-                    if (generate) {
 
-                        /* remove modules with invalid names & get modulesPerRow (limit 7) */
-                        var validModules = modules.filter(canvasModule => /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name)),
-                            modulesPerRow =  validModules.length > 7? 7: validModules.length;
-                        
-                        /* generate module links */
-                        validModules.forEach((canvasModule) => {
-                            generateModuleLink(canvasModule.id, lessonCounter);
-                            lessonCounter++;
-                        });
-                    }
                     /* set home page buttons */
                     if (start)
                         start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
@@ -93,6 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
                     if (resources)
                         resources.href = `/courses/${courseNumber}/modules#module_${resourcesId}`;
+
+                    /* clear lesson div & generate module links if generate class exists */
+                    if (Array.from(document.querySelector(lessonWrapperSelector).classList).includes('generate')) {
+                        document.querySelector(lessonWrapperSelector).innerHTML = '';
+                        /* remove modules with invalid names & get modulesPerRow (limit 7) */
+                        var validModules = modules.filter(canvasModule => /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name)),
+                            modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
+
+                        /* generate module links */
+                        validModules.forEach((canvasModule) => {
+                            generateModuleLink(canvasModule.id, lessonCounter);
+                            lessonCounter++;
+                        });
+                    }
                 });
             } catch (moduleErr) {
                 console.error(moduleErr);
@@ -129,4 +129,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
     insertVideoTag();
     generateHomePage();
-});
+}

@@ -22,7 +22,8 @@ try {
                 }
             });
         } else {
-            // TESTING else only needed if page is shifting up
+            // TESTING enable for production
+            /* removes empty space if we're not inside a course */
             // document.querySelector('.ic-app-nav-toggle-and-crumbs').style.marginTop = '0';
         }
     }
