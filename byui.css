@@ -20,6 +20,20 @@
   color: #ffffff;
 }
 
+/**************************************************
+  STICKY COURSE NAV
+**************************************************/
+.ic-app-course-menu {
+  position: sticky;
+  margin-left: -180px;
+  float: left;
+}
+
+#content-wrapper {
+  display: inline-block;
+}
+
+
 /***************************************************
          BYUI THEME RULES DO-NOT-EDIT!!
 ***************************************************/

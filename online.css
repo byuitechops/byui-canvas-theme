@@ -1,16 +1,3 @@
-/*************************************
-* Sticky course Nav
-*************************************/
-.ic-app-course-menu {
-    position: sticky;
-    margin-left: -180px;
-    float: left;
-}
-
-#content-wrapper {
-    display: inline-block;
-}
-
 /* default styling for h1 */
 
 h1,
