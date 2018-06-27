@@ -72,20 +72,19 @@ function main() {
                         document.querySelector(lessonWrapperSelector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${modNum}</a>`);
                     }
 
-                    /* set home page buttons */
-                    if (start)
-                        start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
-                    if (iLearnTutorial)
-                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
-                    if (resources)
-                        resources.href = `/courses/${courseNumber}/modules#module_${resourcesId}`;
-
                     /* clear lesson div & generate module links if generate class exists */
                     if (Array.from(document.querySelector(lessonWrapperSelector).classList).includes('generate')) {
                         document.querySelector(lessonWrapperSelector).innerHTML = '';
                         /* remove modules with invalid names & get modulesPerRow (limit 7) */
-                        var validModules = modules.filter(canvasModule => /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name)),
-                            modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
+                        var validModules = [];
+                        modules.forEach(canvasModule => {
+                            if (/(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name)) {
+                                validModules.push(canvasModule);
+                            } else if (/student\s*resources/i.test(canvasModule.name)) {
+                                resourcesId = canvasModule.id;
+                            }
+                        });
+                        var modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
 
                         /* generate module links */
                         validModules.forEach((canvasModule) => {
@@ -93,6 +92,14 @@ function main() {
                             lessonCounter++;
                         });
                     }
+
+                    /* set home page buttons */
+                    if (start)
+                        start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
+                    if (iLearnTutorial)
+                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+                    if (resources)
+                        resources.href = `/courses/${courseNumber}/modules#module_${resourcesId}`;
                 });
             } catch (moduleErr) {
                 console.error(moduleErr);
