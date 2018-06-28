@@ -37,25 +37,7 @@ function addCodeHighlight() {
     }
 }
 
-/***************************
- * Hide the 3rd breadcrumb 
- ***************************/
-function alterBreadcrumb() {
-    try {
-        /* If there are 4 total, AND we're inside a course AND we're not in a group tab */
-        if (document.querySelectorAll('#breadcrumbs li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href)) {
-            document.querySelectorAll('#breadcrumbs li:nth-child(3) span')[0].innerHTML = 'Modules';
-            /* update the link */
-            document.querySelectorAll('#breadcrumbs li:nth-child(3) a')[0].href = document.querySelectorAll('#breadcrumbs li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
-        }
-    } catch (breadcrumbErr) {
-        console.error(breadcrumbErr);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
-
     addCopyrightFooter();
     addCodeHighlight();
-    alterBreadcrumb();
 });
