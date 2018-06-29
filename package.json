@@ -17,9 +17,15 @@
   },
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
   "dependencies": {
-    "async": "^2.6.1",
+  },
+  "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-helper-function-name": "^6.24.1",
     "babel-preset-env": "^1.7.0",
-    "chalk": "^2.4.1"
+    "babel-preset-minify": "^0.4.3",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-clean-css": "^3.9.4",
+    "pump": "^3.0.0"
   }
 }
