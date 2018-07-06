@@ -113,13 +113,22 @@ function main() {
                     var teacher = people.filter(person => person.type === 'TeacherEnrollment');
                     if (teacher.length > 1) {
                         /* if there are multiple teachers add the link manually */
-                        console.log('Multiple teachers are enrolled in this course. Please add "Your Instructor" link manually.');
-                        return;
+
+                        // ERROR multiple sections have multiple instructors with the same user_id
+                        let id = teacher[0].user_id;
+                        let multipleTeachers = teacher.find(teach => teach.user_id !== id) != undefined;
+
+                        if (multipleTeachers === true) {
+                            console.log('Multiple teachers are enrolled in this course. Please add "Your Instructor" link manually.');
+                            return;
+                        }
+
                     } else if (teacher.length === 0) {
                         /* if the teacher isn't enrolled for some reason */
                         console.log('Unable to find teacher enrollment.');
                         return;
                     }
+
                     /* if we have a teacher fix the button */
                     instructor.href = `/courses/${courseNumber}/users/${teacher[0].user_id}`;
                 });
