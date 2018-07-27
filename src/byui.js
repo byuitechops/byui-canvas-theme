@@ -114,7 +114,6 @@ function main() {
                     if (teacher.length > 1) {
                         /* if there are multiple teachers add the link manually */
 
-                        // ERROR multiple sections have multiple instructors with the same user_id
                         let id = teacher[0].user_id;
                         let multipleTeachers = teacher.find(teach => teach.user_id !== id) != undefined;
 
@@ -141,9 +140,7 @@ function main() {
         generateInstructorLink();
     }
 
-    /***************************
-     * Hide the 3rd breadcrumb 
-     ***************************/
+    /* Hide the 3rd breadcrumb */
     function alterBreadcrumb() {
         try {
             /* If there are 4 total, AND we're inside a course AND we're not in a group tab */
