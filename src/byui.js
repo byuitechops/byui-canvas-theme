@@ -1,5 +1,6 @@
 /*eslint-env node, browser, jquery*/
 
+/* Allows us to disable this page for testing purposes */
 if (localStorage.getItem('devAccount') !== 'true') {
     document.addEventListener('DOMContentLoaded', main);
 }
@@ -154,9 +155,32 @@ function main() {
         }
     }
 
+    /* enable prism <pre><code></code></pre> highlighting */
+    function prismHighlighting() {
+        try {
+            let codeUsed = document.querySelector('pre code');
+            if (codeUsed == null) return;
+
+            let script = document.createElement('script'),
+                styleLink = document.createElement('link');
+
+            script.src = 'https://content.byui.edu/file/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/1/codeHighlighter.js';
+            styleLink.href = 'https://content.byui.edu/file/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/1/codeHighlighter.css';
+            styleLink.rel = 'stylesheet';
+            styleLink.type = 'text/css';
+            
+            document.body.appendChild(script);
+            document.body.appendChild(styleLink);
+
+        } catch (prismErr) {
+            console.error(prismErr);
+        }
+    }
+
     initializeAccordion();
     initializeTabs();
     insertVideoTag();
     generateHomePage();
     alterBreadcrumb();
+    prismHighlighting();
 }
