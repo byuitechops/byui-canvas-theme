@@ -38,7 +38,7 @@
 ***************************************************/
 
 .byui {
-  /* max-width: 960px; */
+  max-width: 960px;
   padding-bottom: 3px;
 }
 
@@ -398,6 +398,10 @@ span.caption {
 /******************************************
              Course Home Page
 ********************************************/
+
+#course_home_content .byui {
+  max-width: none;
+}
 
 .byui .welcome,
 .byui .title,
