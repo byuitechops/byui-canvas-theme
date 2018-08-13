@@ -174,10 +174,42 @@ function main() {
         }
     }
 
+    /* generate course banner behind breadcrumbs */
+    function generateCourseBanner() {
+        try {
+            // TESTING remove this for production. Applies CSS ONLY to a specific module in a specific course
+            /* If we're inside a course */
+            if (courseNumber) {
+                document.querySelector('body').classList.add('breadcrumbBanner');
+                var courseBanner = document.querySelector('.ic-app-nav-toggle-and-crumbs');
+
+                requestAnimationFrame(() => {
+                    /* set background image of courseBanner - Done in JS because URL is dynamic */
+                    courseBanner.style.backgroundImage = `url(https://byui.instructure.com/courses/${courseNumber}/file_contents/course%20files/template/courseBanner.jpg)`;
+
+                    /* get width of breadcrumbs */
+                    var breadcrumbWidth = document.getElementById('breadcrumbs').offsetWidth;
+
+                    const additionalWidth = '450px';
+
+                    /* set width of fade dynamically. For browsers without CSS variable support */
+                    document.querySelector('head').insertAdjacentHTML('beforeend', `<style type='text/css'>
+                    .ic-app-nav-toggle-and-crumbs::before {
+                    width: calc(${breadcrumbWidth}px + ${additionalWidth}) !important;
+                    }
+                    </style>`);
+                });
+            }
+        } catch (bannerErr) {
+            console.error(bannerErr);
+        }
+    }
+
     initializeAccordion();
     initializeTabs();
     insertVideoTag();
     generateHomePage();
     alterBreadcrumb();
     prismHighlighting();
+    generateCourseBanner();
 }

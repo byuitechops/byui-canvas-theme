@@ -607,3 +607,34 @@ span.caption {
 .callout.simple {
   background-color: #FFFFFF;
 }
+
+/******************************************
+            Course Banner
+********************************************/
+html body.breadcrumbBanner {
+  --banner-fade-width: 700px;
+}
+
+body.breadcrumbBanner .ic-app-nav-toggle-and-crumbs {
+  padding: 0 24px;
+  margin: 0;
+  background-size: cover;
+}
+
+body.breadcrumbBanner .ic-app-nav-toggle-and-crumbs::before {
+  content: "";
+  background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 70%, rgba(255, 255, 255, 0) 100%);
+  background: -moz-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 70%, rgba(255, 255, 255, 0) 100%);
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 70%, rgba(255, 255, 255, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=1);
+  display: block;
+  height: 71px;
+  position: absolute;
+  left: 0;
+  top:0;
+  width: var(--banner-fade-width, 700px);
+}
+
+body.breadcrumbBanner .ic-app-nav-toggle-and-crumbs>.ic-app-crumbs {
+  z-index: 1;
+}
