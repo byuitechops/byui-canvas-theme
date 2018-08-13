@@ -155,22 +155,19 @@ function main() {
         }
     }
 
-    /* enable prism <pre><code></code></pre> highlighting */
+    /* enable prism pre > code highlighting */
     function prismHighlighting() {
         try {
             let codeUsed = document.querySelector('pre code');
             if (codeUsed == null) return;
 
-            let script = document.createElement('script'),
-                styleLink = document.createElement('link');
-
-            script.src = 'https://content.byui.edu/file/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/1/codeHighlighter.js';
-            styleLink.href = 'https://content.byui.edu/file/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/1/codeHighlighter.css';
-            styleLink.rel = 'stylesheet';
-            styleLink.type = 'text/css';
-            
-            document.body.appendChild(script);
-            document.body.appendChild(styleLink);
+            let jsEle = document.createElement('script'),
+                cssEle = document.createElement('link');
+            jsEle.src = 'https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.js';
+            cssEle.href = 'https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css';
+            cssEle.rel = 'stylesheet';
+            document.head.appendChild(jsEle);
+            document.head.appendChild(cssEle);
 
         } catch (prismErr) {
             console.error(prismErr);
