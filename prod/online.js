@@ -1,2 +1,2 @@
-function addCopyrightFooter(){try{var a=document.getElementById('content');a?a.insertAdjacentHTML('beforeend','<p class=\'copyright\'>Copyright '+new Date().getFullYear()+' Brigham Young University-Idaho</p>'):console.error('unable to add copyright footer to page')}catch(a){console.error(a)}}document.addEventListener('DOMContentLoaded',function(){addCopyrightFooter()});
+
 //# sourceMappingURL=online.js.map
