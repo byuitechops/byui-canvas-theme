@@ -95,41 +95,6 @@
   color: red
 }
 
-/* UL & OL styles */
-ol>li>ol>li>ol>li>ol,
-ol>li>ol>li>ol>li>ol>li>ol>li>ol>li>ol {
-    list-style-type: decimal;
-}
-
-ol>li>ol,
-ol>li>ol>li>ol>li>ol>li>ol,
-ol>li>ol>li>ol>li>ol>li>ol>li>ol>li>ol>li>ol {
-    list-style-type: lower-alpha;
-}
-
-ol>li>ol>li>ol,
-ol>li>ol>li>ol>li>ol>li>ol>li>ol,
-ol>li>ol>li>ol>li>ol>li>ol>li>ol>li>ol>li>ol>li>ol {
-    list-style-type: lower-roman;
-}
-
-ul>li>ul>li>ul>li>ul,
-ul>li>ul>li>ul>li>ul>li>ul>li>ul>li>ul {
-    list-style-type: disc;
-}
-
-ul>li>ul,
-ul>li>ul>li>ul>li>ul>li>ul,
-ul>li>ul>li>ul>li>ul>li>ul>li>ul>li>ul>li>ul {
-    list-style-type: circle;
-}
-
-ul>li>ul>li>ul,
-ul>li>ul>li>ul>li>ul>li>ul>li>ul,
-ul>li>ul>li>ul>li>ul>li>ul>li>ul>li>ul>li>ul>li>ul {
-    list-style-type: square;
-}
-
 /***********************************************************
     ACTIVTY BANNERS
 ***********************************************************/
