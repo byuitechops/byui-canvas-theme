@@ -188,6 +188,37 @@ function main() {
         }
     }
 
+    function editorStyles() {
+        /* global tinyMCE */
+        var cssHrefs = [];
+
+        // TODO convert to reduce
+        document.querySelectorAll('link[rel=stylesheet]').forEach(function (linkTag) {
+            var href = linkTag.getAttribute('href');
+
+            //our css, canvas common css, canvas color vars css
+            var regExes = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
+
+            var keepThisCssSheet = regExes.some(function (regEx) {
+                return href.match(regEx) !== null;
+            });
+
+            if (keepThisCssSheet) {
+                cssHrefs.push(href);
+            }
+        });
+
+        // TODO check if tinyMCE exists before doing ANYTHING
+        tinyMCE.editors.forEach(function (editor) {
+            return cssHrefs.forEach(function (href) {
+                return editor.dom.styleSheetLoader.load(href);
+            });
+        });
+
+        //https://instructure-uploads.s3.amazonaws.com/account_107060000000000001/attachments/1087412/byui.css
+        //tinyMCE.editors.forEach(editor => editor.dom.styleSheetLoader.load(`https://content.byui.edu/file/84e15c03-dd17-4156-b2d5-c119c8a790cb/1/test.css`));
+    }
+
     initializeAccordion();
     initializeTabs();
     insertVideoTag();
@@ -195,4 +226,5 @@ function main() {
     alterBreadcrumb();
     prismHighlighting();
     addCopyrightFooter();
+    editorStyles();
 }
