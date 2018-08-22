@@ -1,12 +1,13 @@
 /*eslint-env node, browser, jquery*/
+/* eslint no-console:0 */
 /* global tinyMCE */
-
 
 /* Allows us to disable this page for testing purposes */
 if (localStorage.getItem('devAccount') !== 'true') {
     window.onload = editorStyles;
     document.addEventListener('DOMContentLoaded', main);
-
+} else {
+    console.warn('byui.js disabled for testing');
 }
 
 /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading*/
@@ -40,6 +41,7 @@ function editorStyles() {
         console.error(editorErr);
     }
 }
+
 
 function main() {
     var courseNumber = document.location.pathname.split('/')[2];
@@ -84,22 +86,14 @@ function main() {
 
     /* handles all functions required to generate the course homepage */
     function generateHomePage() {
-        /* quit if we are not on the course homepage OR the page is missing the expected format */
-        if (document.querySelectorAll('#navigation .steps').length === 0) {
-            return;
-        }
-        var iLearnTutorial = document.querySelector('#tutorial');
-        var start = document.querySelector('#start');
-        var instructor = document.querySelector('#instructor');
-        var resources = document.querySelector('#resources');
 
+        /* generate all lnks that go to a module */
         function generateModuleLinks() {
             try {
                 /* get modules */
                 $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
                     var resourcesId,
-                        lessonWrapperSelector = '#navigation .lessons',
-                        lessonCounter = 0;
+                        lessonWrapperSelector = '#navigation .lessons';
                     /* Generate a Module link - called by above try statement */
                     function generateModuleLink(moduleId, moduleCount) {
                         var modNum = moduleCount + 1;
@@ -124,9 +118,8 @@ function main() {
                         var modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
 
                         /* generate module links */
-                        validModules.forEach((canvasModule) => {
+                        validModules.forEach((canvasModule, lessonCounter) => {
                             generateModuleLink(canvasModule.id, lessonCounter);
-                            lessonCounter++;
                         });
                     }
 
@@ -143,14 +136,15 @@ function main() {
             }
         }
 
+        /* generate link to instructor bio */
         function generateInstructorLink() {
             try {
                 /* make the api call to get enrollments */
-                $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?per_page=100`, function (people) {
-                    var teacher = people.filter(person => person.type === 'TeacherEnrollment');
+                $.get(`/api/v1/courses/${courseNumber}/enrollments?per_page=100`, function (enrollments) {
+                    var teacher = enrollments.filter(person => person.type === 'TeacherEnrollment');
                     if (teacher.length > 1) {
-                        /* if there are multiple teachers add the link manually */
 
+                        /* check for multiple instances of the same teacher */
                         let id = teacher[0].user_id;
                         let multipleTeachers = teacher.find(teach => teach.user_id !== id) != undefined;
 
@@ -173,8 +167,21 @@ function main() {
             }
         }
 
-        generateModuleLinks();
-        generateInstructorLink();
+        try {
+            /* quit if we are not on the course homepage OR the page is missing the expected format */
+            if (document.querySelectorAll('#navigation .steps').length === 0) {
+                return;
+            }
+            var iLearnTutorial = document.querySelector('#tutorial');
+            var start = document.querySelector('#start');
+            var instructor = document.querySelector('#instructor');
+            var resources = document.querySelector('#resources');
+
+            generateModuleLinks();
+            generateInstructorLink();
+        } catch (selectorErr) {
+            console.error(selectorErr);
+        }
     }
 
     /* Hide the 3rd breadcrumb */
@@ -215,9 +222,11 @@ function main() {
         try {
             var page = document.getElementById('content');
             if (page) {
-                page.insertAdjacentHTML('beforeend', `<p class='copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
+                /* don't add one if it already exists */
+                if (!document.querySelector('p.copyright') && !document.querySelector('p#byui-copyright'))
+                    page.insertAdjacentHTML('beforeend', `<p id='byui-copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
             } else {
-                console.error('unable to add copyright footer to page');
+                throw new Error('unable to add copyright footer to page');
             }
         } catch (copyrightErr) {
             console.error(copyrightErr);
