@@ -7,7 +7,7 @@ if (localStorage.getItem('devAccount') !== 'true') {
 } else {
     console.warn('byui.js disabled for testing');
 }
-    
+
 function main() {
     var courseNumber = document.location.pathname.split('/')[2];
 
@@ -190,7 +190,7 @@ function main() {
             if (page) {
                 /* don't add one if it already exists */
                 if (!document.querySelector('p.copyright') && !document.querySelector('p#byui-copyright'))
-                    page.insertAdjacentHTML('beforeend', `<p class='copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
+                    page.insertAdjacentHTML('beforeend', `<p id='byui-copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
             } else {
                 throw new Error('unable to add copyright footer to page');
             }

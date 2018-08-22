@@ -23,13 +23,14 @@
 /**************************************************
   STICKY COURSE NAV
 **************************************************/
+
 .ic-app-course-menu {
   position: sticky;
   margin-left: -180px;
   float: left;
 }
 
-#left-side + #not_right_side > #content-wrapper {
+#left-side+#not_right_side>#content-wrapper {
   display: inline-block;
   width: 100%
 }
@@ -371,7 +372,8 @@ span.caption {
 
 .byui .welcome,
 .byui .title,
-.byui .copyright {
+.byui .copyright,
+#byui-copyright {
   border: solid var(--color24);
   border-width: 2px 0 0 0;
 }
@@ -421,14 +423,14 @@ span.caption {
   justify-content: center;
   align-items: center;
   height: 56px;
-
 }
 
 .byui .steps .external span {
   text-decoration: none;
 }
 
-.byui .copyright {
+.byui .copyright,
+#byui-copyright {
   text-align: center;
   font-size: .7em;
   text-transform: uppercase;
@@ -482,6 +484,7 @@ span.caption {
 /******************************************
                  Callouts
 ********************************************/
+
 .callout {
   border: solid 1px #F2F2F2;
   padding-left: 5px;
@@ -509,6 +512,7 @@ span.caption {
 }
 
 /* Blue Callout */
+
 .callout.blue::before {
   background-color: #3A929D;
 }
@@ -522,6 +526,7 @@ span.caption {
 }
 
 /* Green Callout */
+
 .callout.green::before {
   background-color: #8B9531;
 }
@@ -535,6 +540,7 @@ span.caption {
 }
 
 /* Orange Callout */
+
 .callout.orange::before {
   background-color: #CB4A27;
 }
@@ -548,6 +554,7 @@ span.caption {
 }
 
 /* Grey Callout */
+
 .callout.grey::before {
   background-color: #065577;
 }
@@ -561,6 +568,7 @@ span.caption {
 }
 
 /* Simple Callout */
+
 .callout.simple {
   padding: 0;
 }
