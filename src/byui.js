@@ -185,7 +185,6 @@ function main() {
     /* Insert copyright footer */
     function addCopyrightFooter() {
         try {
-            // TODO should I really be using this selector? originall i was going by #content
             var page = document.getElementById('content');
             if (page) {
                 /* don't add one if it already exists */
