@@ -10,34 +10,32 @@ if (localStorage.getItem('devAccount') !== 'true') {
     console.warn('byui.js disabled for testing');
 }
 
-/* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading*/
+/* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
 function editorStyles() {
     try {
-
+        /* if there are no WYSIWYG's on the page, don't bother running */
         if (!tinyMCE) {
             return;
         }
-        
+        /* our css, canvas common css, canvas color vars css */
+        var regExes = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
         var cssHrefs = [...document.querySelectorAll('link[rel=stylesheet]')].reduce((accum, linkTag) => {
-            var href = linkTag.getAttribute('href'),
-                regExes = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
-            
-            /* our css, canvas common css, canvas color vars css */
-            var keepThisCssSheet = regExes.some(regEx => href.match(regEx) !== null);
-            
-            if (keepThisCssSheet) {
+            var href = linkTag.getAttribute('href');
+
+            /* only keep the link if it matches one of the regExes */
+            if (regExes.some(regEx => href.match(regEx) !== null)) {
                 accum.push(href);
             }
             return accum;
         }, []);
-        
-        
-        tinyMCE.editors.forEach(function (editor) {
-            cssHrefs.forEach(function (href) {
+
+        tinyMCE.editors.forEach(editor => {
+            cssHrefs.forEach(href => {
                 editor.dom.styleSheetLoader.load(href);
             });
         });
-    } catch(editorErr) {
+
+    } catch (editorErr) {
         console.error(editorErr);
     }
 }
