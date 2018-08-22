@@ -3,6 +3,8 @@
 /* Allows us to disable this page for testing purposes */
 if (localStorage.getItem('devAccount') !== 'true') {
     document.addEventListener('DOMContentLoaded', main);
+} else {
+    console.warn('JS disabled for testing');
 }
 
 function main() {
@@ -177,11 +179,14 @@ function main() {
     /* Insert copyright footer */
     function addCopyrightFooter() {
         try {
+            // TODO should I really be using this selector? originall i was going by #content
             var page = document.getElementById('content');
             if (page) {
-                page.insertAdjacentHTML('beforeend', `<p class='copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
+                /* don't add one if it already exists */
+                if (!document.querySelector('p.copyright') && !document.querySelector('p#byui-copyright'))
+                    page.insertAdjacentHTML('beforeend', `<p class='copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
             } else {
-                console.error('unable to add copyright footer to page');
+                throw new Error('unable to add copyright footer to page');
             }
         } catch (copyrightErr) {
             console.error(copyrightErr);
