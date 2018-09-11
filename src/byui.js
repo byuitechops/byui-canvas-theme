@@ -14,7 +14,7 @@ if (localStorage.getItem('devAccount') !== 'true') {
 function editorStyles() {
     try {
         /* if there are no WYSIWYG's on the page, don't bother running */
-        if (!tinyMCE) {
+        if (typeof tinyMCE !== 'undefined') {
             return;
         }
         /* our css, canvas common css, canvas color vars css */
