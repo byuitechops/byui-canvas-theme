@@ -86,60 +86,10 @@ function main() {
 
     /* handles all functions required to generate the course homepage */
     function generateHomePage() {
-
-        /* generate all links that go to a module */
-        function generateModuleLinks() {
+        /* generate top buttons (under.steps) */
+        function generateSteps(modules) {
             try {
-                /* get modules */
-                $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
-                    var resourcesId,
-                        lessonWrapperSelector = '#navigation .lessons';
-                    /* Generate a Module link - called by above try statement */
-                    function generateModuleLink(moduleId, moduleCount) {
-                        var modNum = moduleCount + 1;
-                        /* append leading 0 */
-                        if (moduleCount + 1 < 10)
-                            modNum = `0${moduleCount + 1}`;
-                        document.querySelector(lessonWrapperSelector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${modNum}</a>`);
-                    }
-
-                    /* clear lesson div & generate module links if generate class exists */
-                    if ([...document.querySelector(lessonWrapperSelector).classList].includes('generate')) {
-                        document.querySelector(lessonWrapperSelector).innerHTML = '';
-                        /* remove modules with invalid names & get modulesPerRow (limit 7) */
-                        var validModules = [];
-                        modules.forEach(canvasModule => {
-                            if (/(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name)) {
-                                validModules.push(canvasModule);
-                            } else if (/student\s*resources/i.test(canvasModule.name)) {
-                                resourcesId = canvasModule.id;
-                            }
-                        });
-                        var modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
-
-                        /* generate module links */
-                        validModules.forEach((canvasModule, lessonCounter) => {
-                            generateModuleLink(canvasModule.id, lessonCounter);
-                        });
-                    }
-
-                    /* set home page buttons */
-                    if (start)
-                        start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
-                    if (iLearnTutorial)
-                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
-                    if (resources)
-                        resources.href = `/courses/${courseNumber}/modules#module_${resourcesId}`;
-                });
-            } catch (moduleErr) {
-                console.error(moduleErr);
-            }
-        }
-
-        /* generate link to instructor bio */
-        function generateInstructorLink() {
-            try {
-                /* make the api call to get enrollments */
+                /* generate link to instructor bio - make the api call to get enrollments*/
                 $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment`, teachers => {
                     /* check for multiple instances of the same teacher */
                     teachers = teachers.map(teacher => teacher.user_id).filter((teacherId, i, teachers) => teachers.indexOf(teacherId) === i);
@@ -155,23 +105,71 @@ function main() {
                         instructor.href = `/courses/${courseNumber}/users/${teachers[0]}`;
                     }
                 });
-            } catch (instructorErr) {
-                console.error(instructorErr);
+
+                /* Get additional resources module item */
+                var resourcesModule = modules.find(canvasModule => /student\s*resources/i.test(canvasModule.name));
+
+                /* set home page buttons */
+                var start = document.querySelector('#start'),
+                    iLearnTutorial = document.querySelector('#tutorial'),
+                    resources = document.querySelector('#resources');
+
+                if (start)
+                    start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
+                if (iLearnTutorial)
+                    iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+                if (resources && resourcesModule)
+                    resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
+            } catch (generateStepsErr) {
+                console.error(generateStepsErr);
+            }
+        }
+
+        /* generate lesson links (under .lessons) */
+        function generateLessons(modules) {
+            try {
+                /* Generate a Module link - called by above try statement */
+                function generateLessonLink(moduleId, moduleCount) {
+                    moduleCount++;
+                    /* append leading 0 */
+                    if (moduleCount < 10)
+                        moduleCount = `0${moduleCount}`;
+                    document.querySelector(lessonWrapperSelector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${moduleCount}</a>`);
+                }
+
+                var lessonWrapperSelector = '#navigation .lessons';
+
+                /* clear lesson div & generate module links if generate class exists */
+                if ([...document.querySelector(lessonWrapperSelector).classList].includes('generate')) {
+                    document.querySelector(lessonWrapperSelector).innerHTML = '';
+                    /* remove modules with invalid names & get modulesPerRow (limit 7) */
+                    var validModules = modules.filter(canvasModule => {
+                            return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
+                        }),
+                        modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
+
+                    /* generate module links */
+                    validModules.forEach((canvasModule, i) => {
+                        generateLessonLink(canvasModule.id, i);
+                    });
+                }
+            } catch (generateLessonErr) {
+                console.error(generateLessonErr);
             }
         }
 
         try {
             /* quit if we are not on the course homepage OR the page is missing the expected format */
-            if (document.querySelectorAll('#navigation .steps').length === 0) {
+            if (document.querySelectorAll('#navigation .steps, #navigation .lessons').length === 0) {
                 return;
             }
-            var iLearnTutorial = document.querySelector('#tutorial');
-            var start = document.querySelector('#start');
-            var instructor = document.querySelector('#instructor');
-            var resources = document.querySelector('#resources');
 
-            generateModuleLinks();
-            generateInstructorLink();
+            /* get course modules */
+            $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
+
+                generateSteps(modules);
+                generateLessons(modules);
+            });
         } catch (selectorErr) {
             console.error(selectorErr);
         }
@@ -230,12 +228,12 @@ function main() {
     function addTooltips() {
         let borderColor = 'black';
         const divId = 'byui-quizzes-next-tooltip';
-        const assignmentsPage = window.location.href.includes('assignments');
+        const settingsPage = window.location.href.includes('settings');
         const assignmentsHTML = '<div>Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>';
         const settingsHTML = '<div>Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>';
 
         /* if the current href isn't the settings page or the assignments page, then return */
-        if (!settingsPage && ! window.location.href.includes('settings')) {
+        if (!settingsPage && !window.location.href.includes('assignments')) {
             return;
         }
 
