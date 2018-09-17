@@ -87,7 +87,7 @@ function main() {
     /* handles all functions required to generate the course homepage */
     function generateHomePage() {
 
-        /* generate all lnks that go to a module */
+        /* generate all links that go to a module */
         function generateModuleLinks() {
             try {
                 /* get modules */
@@ -104,7 +104,7 @@ function main() {
                     }
 
                     /* clear lesson div & generate module links if generate class exists */
-                    if (Array.from(document.querySelector(lessonWrapperSelector).classList).includes('generate')) {
+                    if ([...document.querySelector(lessonWrapperSelector).classList].includes('generate')) {
                         document.querySelector(lessonWrapperSelector).innerHTML = '';
                         /* remove modules with invalid names & get modulesPerRow (limit 7) */
                         var validModules = [];
@@ -226,16 +226,16 @@ function main() {
         }
     }
 
+    /* add quiz.next tooltips where needed */
     function addTooltips() {
         let borderColor = 'black';
         const divId = 'byui-quizzes-next-tooltip';
         const assignmentsPage = window.location.href.includes('assignments');
-        const settingsPage = window.location.href.includes('settings');
         const assignmentsHTML = '<div>Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>';
         const settingsHTML = '<div>Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>';
 
         /* if the current href isn't the settings page or the assignments page, then return */
-        if (!settingsPage && !assignmentsPage) {
+        if (!settingsPage && ! window.location.href.includes('settings')) {
             return;
         }
 
@@ -257,14 +257,14 @@ function main() {
         const style = document.createElement('style');
         style.innerHTML = `
     .tippy-tooltip.honeybee-theme {
-        background-color: white;
         border: 2px solid ${borderColor};
+        background-color: white;
         color: black;
         max-width: 200px;
-    }
-    .tippy-backdrop {
+      }
+      .tippy-backdrop {
         background: white;
-    }`;
+      }`;
 
         /* create a script tag, add the tooltip JavaScript to it, and add the tag to the document */
         const selectors = '.quizzes_next, .new_quiz_lti_wrapper';
@@ -296,5 +296,5 @@ function main() {
     alterBreadcrumb();
     prismHighlighting();
     addCopyrightFooter();
-    // addTooltips();
+    addTooltips();
 }
