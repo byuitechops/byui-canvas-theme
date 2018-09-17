@@ -3,6 +3,8 @@
 /* global tinyMCE */
 
 /* Allows us to disable this page for testing purposes */
+// TESTING disable for prod
+// if (true) {
 if (localStorage.getItem('devAccount') !== 'true') {
     window.onload = editorStyles;
     document.addEventListener('DOMContentLoaded', main);
@@ -14,7 +16,7 @@ if (localStorage.getItem('devAccount') !== 'true') {
 function editorStyles() {
     try {
         /* if there are no WYSIWYG's on the page, don't bother running */
-        if (typeof tinyMCE !== 'undefined') {
+        if (typeof tinyMCE === 'undefined') {
             return;
         }
         /* our css, canvas common css, canvas color vars css */
@@ -138,27 +140,20 @@ function main() {
         function generateInstructorLink() {
             try {
                 /* make the api call to get enrollments */
-                $.get(`/api/v1/courses/${courseNumber}/enrollments?per_page=100`, function (enrollments) {
-                    var teacher = enrollments.filter(person => person.type === 'TeacherEnrollment');
-                    if (teacher.length > 1) {
+                $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment`, teachers => {
+                    /* check for multiple instances of the same teacher */
+                    teachers = teachers.map(teacher => teacher.user_id).filter((teacherId, i, teachers) => teachers.indexOf(teacherId) === i);
 
-                        /* check for multiple instances of the same teacher */
-                        let id = teacher[0].user_id;
-                        let multipleTeachers = teacher.find(teach => teach.user_id !== id) != undefined;
-
-                        if (multipleTeachers === true) {
-                            console.log('Multiple teachers are enrolled in this course. Please add "Your Instructor" link manually.');
-                            return;
-                        }
-
-                    } else if (teacher.length === 0) {
+                    if (teachers.length > 1) {
+                        /* If there are multiple unique teachers */
+                        console.log('Multiple teachers are enrolled in this course. Please add "Your Instructor" link manually.');
+                    } else if (teachers.length === 0) {
                         /* if the teacher isn't enrolled for some reason */
                         console.log('Unable to find teacher enrollment.');
-                        return;
+                    } else {
+                        /* if we have one teacher set the URL */
+                        instructor.href = `/courses/${courseNumber}/users/${teachers[0]}`;
                     }
-
-                    /* if we have a teacher fix the button */
-                    instructor.href = `/courses/${courseNumber}/users/${teacher[0].user_id}`;
                 });
             } catch (instructorErr) {
                 console.error(instructorErr);
@@ -231,6 +226,69 @@ function main() {
         }
     }
 
+    function addTooltips() {
+        let borderColor = 'black';
+        const divId = 'byui-quizzes-next-tooltip';
+        const assignmentsPage = window.location.href.includes('assignments');
+        const settingsPage = window.location.href.includes('settings');
+        const assignmentsHTML = '<div>Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>';
+        const settingsHTML = '<div>Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>';
+
+        /* if the current href isn't the settings page or the assignments page, then return */
+        if (!settingsPage && !assignmentsPage) {
+            return;
+        }
+
+        /* create the tooltip div and set its attributes */
+        const div = document.createElement('div');
+        div.setAttribute('id', divId);
+        div.setAttribute('style', 'display:none');
+
+        /* assignment page's innerHTML for the tooltip */
+        div.innerHTML = assignmentsHTML;
+
+        /* the setting's page borderColor and innerHTML are different than the assignment's page */
+        if (settingsPage) {
+            borderColor = 'red';
+            div.innerHTML = settingsHTML;
+        }
+
+        /* create a style tag on the document and set its innerHTML */
+        const style = document.createElement('style');
+        style.innerHTML = `
+    .tippy-tooltip.honeybee-theme {
+        background-color: white;
+        border: 2px solid ${borderColor};
+        color: black;
+        max-width: 200px;
+    }
+    .tippy-backdrop {
+        background: white;
+    }`;
+
+        /* create a script tag, add the tooltip JavaScript to it, and add the tag to the document */
+        const selectors = '.quizzes_next, .new_quiz_lti_wrapper';
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.async = true;
+        script.onload = function () {
+            tippy(selectors, {
+                html: `#${divId}`,
+                interactive: true,
+                placement: 'bottom-end',
+                theme: 'honeybee',
+                size: 'large'
+            })
+        };
+        script.src = 'https://unpkg.com/tippy.js@2.5.4/dist/tippy.all.min.js';
+
+        /* put the html tags in the document */
+        document.body.appendChild(div);
+        document.head.appendChild(style);
+        document.head.appendChild(script);
+
+    }
+
     initializeAccordion();
     initializeTabs();
     insertVideoTag();
@@ -238,4 +296,5 @@ function main() {
     alterBreadcrumb();
     prismHighlighting();
     addCopyrightFooter();
+    // addTooltips();
 }

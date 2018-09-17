@@ -30,6 +30,7 @@
   float: left;
 }
 
+/* ERROR this breaks a lot of pages when the content isn't using the full screen. why do we need inline-block?? */
 #left-side+#not_right_side>#content-wrapper {
   display: inline-block;
   width: 100%
