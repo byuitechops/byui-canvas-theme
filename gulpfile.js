@@ -8,6 +8,14 @@ const sourcemaps = require('gulp-sourcemaps');
 const gulp = require('gulp');
 
 
+/****************************************************
+ * TODO
+ * Replace spread syntax & `Array.from()` with 
+ * `Array.prototype.forEach.call(l, function (ele) {
+ * console.log(ele);
+ * });`
+*****************************************************/
+
 gulp.task('default', () => {
     // Nothing to see here...
 });
@@ -16,7 +24,9 @@ gulp.task('compressJS', (cb) => {
     pump([
         gulp.src('src/**/*.js'),
         sourcemaps.init(),
-        babel({presets: [['env', {'modules': false}], 'minify']}),
+        // cleanArrays,
+        // babel({presets: [['env', {'modules': false, 'targets': {'ie': 11}}], 'minify']}),
+        babel({presets: [['env', {'modules': false, 'targets': {'ie': '11'}}]]}),
         sourcemaps.write('.'),
         gulp.dest('./prod/')
     ], cb);
@@ -33,4 +43,5 @@ gulp.task('compressCSS', (cb) => {
 });
 
 gulp.watch('src/**/*.js', ['compressJS']);
+// gulp.watch('src/**/*.js', ['cleanArrays', 'compressJS']);
 gulp.watch('src/**/*.css', ['compressCSS']);
