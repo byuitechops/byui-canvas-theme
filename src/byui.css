@@ -26,11 +26,12 @@
 **************************************************/
 .ic-app-course-menu {
   position: sticky;
-  margin-left: -180px;
+  /* if the content stops sitting next to the menu on smaller screens, ensure margin-left is up to date */
+  margin-left: -192px; 
   float: left;
 }
 
-/* ERROR this breaks a lot of pages when the content isn't using the full screen. why do we need inline-block?? */
+/* inline block is the only way to keep the nav & the page content next to each other */
 #left-side+#not_right_side>#content-wrapper {
   display: inline-block;
   width: 100%
