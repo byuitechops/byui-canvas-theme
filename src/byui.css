@@ -30,7 +30,6 @@
   float: left;
 }
 
-/* ERROR this breaks a lot of pages when the content isn't using the full screen. why do we need inline-block?? */
 #left-side+#not_right_side>#content-wrapper {
   display: inline-block;
   width: 100%
@@ -45,9 +44,9 @@
 }
 
 /*These are the default theme colors, to be overridden by individual courses */
-.byui {
-  --color24: #525252;
+:root {
   --color35: #0076C6;
+  --color24: #525252;
   --button-color: #525252;
 }
 
