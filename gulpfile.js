@@ -1,9 +1,10 @@
-/* eslint no-console:0 */
-
 const pump = require('pump');
 const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
 const postcss = require('gulp-postcss');
+const postcssCustomProperties = require('postcss-custom-properties');
+const cssnano = require('cssnano');
+
 
 const gulp = require('gulp');
 
@@ -25,7 +26,12 @@ gulp.task('compressCSS', (cb) => {
     pump([
         gulp.src('src/**/*.css'),
         sourcemaps.init(),
-        postcss(),
+        postcss([
+            postcssCustomProperties({
+                'preserve': true // false to completely remove css3 vars from prod
+            }),
+            cssnano()
+        ]),
         sourcemaps.write('./'),
         gulp.dest('./prod/')
     ], cb);
