@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"online.js","sourcesContent":[]}
+{"version":3,"sources":["online.js"],"names":[],"mappings":"AAAA","file":"online.js","sourcesContent":["/*eslint-env node, browser, jquery, es6*/"]}
