@@ -278,7 +278,7 @@ function main() {
                 size: 'large'
             });
         };
-        script.src = 'https://unpkg.com/tippy.js@2.5.4/dist/tippy.all.min.js';
+        script.src = 'https://content.byui.edu/integ/gen/a422cccd-35b7-4087-9329-20698cf169b0/0/tippy.all.min.js';
 
         /* put the html tags in the document */
         document.body.appendChild(div);
