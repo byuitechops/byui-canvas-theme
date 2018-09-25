@@ -109,7 +109,11 @@ function main() {
                 /* generate link to instructor bio - make the api call to get enrollments*/
                 $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment&per_page=50`, teachers => {
                     /* check for multiple instances of the same teacher */
-                    teachers = teachers.map(teacher => teacher.user_id).filter((teacherId, i, teachers) => teachers.indexOf(teacherId) === i);
+
+                    // TODO which one of these is faster?
+                    // teachers = teachers.map(teacher => teacher.user_id).filter((teacherId, i, teachers) => teachers.indexOf(teacherId) === i);
+                    teachers = teachers.filter((teacher, i, teachers) => teachers.findIndex(teach => teach.user_id == teacher.user_id) == i);
+
 
                     if (teachers.length > 1) {
                         /* If there are multiple unique teachers */
@@ -119,7 +123,7 @@ function main() {
                         console.log('Unable to find teacher enrollment.');
                     } else {
                         /* if we have one teacher set the URL */
-                        instructor.href = `/courses/${courseNumber}/users/${teachers[0]}`;
+                        instructor.href = `/courses/${courseNumber}/users/${teachers[0].user_id}`;
                     }
                 });
             } catch (generateStepsErr) {
@@ -162,15 +166,21 @@ function main() {
 
         try {
             /* quit if we are not on the course homepage OR the page is missing the expected format */
-            if (document.querySelectorAll('#navigation .steps, #navigation .lessons').length === 0) {
+            let stepsExist = document.querySelectorAll('#navigation .steps').length > 0,
+                lessonsExist = document.querySelectorAll('#navigation .lessons').length > 0;
+            if (!stepsExist || !lessonsExist) {
                 return;
             }
 
             /* get course modules */
             $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
-
-                generateSteps(modules);
-                generateLessons(modules);
+                /* Don't run steps if they don't exist (or lessons) */
+                if (stepsExist) {
+                    generateSteps(modules);
+                }
+                if (lessonsExist) {
+                    generateLessons(modules);
+                }
             });
         } catch (selectorErr) {
             console.error(selectorErr);
@@ -231,11 +241,12 @@ function main() {
         let borderColor = 'black';
         const divId = 'byui-quizzes-next-tooltip';
         const settingsPage = window.location.href.includes('settings');
+        const assignmentsPage = window.location.href.includes('assignments');
         const assignmentsHTML = '<div>Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>';
         const settingsHTML = '<div>Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>';
 
         /* if the current href isn't the settings page or the assignments page, then return */
-        if (!settingsPage && !window.location.href.includes('assignments')) {
+        if (!settingsPage && !assignmentsPage) {
             return;
         }
 
@@ -256,7 +267,7 @@ function main() {
         /* create a style tag on the document and set its innerHTML */
         const style = document.createElement('style');
         style.innerHTML = `
-    .tippy-tooltip.honeybee-theme {
+    .tippy-tooltip.byui-theme {
         border: 2px solid ${borderColor};
         background-color: white;
         color: black;
@@ -276,7 +287,7 @@ function main() {
                 html: `#${divId}`,
                 interactive: true,
                 placement: 'bottom-end',
-                theme: 'honeybee',
+                theme: 'byui',
                 size: 'large'
             });
         };
