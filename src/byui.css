@@ -298,14 +298,17 @@
 /* Sizing */
 .full {
   width: 100%;
+  max-width: 50%;
 }
 
 .half {
   width: 50%;
+  max-width: 50%;
 }
 
 .quarter {
   width: 25%;
+  max-width: 25%;
 }
 
 /* Captions for images */
@@ -511,6 +514,11 @@ span.caption {
   padding: 2px 10px;
   margin: 0;
   /* font-style: italic; */
+}
+
+.callout img {
+  /* to overwrite max-width canvas applies on load */
+  max-width: 100% !important;
 }
 
 /* Blue Callout */
