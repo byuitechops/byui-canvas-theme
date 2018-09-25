@@ -4,8 +4,8 @@
 
 /* Allows us to disable this page for testing purposes */
 // TESTING disable for prod
-if (true) {
-    // if (localStorage.getItem('devAccount') !== 'true') {
+// if (true) {
+if (localStorage.getItem('devAccount') !== 'true') {
     window.onload = editorStyles;
     document.addEventListener('DOMContentLoaded', main);
 } else {
