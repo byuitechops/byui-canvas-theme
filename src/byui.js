@@ -1,11 +1,11 @@
 /*eslint-env node, browser, jquery*/
 /* eslint no-console:0 */
-/* global tinyMCE */
+/* global tinyMCE, tippy */
 
 /* Allows us to disable this page for testing purposes */
 // TESTING disable for prod
-// if (true) {
-if (localStorage.getItem('devAccount') !== 'true') {
+if (true) {
+    // if (localStorage.getItem('devAccount') !== 'true') {
     window.onload = editorStyles;
     document.addEventListener('DOMContentLoaded', main);
 } else {
@@ -89,8 +89,25 @@ function main() {
         /* generate top buttons (under.steps) */
         function generateSteps(modules) {
             try {
+                /* Get additional resources module item */
+                var resourcesModule = modules.find(canvasModule => /student\s*resources/i.test(canvasModule.name));
+
+                /* set home page buttons */
+                var start = document.querySelector('#start'),
+                    iLearnTutorial = document.querySelector('#tutorial'),
+                    resources = document.querySelector('#resources'),
+                    instructor = document.querySelector('#instructor');
+
+                if (start)
+                    start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
+                if (iLearnTutorial)
+                    iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+                if (resources && resourcesModule)
+                    resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
+
+
                 /* generate link to instructor bio - make the api call to get enrollments*/
-                $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment?per_page=50`, teachers => {
+                $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment&per_page=50`, teachers => {
                     /* check for multiple instances of the same teacher */
                     teachers = teachers.map(teacher => teacher.user_id).filter((teacherId, i, teachers) => teachers.indexOf(teacherId) === i);
 
@@ -105,21 +122,6 @@ function main() {
                         instructor.href = `/courses/${courseNumber}/users/${teachers[0]}`;
                     }
                 });
-
-                /* Get additional resources module item */
-                var resourcesModule = modules.find(canvasModule => /student\s*resources/i.test(canvasModule.name));
-
-                /* set home page buttons */
-                var start = document.querySelector('#start'),
-                    iLearnTutorial = document.querySelector('#tutorial'),
-                    resources = document.querySelector('#resources');
-
-                if (start)
-                    start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
-                if (iLearnTutorial)
-                    iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
-                if (resources && resourcesModule)
-                    resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
             } catch (generateStepsErr) {
                 console.error(generateStepsErr);
             }
