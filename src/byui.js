@@ -238,41 +238,45 @@ function main() {
 
     /* add quiz.next tooltips where needed */
     function addTooltips() {
-        let borderColor = 'black';
-        const divId = 'byui-quizzes-next-tooltip';
-        const assignmentsHTML = `<div id="${divId}" style="display: none;">Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>`;
-        const settingsHTML = `<div id="${divId}" style="display: none;">Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>`;
+        try {
+            let borderColor = 'black';
+            const divId = 'byui-quizzes-next-tooltip';
+            const assignmentsHTML = `<div id="${divId}" style="display: none;">Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>`;
+            const settingsHTML = `<div id="${divId}" style="display: none;">Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>`;
 
-        /* Add appropriate tooltip OR return if we're on the wrong page */
-        if (window.location.href.includes('settings')) {
-            document.head.insertAdjacentHTML('beforeend', settingsHTML);
-            borderColor = 'red';
-        } else if (window.location.href.includes('assignments')) {
-            document.head.insertAdjacentHTML('beforeend', assignmentsHTML);
-        } else {
-            return;
+            /* Add appropriate tooltip OR return if we're on the wrong page */
+            if (window.location.href.includes('settings')) {
+                document.head.insertAdjacentHTML('beforeend', settingsHTML);
+                borderColor = 'red';
+            } else if (window.location.href.includes('assignments')) {
+                document.head.insertAdjacentHTML('beforeend', assignmentsHTML);
+            } else {
+                return;
+            }
+
+            /* Add tooltip styles to DOM with appropriate border color */
+            const styleGuts = `<style>.tippy-tooltip.byui-theme {border: 2px solid ${borderColor};background-color: white;color: black;max-width: 200px;}.tippy-backdrop {background: white;}</style>`;
+
+            document.head.insertAdjacentHTML('beforeend', styleGuts);
+
+            /* create a script tag, add the tooltip JavaScript to it, and add the tag to the document */
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.src = 'https://content.byui.edu/integ/gen/a422cccd-35b7-4087-9329-20698cf169b0/0/tippy.all.min.js';
+            script.onload = () => {
+                tippy('.quizzes_next, .new_quiz_lti_wrapper', {
+                    html: `#${divId}`,
+                    interactive: true,
+                    placement: 'bottom-end',
+                    theme: 'byui',
+                    size: 'large'
+                });
+            };
+            document.head.appendChild(script);
+        } catch (tooltipErr) {
+            console.error(tooltipErr);
         }
-
-        /* Add tooltip styles to DOM with appropriate border color */
-        const styleGuts = `<style>.tippy-tooltip.byui-theme {border: 2px solid ${borderColor};background-color: white;color: black;max-width: 200px;}.tippy-backdrop {background: white;}</style>`;
-          
-        document.head.insertAdjacentHTML('beforeend', styleGuts);
-
-        /* create a script tag, add the tooltip JavaScript to it, and add the tag to the document */
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.async = true;
-        script.src = 'https://content.byui.edu/integ/gen/a422cccd-35b7-4087-9329-20698cf169b0/0/tippy.all.min.js';
-        script.onload = () => {
-            tippy('.quizzes_next, .new_quiz_lti_wrapper', {
-                html: `#${divId}`,
-                interactive: true,
-                placement: 'bottom-end',
-                theme: 'byui',
-                size: 'large'
-            });
-        };
-        document.head.appendChild(script);
     }
 
     initializeAccordion();
