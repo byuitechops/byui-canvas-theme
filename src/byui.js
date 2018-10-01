@@ -254,16 +254,7 @@ function main() {
         }
 
         /* Add tooltip styles to DOM with appropriate border color */
-        const styleGuts = `<style>
-        .tippy-tooltip.byui-theme {
-            border: 2px solid ${borderColor};
-            background-color: white;
-            color: black;
-            max-width: 200px;
-          }
-          .tippy-backdrop {
-            background: white;
-          }</style>`;
+        const styleGuts = `<style>.tippy-tooltip.byui-theme {border: 2px solid ${borderColor};background-color: white;color: black;max-width: 200px;}.tippy-backdrop {background: white;}</style>`;
           
         document.head.insertAdjacentHTML('beforeend', styleGuts);
 
