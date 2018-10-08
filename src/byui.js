@@ -1,6 +1,6 @@
-/*eslint-env node, browser, jquery*/
+/*eslint-env browser */
 /* eslint no-console:0 */
-/* global tinyMCE, tippy */
+/* global tinyMCE, tippy $ */
 
 /* Allows us to disable this page for testing purposes */
 // TESTING disable for prod
@@ -58,8 +58,18 @@ function main() {
             console.error(accordionErr);
         }
     }
+    
+    /* Initialize dialog - JQUERY UI */
+    function initializeDialog() {
+        try {
+            $('div.dialog').dialog();
+        } catch (dialogErr) {
+            console.error(dialogErr);
+        }
+    }
 
     /* Initialize tabs - JQUERY UI */
+    // TODO are we even using this???
     function initializeTabs() {
         try {
             $('#styleguide-tabs-demo-minimal').tabs();
@@ -109,7 +119,6 @@ function main() {
                 /* generate link to instructor bio - make the api call to get enrollments*/
                 $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment&per_page=50`, teachers => {
                     /* check for multiple instances of the same teacher */
-
                     // TODO which one of these is faster?
                     // teachers = teachers.map(teacher => teacher.user_id).filter((teacherId, i, teachers) => teachers.indexOf(teacherId) === i);
                     teachers = teachers.filter((teacher, i, teachers) => teachers.findIndex(teach => teach.user_id == teacher.user_id) == i);
@@ -281,6 +290,7 @@ function main() {
 
     initializeAccordion();
     initializeTabs();
+    initializeDialog();
     insertVideoTag();
     generateHomePage();
     alterBreadcrumb();
