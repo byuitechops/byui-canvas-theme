@@ -6,40 +6,59 @@
 // TESTING disable for prod
 // if (true) {
 if (localStorage.getItem('devAccount') !== 'true') {
-    window.onload = editorStyles;
+    window.onload = onloadFunctions;
     document.addEventListener('DOMContentLoaded', main);
 } else {
     console.warn('byui.js disabled for testing');
 }
 
-/* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
-function editorStyles() {
-    try {
-        /* if there are no WYSIWYG's on the page, don't bother running */
-        if (typeof tinyMCE === 'undefined') {
-            return;
-        }
-        /* our css, canvas common css, canvas color vars css */
-        var regExes = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
-        var cssHrefs = [...document.querySelectorAll('link[rel=stylesheet]')].reduce((accum, linkTag) => {
-            var href = linkTag.getAttribute('href');
-
-            /* only keep the link if it matches one of the regExes */
-            if (regExes.some(regEx => href.match(regEx) !== null)) {
-                accum.push(href);
+function onloadFunctions() {
+    
+    function initializeCarousel() {
+        try {
+            /* Initialize carousels*/
+            if ($('.carousel').length !== 0) {
+                $('.carousel').slick({
+                    dots: true
+                });
             }
-            return accum;
-        }, []);
-
-        tinyMCE.editors.forEach(editor => {
-            cssHrefs.forEach(href => {
-                editor.dom.styleSheetLoader.load(href);
-            });
-        });
-
-    } catch (editorErr) {
-        console.error(editorErr);
+        } catch (carouselErr) {
+            console.error(carouselErr);
+        }
     }
+    
+    /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
+    function editorStyles() {
+        try {
+            /* if there are no WYSIWYG's on the page, don't bother running */
+            if (typeof tinyMCE === 'undefined') {
+                return;
+            }
+            /* our css, canvas common css, canvas color vars css */
+            var regExes = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
+            var cssHrefs = [...document.querySelectorAll('link[rel=stylesheet]')].reduce((accum, linkTag) => {
+                var href = linkTag.getAttribute('href');
+
+                /* only keep the link if it matches one of the regExes */
+                if (regExes.some(regEx => href.match(regEx) !== null)) {
+                    accum.push(href);
+                }
+                return accum;
+            }, []);
+
+            tinyMCE.editors.forEach(editor => {
+                cssHrefs.forEach(href => {
+                    editor.dom.styleSheetLoader.load(href);
+                });
+            });
+
+        } catch (editorErr) {
+            console.error(editorErr);
+        }
+    }
+
+    initializeCarousel();
+    editorStyles();
 }
 
 
@@ -58,7 +77,7 @@ function main() {
             console.error(accordionErr);
         }
     }
-    
+
     /* Initialize dialog - JQUERY UI */
     function initializeDialog() {
         try {
@@ -288,6 +307,22 @@ function main() {
         }
     }
 
+    function loadSlickJS() {
+        var slickScript = document.createElement('script');
+        slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
+        document.body.appendChild(slickScript);
+
+        var slickScriptCss = document.createElement('link');
+        slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
+        slickScriptCss.rel = 'stylesheet';
+        document.body.appendChild(slickScriptCss);
+
+        var slickScriptTheme = document.createElement('link');
+        slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
+        slickScriptTheme.rel = 'stylesheet';
+        document.body.appendChild(slickScriptTheme);
+    }
+
     initializeAccordion();
     initializeTabs();
     initializeDialog();
@@ -297,4 +332,5 @@ function main() {
     prismHighlighting();
     addCopyrightFooter();
     addTooltips();
+    loadSlickJS();
 }
