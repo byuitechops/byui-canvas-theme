@@ -1,6 +1,6 @@
 /*eslint-env browser */
 /* eslint no-console:0 */
-/* global tinyMCE, tippy $ */
+/* global tinyMCE, tippy, $, jQuery */
 
 /* Allows us to disable this page for testing purposes */
 // TESTING disable for prod
@@ -12,13 +12,44 @@ if (localStorage.getItem('devAccount') !== 'true') {
     console.warn('byui.js disabled for testing');
 }
 
+function checkForJquery() {
+    function loadJquery() {
+        var jqueryScript = document.createElement('script');
+        jqueryScript.href = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js';
+        document.head.appendChild(jqueryScript);
+    }
+    try {
+        if (typeof $ != 'undefined') {
+            // check version number
+            var minimumVersion = '1.7.2'.split('.');
+            var version = jQuery.fn.jquery.split('.');
+            var validVersion;
+
+            validVersion = minimumVersion.every((minVersionNum, i) => {
+                return minimumVersion <= version[i];
+            });
+
+            if (!validVersion) {
+                loadJquery();
+            } 
+        } else {
+            loadJquery();
+        }
+    } catch (loadjQueryErr) {
+        console.error(loadjQueryErr);
+        loadJquery();
+    }
+}
+
 /* controls functions which run onload (after DOMContentLoaded) */
 function onloadFunctions() {
-    
+
     /* Initialize carousels if any are present on page */
     function initializeCarousel() {
         try {
             if (document.querySelectorAll('.carousel').length > 0) {
+                checkForJquery();
+
                 $('.carousel').slick({
                     dots: true
                 });
@@ -27,7 +58,7 @@ function onloadFunctions() {
             console.error(carouselErr);
         }
     }
-    
+
     /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
     function editorStyles() {
         try {
@@ -317,17 +348,17 @@ function main() {
             }
             var slickScript = document.createElement('script');
             slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
-            document.body.appendChild(slickScript);
-            
+            document.head.appendChild(slickScript);
+
             var slickScriptCss = document.createElement('link');
             slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
             slickScriptCss.rel = 'stylesheet';
-            document.body.appendChild(slickScriptCss);
-            
+            document.head.appendChild(slickScriptCss);
+
             var slickScriptTheme = document.createElement('link');
             slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
             slickScriptTheme.rel = 'stylesheet';
-            document.body.appendChild(slickScriptTheme);
+            document.head.appendChild(slickScriptTheme);
         } catch (slickErr) {
             console.error(slickErr);
         }
