@@ -12,12 +12,13 @@ if (localStorage.getItem('devAccount') !== 'true') {
     console.warn('byui.js disabled for testing');
 }
 
+/* controls functions which run onload (after DOMContentLoaded) */
 function onloadFunctions() {
     
+    /* Initialize carousels if any are present on page */
     function initializeCarousel() {
         try {
-            /* Initialize carousels*/
-            if ($('.carousel').length !== 0) {
+            if (document.querySelectorAll('.carousel').length > 0) {
                 $('.carousel').slick({
                     dots: true
                 });
@@ -307,20 +308,29 @@ function main() {
         }
     }
 
+    /* load JS & CSS needed for image carousels if there is one on the page */
     function loadSlickJS() {
-        var slickScript = document.createElement('script');
-        slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
-        document.body.appendChild(slickScript);
-
-        var slickScriptCss = document.createElement('link');
-        slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
-        slickScriptCss.rel = 'stylesheet';
-        document.body.appendChild(slickScriptCss);
-
-        var slickScriptTheme = document.createElement('link');
-        slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
-        slickScriptTheme.rel = 'stylesheet';
-        document.body.appendChild(slickScriptTheme);
+        try {
+            /* don't load scripts if they aren't being used on the current page */
+            if (document.querySelector('.carousel').length === 0) {
+                return;
+            }
+            var slickScript = document.createElement('script');
+            slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
+            document.body.appendChild(slickScript);
+            
+            var slickScriptCss = document.createElement('link');
+            slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
+            slickScriptCss.rel = 'stylesheet';
+            document.body.appendChild(slickScriptCss);
+            
+            var slickScriptTheme = document.createElement('link');
+            slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
+            slickScriptTheme.rel = 'stylesheet';
+            document.body.appendChild(slickScriptTheme);
+        } catch (slickErr) {
+            console.error(slickErr);
+        }
     }
 
     initializeAccordion();
