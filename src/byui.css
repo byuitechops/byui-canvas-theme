@@ -27,7 +27,7 @@
 .ic-app-course-menu {
   position: sticky;
   /* if the content stops sitting next to the menu on smaller screens, ensure margin-left is up to date */
-  margin-left: -192px; 
+  margin-left: -192px;
   float: left;
 }
 
@@ -298,7 +298,7 @@
 /* Sizing */
 .full {
   width: 100%;
-  max-width: 50%;
+  max-width: 100%;
 }
 
 .half {
@@ -589,4 +589,11 @@ span.caption {
 
 .callout.simple {
   background-color: #FFFFFF;
+}
+
+/******************************************
+          Image Carousel
+********************************************/
+.carousel img {
+  max-width: 100% !important;
 }
