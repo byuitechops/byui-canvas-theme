@@ -366,7 +366,6 @@ function main() {
     }
 
     initializeAccordion();
-    initializeTabs();
     initializeDialog();
     insertVideoTag();
     generateHomePage();
