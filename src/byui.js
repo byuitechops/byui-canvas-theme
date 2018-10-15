@@ -130,19 +130,6 @@ function main() {
         }
     }
 
-    /* Initialize tabs - JQUERY UI */
-    // TODO are we even using this???
-    function initializeTabs() {
-        try {
-            if (document.querySelector('#styleguide-tabs-demo-minimal')) {
-                checkForJquery();
-                $('#styleguide-tabs-demo-minimal').tabs();
-            }
-        } catch (tabErr) {
-            console.error(tabErr);
-        }
-    }
-
     /* Insert custom video tag generation scripts */
     function insertVideoTag() {
         try {
