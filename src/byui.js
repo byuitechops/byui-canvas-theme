@@ -1,6 +1,6 @@
 /*eslint-env browser */
 /* eslint no-console:0 */
-/* global tinyMCE, tippy, $, jQuery */
+/* global tinyMCE, tippy, $ */
 
 /* Allows us to disable this page for testing purposes */
 // TESTING disable for prod
@@ -14,30 +14,35 @@ if (localStorage.getItem('devAccount') !== 'true') {
 
 function checkForJquery() {
     function loadJquery() {
+        console.log('loading jQuery');
         var jqueryScript = document.createElement('script');
         jqueryScript.href = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js';
         document.head.appendChild(jqueryScript);
     }
     try {
-        if (typeof $ != 'undefined') {
-            // check version number
-            var minimumVersion = '1.7.2'.split('.');
-            var version = jQuery.fn.jquery.split('.');
-            var validVersion;
+        if (typeof $ == 'undefined' || typeof $().jquery == 'undefined') {
+            loadJquery();
+        } else {
+            // check version
+            var minimumVersion = '1.7.0'.split('.');
+            var currentVersion = $().jquery.split('.');
+            var validVersion = true;
 
-            validVersion = minimumVersion.every((minVersionNum, i) => {
-                return minimumVersion <= version[i];
-            });
+            for (let i = 0; i < minimumVersion.length; i++) {
+                if (currentVersion[i] > minimumVersion[i]) {
+                    break;
+                } else if (currentVersion < minimumVersion) {
+                    validVersion = false;
+                    break;
+                }
+            }
 
             if (!validVersion) {
                 loadJquery();
-            } 
-        } else {
-            loadJquery();
+            }
         }
     } catch (loadjQueryErr) {
         console.error(loadjQueryErr);
-        loadJquery();
     }
 }
 
@@ -47,11 +52,11 @@ function onloadFunctions() {
     /* Initialize carousels if any are present on page */
     function initializeCarousel() {
         try {
-            if (document.querySelectorAll('.carousel').length > 0) {
+            if (document.querySelector('.carousel')) {
                 checkForJquery();
 
                 $('.carousel').slick({
-                    dots: true
+                    dots: true,
                 });
             }
         } catch (carouselErr) {
@@ -100,11 +105,14 @@ function main() {
     /* Initialize accordion - JQUERY UI */
     function initializeAccordion() {
         try {
-            $('div.accordion').accordion({
-                heightStyle: 'content',
-                collapsible: true,
-                active: false
-            });
+            if (document.querySelector('div.accordion')) {
+                checkForJquery();
+                $('div.accordion').accordion({
+                    heightStyle: 'content',
+                    collapsible: true,
+                    active: false
+                });
+            }
         } catch (accordionErr) {
             console.error(accordionErr);
         }
@@ -113,7 +121,10 @@ function main() {
     /* Initialize dialog - JQUERY UI */
     function initializeDialog() {
         try {
-            $('div.dialog').dialog();
+            if (document.querySelector('div.dialog')) {
+                checkForJquery();
+                $('div.dialog').dialog();
+            }
         } catch (dialogErr) {
             console.error(dialogErr);
         }
@@ -123,7 +134,10 @@ function main() {
     // TODO are we even using this???
     function initializeTabs() {
         try {
-            $('#styleguide-tabs-demo-minimal').tabs();
+            if (document.querySelector('#styleguide-tabs-demo-minimal')) {
+                checkForJquery();
+                $('#styleguide-tabs-demo-minimal').tabs();
+            }
         } catch (tabErr) {
             console.error(tabErr);
         }
@@ -165,7 +179,6 @@ function main() {
                     iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
                 if (resources && resourcesModule)
                     resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
-
 
                 /* generate link to instructor bio - make the api call to get enrollments*/
                 $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment&per_page=50`, teachers => {
@@ -232,6 +245,7 @@ function main() {
                 return;
             }
 
+            checkForJquery();
             /* get course modules */
             $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
                 /* Don't run steps if they don't exist (or lessons) */
