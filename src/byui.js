@@ -110,27 +110,28 @@ function initializeCarousel() {
 /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
 function editorStyles() {
     /* if there are no WYSIWYG's on the page, don't bother running */
-    if (typeof tinyMCE === 'undefined') return;
+    if (typeof tinyMCE != 'undefined'){
 
-    /* our css, canvas common css, canvas color vars css */
-    var cssNames = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
+        /* our css, canvas common css, canvas color vars css */
+        var cssNames = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
+        
+        /* Collect list of hrefs that match one of the cssNames */
+        var cssHrefs = []
+        document.querySelectorAll('link[rel=stylesheet]').forEach(function(linkTag){
+            var href = linkTag.getAttribute('href');
+            /* only keep the link if it matches one of the regExes */
+            if (cssNames.some(cssName => href.match(cssName) !== null)) {
+                cssHrefs.push(href);
+            }
+        })
     
-    /* Collect list of hrefs that match one of the cssNames */
-    var cssHrefs = []
-    document.querySelectorAll('link[rel=stylesheet]').forEach(function(linkTag){
-        var href = linkTag.getAttribute('href');
-        /* only keep the link if it matches one of the regExes */
-        if (cssNames.some(cssName => href.match(cssName) !== null)) {
-            cssHrefs.push(href);
-        }
-    })
-
-    /* For each editor, inject each stylesheet */
-    tinyMCE.editors.forEach(editor => {
-        cssHrefs.forEach(href => {
-            editor.dom.styleSheetLoader.load(href);
+        /* For each editor, inject each stylesheet */
+        tinyMCE.editors.forEach(editor => {
+            cssHrefs.forEach(href => {
+                editor.dom.styleSheetLoader.load(href);
+            });
         });
-    });
+    }
 }
 
 /* Initialize accordion - JQUERY UI */
@@ -268,7 +269,7 @@ function alterBreadcrumb() {
 
 /* enable prism pre > code highlighting */
 function prismHighlighting() {
-    if (document.querySelector('pre code') == null){
+    if (document.querySelector('pre code')){
         loadScript('https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.js')
         loadStyle('https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css')
     }
