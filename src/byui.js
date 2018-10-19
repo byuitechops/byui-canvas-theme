@@ -13,11 +13,12 @@
         console.warn('byui.js disabled for testing');
     }
 
-    function checkForJquery() {
+    function checkForJquery(cb) {
         function loadJquery() {
             console.log('loading jQuery');
             var jqueryScript = document.createElement('script');
             jqueryScript.href = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js';
+            jqueryScript.onload = cb;
             document.head.appendChild(jqueryScript);
         }
         try {
@@ -40,7 +41,10 @@
 
                 if (!validVersion) {
                     loadJquery();
+                    return;
                 }
+
+                cb();
             }
         } catch (loadjQueryErr) {
             console.error(loadjQueryErr);
@@ -84,12 +88,17 @@
         /* Initialize accordion - JQUERY UI */
         function initializeAccordion() {
             try {
-                if (document.querySelector('div.accordion')) {
-                    checkForJquery();
-                    $('div.accordion').accordion({
-                        heightStyle: 'content',
-                        collapsible: true,
-                        active: false
+                if (document.querySelector('.byui div.accordion')) {
+                    checkForJquery(jQueryErr => {
+                        if (jQueryErr) {
+                            throw jQueryErr;
+                        }
+
+                        $('.byui div.accordion').accordion({
+                            heightStyle: 'content',
+                            collapsible: true,
+                            active: false
+                        });
                     });
                 }
             } catch (accordionErr) {
@@ -100,9 +109,14 @@
         /* Initialize dialog - JQUERY UI */
         function initializeDialog() {
             try {
-                if (document.querySelector('div.dialog')) {
-                    checkForJquery();
-                    $('div.dialog').dialog();
+                if (document.querySelector('.byui div.dialog')) {
+                    checkForJquery(jQueryErr => {
+                        if (jQueryErr) {
+                            throw jQueryErr;
+                        }
+
+                        $('.byui div.dialog').dialog();
+                    });
                 }
             } catch (dialogErr) {
                 console.error(dialogErr);
@@ -112,7 +126,13 @@
         /* Initialize tabs - JQUERY UI */
         function initializeTabs() {
             try {
-                $('#styleguide-tabs-demo-minimal').tabs();
+                checkForJquery(jQueryErr => {
+                    if (jQueryErr) {
+                        throw jQueryErr;
+                    }
+
+                    $('.byui #styleguide-tabs-demo-minimal').tabs();
+                });
             } catch (tabErr) {
                 console.error(tabErr);
             }
@@ -143,10 +163,10 @@
                     var resourcesModule = modules.find(canvasModule => /student\s*resources/i.test(canvasModule.name));
 
                     /* set home page buttons */
-                    var start = document.querySelector('#start'),
-                        iLearnTutorial = document.querySelector('#tutorial'),
-                        resources = document.querySelector('#resources'),
-                        instructor = document.querySelector('#instructor');
+                    var start = document.querySelector('.byui #start'),
+                        iLearnTutorial = document.querySelector('.byui #tutorial'),
+                        resources = document.querySelector('.byui #resources'),
+                        instructor = document.querySelector('.byui #instructor');
 
                     if (start)
                         start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
@@ -191,7 +211,7 @@
                         document.querySelector(lessonWrapperSelector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${moduleCount}</a>`);
                     }
 
-                    var lessonWrapperSelector = '#navigation .lessons';
+                    var lessonWrapperSelector = '.byui #navigation .lessons';
 
                     /* clear lesson div & generate module links if generate class exists */
                     if ([...document.querySelector(lessonWrapperSelector).classList].includes('generate')) {
@@ -214,22 +234,26 @@
 
             try {
                 /* quit if we are not on the course homepage OR the page is missing the expected format */
-                let stepsExist = document.querySelectorAll('#navigation .steps').length > 0,
-                    lessonsExist = document.querySelectorAll('#navigation .lessons').length > 0;
+                let stepsExist = document.querySelectorAll('.byui #navigation .steps').length > 0,
+                    lessonsExist = document.querySelectorAll('.byui #navigation .lessons').length > 0;
                 if (!stepsExist || !lessonsExist) {
                     return;
                 }
 
-                checkForJquery();
-                /* get course modules */
-                $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
-                    /* Don't run steps if they don't exist (or lessons) */
-                    if (stepsExist) {
-                        generateSteps(modules);
+                checkForJquery(jQueryErr => {
+                    if (jQueryErr) {
+                        throw jQueryErr;
                     }
-                    if (lessonsExist) {
-                        generateLessons(modules);
-                    }
+                    /* get course modules */
+                    $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
+                        /* Don't run steps if they don't exist (or lessons) */
+                        if (stepsExist) {
+                            generateSteps(modules);
+                        }
+                        if (lessonsExist) {
+                            generateLessons(modules);
+                        }
+                    });
                 });
             } catch (selectorErr) {
                 console.error(selectorErr);
@@ -332,17 +356,21 @@
         function loadSlickJS() {
             try {
                 /* don't load scripts if they aren't being used on the current page */
-                if (document.querySelector('.carousel').length === 0) {
+                if (document.querySelector('.byui .carousel').length === 0) {
                     return;
                 }
                 var slickScript = document.createElement('script');
                 slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
                 /* Initialize carousels if any are present on page */
                 slickScript.onload = () => {
-                    checkForJquery();
+                    checkForJquery(jQueryErr => {
+                        if (jQueryErr) {
+                            throw jQueryErr;
+                        }
 
-                    $('.carousel').slick({
-                        dots: true,
+                        $('.byui .carousel').slick({
+                            dots: true,
+                        });
                     });
                 };
                 document.head.appendChild(slickScript);
