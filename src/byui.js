@@ -5,8 +5,8 @@
 /* Allows us to disable this page for testing purposes */
 // TESTING disable for prod
 (function () {
-    // if (true) {
-    if (localStorage.getItem('devAccount') !== 'true') {
+    if (true) {
+    // if (localStorage.getItem('devAccount') !== 'true') {
         window.addEventListener('onload', editorStyles);
         document.addEventListener('DOMContentLoaded', main);
     } else {
@@ -51,7 +51,6 @@
         }
     }
 
-
     /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
     function editorStyles() {
         try {
@@ -80,7 +79,6 @@
             console.error(editorErr);
         }
     }
-
 
     function main() {
         var courseNumber = document.location.pathname.split('/')[2];
@@ -114,8 +112,23 @@
                         if (jQueryErr) {
                             throw jQueryErr;
                         }
+                        /* get all jQueryUI dialog boxes */
+                        document.querySelectorAll('.byui .Button[id^=\'link_\']').forEach(button => {
+                            /* Save linkID */
+                            let buttonId = /link_(\d+)/i.exec(button.id)[1];
+                            let $button = $(`.byui #dialog_for_link_${buttonId}`);
 
-                        $('.byui div.dialog').dialog();
+                            /* instantiate dialog */
+                            $button.dialog({
+                                autoOpen: false
+                            });
+
+                            /* add event listener to open dialog */
+                            button.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                $button.dialog('open');
+                            });
+                        });
                     });
                 }
             } catch (dialogErr) {
@@ -356,7 +369,7 @@
         function loadSlickJS() {
             try {
                 /* don't load scripts if they aren't being used on the current page */
-                if (document.querySelector('.byui .carousel').length === 0) {
+                if (document.querySelectorAll('.byui .carousel').length === 0) {
                     return;
                 }
                 var slickScript = document.createElement('script');
@@ -374,12 +387,12 @@
                     });
                 };
                 document.head.appendChild(slickScript);
-
+                
                 var slickScriptCss = document.createElement('link');
                 slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
                 slickScriptCss.rel = 'stylesheet';
                 document.head.appendChild(slickScriptCss);
-
+                
                 var slickScriptTheme = document.createElement('link');
                 slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
                 slickScriptTheme.rel = 'stylesheet';

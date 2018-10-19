@@ -479,11 +479,7 @@ span.caption {
   /* md1 */
 }
 
-.byui .slick-slider {
-  margin-left: 20px;
-}
-
-.byui .slick-slide img {
+.byui .slick-slider img {
   width: 100%;
 }
 
@@ -589,11 +585,4 @@ span.caption {
 
 .callout.simple {
   background-color: #FFFFFF;
-}
-
-/******************************************
-          Image Carousel
-********************************************/
-.carousel img {
-  max-width: 100% !important;
 }
