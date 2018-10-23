@@ -4,7 +4,7 @@
   "description": "",
   "main": "byui.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./testing/setup.js && jest --config ./testing/jest.config.js"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,11 @@
     "url": "https://github.com/byuitechops/byui-canvas-theme/issues"
   },
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
-  "dependencies": {},
+  "dependencies": {
+    "enquirer": "^1.0.3",
+    "prompt-confirm": "^2.0.4",
+    "prompt-password": "^1.2.0"
+  },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",
     "babel-core": "^6.26.3",
@@ -28,8 +32,10 @@
     "gulp-babel": "^7.0.1",
     "gulp-postcss": "^8.0.0",
     "gulp-sourcemaps": "^2.6.4",
+    "jest": "^23.6.0",
     "postcss-custom-properties": "^8.0.5",
     "postcss-load-config": "^2.0.0",
-    "pump": "^3.0.0"
+    "pump": "^3.0.0",
+    "puppeteer": "^1.9.0"
   }
 }
