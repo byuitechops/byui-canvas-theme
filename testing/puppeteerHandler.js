@@ -128,7 +128,6 @@ async function setIntercepters (page){
           headers: request.headers(),
           body: fs.readFileSync(resourcepath)
         })
-        console.log('>',resourcepath)
       } catch(e){
         request.respond({
           status:'404',
@@ -150,8 +149,7 @@ module.exports.redirect = function (match,filepath){
   } else if(typeof match == 'string'){
     isMatch = url => url.endsWith(match)
   } else {
-    console.error(match)
-    throw new Error('Redirect must have \'url\' property')
+    throw new Error('Redirect must have \'match\' property')
   }
 
   if(typeof filepath == 'string'){

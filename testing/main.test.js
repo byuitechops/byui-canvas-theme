@@ -1,9 +1,17 @@
-var path = require('path')
-var DIR = path.join(__dirname,'../src')
-  
-beforeAll(() => {
-  page.redirect(/byui\.(js|css)$/,DIR)
+const puppeteerHandler = require('./puppeteerHandler')
+const path = require('path')
+const DIR = path.join(__dirname,'../src')
+/* Specify which requests to redirect where */
+puppeteerHandler.redirect(/byui\.(js|css)$/,DIR)
+
+let browser,page
+
+/* Handle opening and closing the browser */
+beforeAll(async () => {
+  browser = await puppeteerHandler.open({ headless:true });
+  [ page ] = await browser.pages();
 })
+afterAll(() => browser.close())
 
 describe('homepage',async () => {
 
