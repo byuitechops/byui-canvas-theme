@@ -7,8 +7,7 @@ const DIR = path.join(os.tmpdir(), 'jest_puppeteer_global_setup');
 
 
 module.exports = async function (){
-  const [browser,page] = await openPuppeteer()
-  await page.close()
+  const browser = await openPuppeteer({headless:false})
 
   global.__BROWSER_GLOBAL__ = browser
   

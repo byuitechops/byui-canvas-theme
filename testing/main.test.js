@@ -2,8 +2,7 @@ var path = require('path')
 var DIR = path.join(__dirname,'../src')
   
 beforeAll(() => {
-  redirect('byui.js',DIR)
-  redirect('byui.css',DIR)
+  page.redirect(/byui\.(js|css)$/,DIR)
 })
 
 describe('homepage',async () => {

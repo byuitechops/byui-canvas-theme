@@ -4,6 +4,7 @@
   "description": "",
   "main": "byui.js",
   "scripts": {
+    "start": "node ./testing/explore.js ./src",
     "test": "node ./testing/setup.js && jest --config ./testing/jest.config.js"
   },
   "repository": {
@@ -18,8 +19,13 @@
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
   "dependencies": {
     "enquirer": "^1.0.3",
+    "fuzzyurl": "^0.9.0",
+    "ip-regex": "^1.0.1",
     "prompt-confirm": "^2.0.4",
-    "prompt-password": "^1.2.0"
+    "prompt-password": "^1.2.0",
+    "tlds": "^1.187.0",
+    "typed-url-matcher": "^0.2.4",
+    "url-match-patterns": "^0.2.0"
   },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",

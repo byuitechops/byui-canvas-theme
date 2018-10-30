@@ -2,6 +2,8 @@
 /* eslint no-console:0 */
 /* global tinyMCE, tippy */
 
+window.puppydog = "Arf!!";
+
 (function(){ /* IFFY - nothing released into global */
 
 /* Allows us to disable this page for testing purposes */
