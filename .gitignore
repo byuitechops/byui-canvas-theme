@@ -4,3 +4,6 @@ node_modules/
 testing/auth.json
 testing/.cookie
 temp.*
+prod/
+!prod/byui.*
+!prod/online.*
