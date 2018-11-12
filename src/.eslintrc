@@ -1,0 +1,28 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "extends": "airbnb-base",
+  "rules": {
+    "no-console": "warn",
+    "semi": [
+      "error",
+      "always",
+      {
+        "omitLastInOneLineBlock": true
+      }
+    ],
+    "prefer-rest-params": "off",
+    "no-underscore-dangle": "off",
+    "prefer-template": "off",
+    "padded-blocks": "off",
+    "func-names": "off",
+    "consistent-return": "off",
+    "no-use-before-define": "off"
+  }
+}

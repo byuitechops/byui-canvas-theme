@@ -1,1 +1,1 @@
-/*eslint-env node, browser, jquery, es6*/
+/* eslint-env node, browser, jquery, es6 */

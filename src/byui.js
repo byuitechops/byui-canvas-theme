@@ -1,15 +1,20 @@
 /* IFFY - nothing released into global */
 (() => {
   /* ---------- LOADER ---------- */
-  const loader = {
-    version:'0.0.1',
-    mode:'development',
+  const Loader = {
+    version: '0.0.1',
+    // If mode set to 'development' then verbose will run
+    mode: 'development',
+    // The resources that have been defined
     resources: {},
+    // The actions that have been defined
     actions: {},
+    // The defaults used for a resource
     defaultResource: {
       dependencies: [],
       scripts: [],
       styles: [],
+      xhr: null,
       hasExistingInstance: () => false,
       findValue: () => null,
       _value: null,
@@ -20,25 +25,30 @@
       _callbacks: [],
       */
     },
+    // The defaults used for an action
     defaultAction: {
       dependencies: [],
       on: null,
       run() {},
     },
+    // Used to define a resource
     defineResource(tag, options) {
       this.resources[tag] = Object.assign({}, this.defaultResource, options);
-      this.resources[tag]._callbacks = []
+      this.resources[tag]._callbacks = [];
       this.resources[tag]._tag = tag;
     },
+    // Used to define an Action
     defineAction(tag, options) {
       this.actions[tag] = Object.assign({}, this.defaultAction, options);
       this.actions[tag]._tag = tag;
     },
-    getResourceValue(tag,cb){
+    // Handles the logic of adding listeners if not loaded
+    // and running loader if not already run
+    getResourceValue(tag, cb) {
       if (this.resources[tag] === undefined) throw new Error(`No resource defined with '${tag}' tag`);
       const resource = this.resources[tag];
-      if(resource._readyState == 'unknown'){
-        if(resource.hasExistingInstance()) {
+      if (resource._readyState === 'unknown') {
+        if (resource.hasExistingInstance()) {
           verbose(tag + ' already on the page');
           this.setResourceValue(tag);
         } else {
@@ -46,17 +56,19 @@
           this.loadResource(tag);
         }
       }
-      if(resource._readyState == 'loading'){
-        verbose('Waiting for '+tag);
-        resource._callbacks.push(cb)
-      } else if (resource._readyState == 'complete'){
-        verbose('Already loaded '+tag);
-        cb(resource._error,resource._value);
+      if (resource._readyState === 'loading') {
+        verbose('Waiting for ' + tag);
+        resource._callbacks.push(cb);
+      } else if (resource._readyState === 'complete') {
+        verbose('Already loaded ' + tag);
+        cb(resource._error, resource._value);
       } else {
-        throw new Error('Unknown Loading State: '+this._readyState)
+        throw new Error('Unknown Loading State: ' + this._readyState);
       }
     },
-    setResourceValue(tag,err,data){
+    // Handles the logic of calling all of the listeners set
+    // and setting all of the data
+    setResourceValue(tag, err, data) {
       if (this.resources[tag] === undefined) throw new Error(`No resource defined with '${tag}' tag`);
       const resource = this.resources[tag];
       resource._readyState = 'complete';
@@ -67,47 +79,56 @@
         verbose('Finished loading ' + resource._tag);
         resource._value = data || resource.findValue();
       }
-      resource._callbacks.forEach(cb => cb(resource._error,resource._value));
+      resource._callbacks.forEach(cb => cb(resource._error, resource._value));
       resource._callbacks = [];
     },
+    // Handles loading the resource and it's dependencies
+    // Called from getResourceValue, and calls setResourceValue when done
     loadResource(tag) {
       if (this.resources[tag] === undefined) throw new Error(`No resource defined with '${tag}' tag`);
       const resource = this.resources[tag];
       // Wait for dependencies to load
       waitForAll(this, resource.dependencies, this.getResourceValue, function (err) {
-        if (err) return this.setResourceValue(tag,err);
+        if (err) return this.setResourceValue(tag, err);
         try {
           if (resource.xhr) {
-            xhttpRequest(resource.xhr(),(e,data) => this.setResourceValue(tag,e,data));
+            xhttpRequest(resource.xhr(), (e, data) => this.setResourceValue(tag, e, data));
           } else {
             // Wait for Scripts to load
-            waitForAll(this, resource.scripts, loadScript, e => this.setResourceValue(tag,e));
+            waitForAll(this, resource.scripts, loadScript, e => this.setResourceValue(tag, e));
             // Don't wait for style sheets (the onload event for links isn't dependable)
             resource.styles.forEach(href => loadStyle(href));
           }
         } catch (e) {
-          return this.setResourceValue(tag,e);
+          return this.setResourceValue(tag, e);
         }
       });
     },
-    _getTargets(action, args) {
+    // gets all of the targets specified by the 'on' property of an action
+    getTargets(action, args) {
       // If using an ID, just give back a single item
       let selection;
       if (typeof action.on === 'string') {
         selection = document.querySelectorAll(action.on);
       } else if (typeof action.on === 'function') {
         selection = action.on(args);
-        if (!(selection instanceof Array)) {
-          if (selection) {
+        if (selection) {
+          // If not an array, turn into an array
+          if (selection.length === undefined) {
             selection = [selection];
-          } else {
-            selection = [];
           }
+        } else {
+          selection = [];
         }
       } else throw new Error(action._tag + ' on is not a string or function');
 
       return selection;
     },
+    // Handles running an action
+    //  - Checking to see if it needs to run
+    //  - Loading required dependencies
+    //  - Handling any errors thrown in the process
+    //  - verbose the ending status of the action (unneeded|ran|errored)
     run(tag /* , ...additional arguments to pass on */) {
       if (this.actions[tag] === undefined) throw new Error(`No action defined with '${tag}' tag`);
       const action = this.actions[tag];
@@ -115,7 +136,7 @@
       for (let i = 1; arguments[i] !== undefined; i += 1) {
         additionalargs.push(arguments[i]);
       }
-      const targets = this._getTargets(action, additionalargs);
+      const targets = this.getTargets(action, additionalargs);
       if (targets.length) {
         waitForAll(this, action.dependencies, this.getResourceValue, (err) => {
           if (err) {
@@ -142,36 +163,37 @@
         verbose('⚪ ' + tag);
       }
     },
-    onload(){
-      Object.keys(this.actions).forEach(tag => loader.run(tag))
-    }
+    // Ran when the page loads
+    onload() {
+      Object.keys(this.actions).forEach(tag => Loader.run(tag));
+    },
   };
 
   /* Additional consoles if in testing */
-  verbose('Resources:', loader.resources);
-  verbose('Actions:', loader.actions);
+  verbose('Resources:', Loader.resources);
+  verbose('Actions:', Loader.actions);
 
   /* Deal with competing versions */
-  if(window.ByuiThemeLoader){
-    var other = window.ByuiThemeLoader
-    if(loader.mode == 'development' || isLesserVersionNum(other.version,loader.version)){
+  if (window.ByuiThemeLoader) {
+    const other = window.ByuiThemeLoader;
+    if (Loader.mode === 'development' || isLesserVersionNum(other.version, Loader.version)) {
       /* If they have a smaller version slice their throat */
       other.onload = () => {
-        console.warn(`ByuiThemeLoader@${other.version} was replaced by version @${loader.version}`)
-        loader.onload() // piggy back off their event
-      }
+        console.warn(`ByuiThemeLoader@${other.version} was replaced by version @${Loader.version}`); // eslint-disable-line no-console
+        Loader.onload(); // piggy back off their event
+      };
     } else {
-      console.warn(`Couldn't use ByuiThemeLoader@${loader.version} higher version @${other.version} exists on the page`)
+      console.warn(`Couldn't use ByuiThemeLoader@${Loader.version} higher version @${other.version} exists on the page`); // eslint-disable-line no-console
     }
   } else {
-    window.ByuiThemeLoader = loader
-    window.addEventListener('load',() => loader.onload())
+    window.ByuiThemeLoader = Loader;
+    window.addEventListener('load', () => Loader.onload());
   }
 
   /* -------- RESOURCES -------- */
 
   /* Prism */
-  loader.defineResource('Prism', {
+  Loader.defineResource('Prism', {
     scripts: ['https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.js'],
     styles: ['https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css'],
     findValue() {
@@ -180,7 +202,7 @@
   });
 
   /* Tippy */
-  loader.defineResource('Tippy', {
+  Loader.defineResource('Tippy', {
     scripts: ['https://content.byui.edu/integ/gen/a422cccd-35b7-4087-9329-20698cf169b0/0/tippy.all.min.js'],
     findValue() {
       return window.tippy;
@@ -188,7 +210,7 @@
   });
 
   /* Slick */
-  loader.defineResource('Slick', {
+  Loader.defineResource('Slick', {
     dependencies: ['jQuery'],
     scripts: ['https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js'],
     styles: [
@@ -198,7 +220,7 @@
   });
 
   /* JQuery */
-  loader.defineResource('jQuery', {
+  Loader.defineResource('jQuery', {
     scripts: ['https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'],
     hasExistingInstance() {
       /* If jQuery is already on the page */
@@ -214,20 +236,20 @@
   });
 
   /* Canvas API Modules */
-  loader.defineResource('Modules', {
+  Loader.defineResource('Modules', {
     xhr: () => `/api/v1/courses/${document.location.pathname.split('/')[2]}/modules?per_page=100`,
-  })
+  });
 
   /* Canvas API Teachers */
-  loader.defineResource('Teachers', {
+  Loader.defineResource('Teachers', {
     xhr: () => `/api/v1/courses/${document.location.pathname.split('/')[2]}/enrollments?type%5B%5D=TeacherEnrollment`,
-  })
+  });
 
 
   /* -------- ACTIONS (alphabetical order) ------------ */
 
   /* Accordions */
-  loader.defineAction('Accordions', {
+  Loader.defineAction('Accordions', {
     on: '.byui div.accordion',
     dependencies: ['jQuery'],
     run($) {
@@ -240,7 +262,7 @@
   });
 
   /* Bread Crumbs */
-  loader.defineAction('Breadcrumbs', {
+  Loader.defineAction('Breadcrumbs', {
     on() {
       /* If there are 4 total, AND we're inside a course AND we're not in a group tab */
       return document.querySelectorAll('#breadcrumbs li').length === 4
@@ -256,7 +278,7 @@
   });
 
   /* Carousels */
-  loader.defineAction('Carousels', {
+  Loader.defineAction('Carousels', {
     on: '.byui .carousel',
     dependencies: ['jQuery', 'Slick'],
     run($) {
@@ -267,13 +289,13 @@
   });
 
   /* Code Highlighting */
-  loader.defineAction('CodeHighlighting', {
+  Loader.defineAction('CodeHighlighting', {
     on: '.byui pre code',
     dependencies: ['Prism'], // No action needs to be run, just Prism loaded
   });
 
   /* Copyright Footer */
-  loader.defineAction('CopyrightFooter', {
+  Loader.defineAction('CopyrightFooter', {
     on() {
       /* don't add one if it already exists */
       return !document.querySelector('p.copyright')
@@ -286,7 +308,7 @@
   });
 
   /* Dialog */
-  loader.defineAction('Dialog', {
+  Loader.defineAction('Dialog', {
     on: '.byui .Button[id^="link_"]',
     dependencies: ['jQuery'],
     run($) {
@@ -309,7 +331,7 @@
   });
 
   /* Tiny MCE style changes */
-  loader.defineAction('EditorStyles', {
+  Loader.defineAction('EditorStyles', {
     on() {
       return window.tinyMCE;
     },
@@ -336,16 +358,16 @@
   });
 
   /* HomePage - Start */
-  loader.defineAction('Homepage.Start', {
+  Loader.defineAction('Homepage.Start', {
     on: '.byui #navigation .steps #start',
-    dependencies:['Modules'],
+    dependencies: ['Modules'],
     run(modules) {
       this.href = `/courses/${COURSE_NUMBER}/modules#module_${modules[0].id}`;
     },
   });
 
   /* HomePage - Tutorial */
-  loader.defineAction('Homepage.Tutorial', {
+  Loader.defineAction('Homepage.Tutorial', {
     on: '.byui #navigation .steps #tutorial',
     run() {
       this.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
@@ -353,9 +375,9 @@
   });
 
   /* HomePage - Resources */
-  loader.defineAction('Homepage.Resources', {
+  Loader.defineAction('Homepage.Resources', {
     on: '.byui #navigation .steps #resources',
-    dependencies:['Modules'],
+    dependencies: ['Modules'],
     run(modules) {
       const resourcesModule = modules.find(canvasModule => /student\s*resources/i.test(canvasModule.name));
 
@@ -367,12 +389,13 @@
   });
 
   /* HomePage - Instructor */
-  loader.defineAction('Homepage.Instructor', {
+  Loader.defineAction('Homepage.Instructor', {
     on: '.byui #navigation .steps #instructor',
-    dependencies:['Teachers'],
+    dependencies: ['Teachers'],
     run(teachers) {
       /* Remove duplicates */
-      const teacherIds = teachers.map(teacher => teacher.user_id).filter((teacherId, i, arr) => arr.indexOf(teacherId) === i);
+      const teacherIds = teachers.map(teacher => teacher.user_id)
+        .filter((teacherId, i, arr) => arr.indexOf(teacherId) === i);
 
       // If there are multiple unique teachers
       if (teacherIds.length > 1) throw new Error('Multiple teachers are enrolled in this course. Please add "Your Instructor" link manually.');
@@ -380,13 +403,13 @@
       if (teacherIds.length === 0) throw new Error('Unable to find teacher enrollment.');
       // If we have one teacher set the URL
       this.href = `/courses/${COURSE_NUMBER}/users/${teacherIds[0]}`;
-    }
+    },
   });
 
   /* Home Page - Lessons */
-  loader.defineAction('Homepage.Lessons', {
+  Loader.defineAction('Homepage.Lessons', {
     on: '.byui #navigation .lessons.generate',
-    dependencies:['Modules'],
+    dependencies: ['Modules'],
     run(modules) {
       /* Clear lesson wrapper */
       this.innerHTML = '';
@@ -404,7 +427,7 @@
   });
 
   /* QuizzesNext NewQuiz ToolTip */
-  loader.defineAction('ToolTips.onNewQuiz', {
+  Loader.defineAction('ToolTips.onNewQuiz', {
     on: '#application .new_quiz_lti_wrapper',
     dependencies: ['Tippy'],
     run(tippy) {
@@ -421,7 +444,7 @@
   });
 
   /* QuizzesNext Settings ToolTip */
-  loader.defineAction('ToolTips.onSettings', {
+  Loader.defineAction('ToolTips.onSettings', {
     on: '.course-feature-flags .quizzes_next',
     dependencies: ['Tippy'],
     run(tippy) {
@@ -440,7 +463,7 @@
 
   // NOTE: google training course
   /* Tabs */
-  loader.defineAction('Tabs', {
+  Loader.defineAction('Tabs', {
     on: '.byui #styleguide-tabs-demo-minimal',
     dependencies: ['jQuery'],
     run($) {
@@ -449,7 +472,7 @@
   });
 
   /* Video Tags */
-  loader.defineAction('VideoTags', {
+  Loader.defineAction('VideoTags', {
     on: '.byui-video',
     run() {
       if (this.dataset.source === 'youtube') {
@@ -467,11 +490,11 @@
   const QUIZZES_NEXT_FAQ = 'http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s';
   const COURSE_NUMBER = document.location.pathname.split('/')[2];
 
-  function isLesserVersionNum(A,B){
-    A = A.split('.')
-    B = B.split('.')
-    while(A.length < B.length) A.unshift(0)
-    while(B.length < A.length) B.unshift(0)
+  function isLesserVersionNum(a, b) {
+    const A = a.split('.');
+    const B = b.split('.');
+    while (A.length < B.length) A.unshift(0);
+    while (B.length < A.length) B.unshift(0);
     for (let i = 0; i < A.length; i += 1) {
       if (+A[i] > +B[i]) return false;
       if (+A[i] < +B[i]) return true;
@@ -504,7 +527,7 @@
 
   function verbose(tag, object) {
     /* eslint-disable no-console */
-    if (loader.mode == 'development') {
+    if (Loader.mode === 'development') {
       if (arguments.length === 2 && typeof tag === 'string' && typeof object === 'object') {
         console.groupCollapsed(tag);
         console.log(object);
@@ -517,10 +540,10 @@
   }
 
   function loadScript(href, cb) {
-    if(!document.querySelector('script[src="' + href + '"]')) {
+    if (!document.querySelector('script[src="' + href + '"]')) {
       verbose('Loading Script from ' + href);
       const script = document.createElement('script');
-      script.dataset.readyState = 'loading'
+      script.dataset.readyState = 'loading';
       script.src = href;
       // Call the callback once it is done loading
       if (cb) {

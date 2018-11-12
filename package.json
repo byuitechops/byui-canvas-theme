@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./testing/explore.js ./src",
     "test": "jest",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src --fix",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
@@ -23,26 +24,6 @@
     "fuzzyurl": "^0.9.0",
     "prompt-confirm": "^2.0.4",
     "prompt-password": "^1.2.0"
-  },
-  "eslintConfig": {
-    "parserOptions": {
-      "ecmaVersion": 6
-    },
-    "env": {
-      "es6": true,
-      "browser": true,
-      "jest": true
-    },
-    "rules": {
-      "no-console":"warn",
-      "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
-      "prefer-rest-params":"off",
-      "no-underscore-dangle":"off",
-      "prefer-template":"off",
-      "padded-blocks":"off",
-      "func-names":"off",
-      "consistent-return":"off"
-    }
   },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",
