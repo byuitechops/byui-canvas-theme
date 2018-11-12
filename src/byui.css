@@ -486,13 +486,20 @@ span.caption {
 /******************************************
                  Callouts
 ********************************************/
-.callout {
+/* @media screen and (max-width: 785px) {
+  .byui .callout {
+      width: 100%;
+      max-width: 100%;
+  }
+} */
+
+.byui .callout {
   border: solid 1px #F2F2F2;
   padding-left: 5px;
   position: relative;
 }
 
-.callout::before {
+.byui .callout::before {
   content: "";
   width: 5px;
   height: 100%;
@@ -500,90 +507,90 @@ span.caption {
   left: 0;
 }
 
-.callout-header {
+.byui .callout-header {
   padding: 5px 10px;
   margin: 0;
   font-weight: bold;
 }
 
-.callout p,
-.callout div {
+.byui .callout p,
+.byui .callout div {
   padding: 2px 10px;
   margin: 0;
   /* font-style: italic; */
 }
 
-.callout img {
+.byui .callout img {
   /* to overwrite max-width canvas applies on load */
   max-width: 100% !important;
 }
 
 /* Blue Callout */
-.callout.blue::before {
+.byui .callout.blue::before {
   background-color: #3A929D;
 }
 
-.callout.blue .callout-header {
+.byui .callout.blue .callout-header {
   background-color: #A7CDD4;
 }
 
-.callout.blue {
+.byui .callout.blue {
   background-color: #E2EEF1;
 }
 
 /* Green Callout */
-.callout.green::before {
+.byui .callout.green::before {
   background-color: #8B9531;
 }
 
-.callout.green .callout-header {
+.byui .callout.green .callout-header {
   background-color: #D9E69E;
 }
 
-.callout.green {
+.byui .callout.green {
   background-color: #EFF5D6;
 }
 
 /* Orange Callout */
-.callout.orange::before {
+.byui .callout.orange::before {
   background-color: #CB4A27;
 }
 
-.callout.orange .callout-header {
+.byui .callout.orange .callout-header {
   background-color: #F9BA90;
 }
 
-.callout.orange {
+.byui .callout.orange {
   background-color: #FEF0E7;
 }
 
 /* Grey Callout */
-.callout.grey::before {
+.byui .callout.grey::before {
   background-color: #065577;
 }
 
-.callout.grey .callout-header {
+.byui .callout.grey .callout-header {
   background-color: #F1F2F2;
 }
 
-.callout.grey {
+.byui .callout.grey {
   background-color: #FFFFFF;
 }
 
 /* Simple Callout */
-.callout.simple {
+.byui .callout.simple {
   padding: 0;
 }
 
-.callout.simple::before {
+.byui .callout.simple::before {
   display: none;
   background-color: #065577;
 }
 
-.callout.simple .callout-header {
+.byui .callout.simple .callout-header {
   background-color: #F1F2F2;
 }
 
-.callout.simple {
+.byui .callout.simple {
   background-color: #FFFFFF;
 }
