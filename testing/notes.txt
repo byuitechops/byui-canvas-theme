@@ -1,0 +1,12 @@
+Homepage, CopyrightFooter
+https://byui.instructure.com/courses/92
+
+Tooltips,
+https://byui.instructure.com/courses/92/settings (feature options tab. hover on Quizzes.Next button)
+https://byui.instructure.com/courses/92/assignments (hover on +Quiz/test)
+
+Carousels, Dialog, CopyrightFooter, Breadcrumbs, Accordions, Video, Prism
+https://byui.instructure.com/courses/92/pages/web-features?module_item_id=1891294
+
+EditorStyles
+https://byui.instructure.com/courses/92/pages/web-features/edit

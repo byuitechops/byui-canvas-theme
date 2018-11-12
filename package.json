@@ -4,7 +4,9 @@
   "description": "",
   "main": "byui.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./testing/explore.js ./src",
+    "test": "jest",
+    "lint": "eslint ./src"
   },
   "repository": {
     "type": "git",
@@ -16,7 +18,32 @@
     "url": "https://github.com/byuitechops/byui-canvas-theme/issues"
   },
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
-  "dependencies": {},
+  "dependencies": {
+    "enquirer": "^1.0.3",
+    "fuzzyurl": "^0.9.0",
+    "prompt-confirm": "^2.0.4",
+    "prompt-password": "^1.2.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6
+    },
+    "env": {
+      "es6": true,
+      "browser": true,
+      "jest": true
+    },
+    "rules": {
+      "no-console":"warn",
+      "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
+      "prefer-rest-params":"off",
+      "no-underscore-dangle":"off",
+      "prefer-template":"off",
+      "padded-blocks":"off",
+      "func-names":"off",
+      "consistent-return":"off"
+    }
+  },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",
     "babel-core": "^6.26.3",
@@ -24,12 +51,17 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-minify": "^0.4.3",
     "cssnano": "^4.1.0",
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",
     "gulp-postcss": "^8.0.0",
     "gulp-sourcemaps": "^2.6.4",
+    "jest": "^23.6.0",
     "postcss-custom-properties": "^8.0.5",
     "postcss-load-config": "^2.0.0",
-    "pump": "^3.0.0"
+    "pump": "^3.0.0",
+    "puppeteer": "^1.9.0"
   }
 }

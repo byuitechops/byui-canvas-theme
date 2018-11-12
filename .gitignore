@@ -1,3 +1,9 @@
 *.zip
 node_modules/
 3rd party/
+testing/auth.json
+testing/.cookie
+temp.*
+prod/
+!prod/byui.*
+!prod/online.*

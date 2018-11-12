@@ -1,416 +1,591 @@
-/*eslint-env browser */
-/* eslint no-console:0 */
-/* global tinyMCE, tippy, $ */
+/* IFFY - nothing released into global */
+(() => {
+  /* ---------- LOADER ---------- */
+  const loader = {
+    version:'0.0.1',
+    mode:'development',
+    resources: {},
+    actions: {},
+    defaultResource: {
+      dependencies: [],
+      scripts: [],
+      styles: [],
+      hasExistingInstance: () => false,
+      findValue: () => null,
+      _value: null,
+      _error: null,
+      _readyState: 'unknown',
+      /* Added later
+      _tag: tag,
+      _callbacks: [],
+      */
+    },
+    defaultAction: {
+      dependencies: [],
+      on: null,
+      run() {},
+    },
+    defineResource(tag, options) {
+      this.resources[tag] = Object.assign({}, this.defaultResource, options);
+      this.resources[tag]._callbacks = []
+      this.resources[tag]._tag = tag;
+    },
+    defineAction(tag, options) {
+      this.actions[tag] = Object.assign({}, this.defaultAction, options);
+      this.actions[tag]._tag = tag;
+    },
+    getResourceValue(tag,cb){
+      if (this.resources[tag] === undefined) throw new Error(`No resource defined with '${tag}' tag`);
+      const resource = this.resources[tag];
+      if(resource._readyState == 'unknown'){
+        if(resource.hasExistingInstance()) {
+          verbose(tag + ' already on the page');
+          this.setResourceValue(tag);
+        } else {
+          resource._readyState = 'loading';
+          this.loadResource(tag);
+        }
+      }
+      if(resource._readyState == 'loading'){
+        verbose('Waiting for '+tag);
+        resource._callbacks.push(cb)
+      } else if (resource._readyState == 'complete'){
+        verbose('Already loaded '+tag);
+        cb(resource._error,resource._value);
+      } else {
+        throw new Error('Unknown Loading State: '+this._readyState)
+      }
+    },
+    setResourceValue(tag,err,data){
+      if (this.resources[tag] === undefined) throw new Error(`No resource defined with '${tag}' tag`);
+      const resource = this.resources[tag];
+      resource._readyState = 'complete';
+      if (err) {
+        verbose('Error loading ' + resource._tag);
+        resource._error = err;
+      } else {
+        verbose('Finished loading ' + resource._tag);
+        resource._value = data || resource.findValue();
+      }
+      resource._callbacks.forEach(cb => cb(resource._error,resource._value));
+      resource._callbacks = [];
+    },
+    loadResource(tag) {
+      if (this.resources[tag] === undefined) throw new Error(`No resource defined with '${tag}' tag`);
+      const resource = this.resources[tag];
+      // Wait for dependencies to load
+      waitForAll(this, resource.dependencies, this.getResourceValue, function (err) {
+        if (err) return this.setResourceValue(tag,err);
+        try {
+          if (resource.xhr) {
+            xhttpRequest(resource.xhr(),(e,data) => this.setResourceValue(tag,e,data));
+          } else {
+            // Wait for Scripts to load
+            waitForAll(this, resource.scripts, loadScript, e => this.setResourceValue(tag,e));
+            // Don't wait for style sheets (the onload event for links isn't dependable)
+            resource.styles.forEach(href => loadStyle(href));
+          }
+        } catch (e) {
+          return this.setResourceValue(tag,e);
+        }
+      });
+    },
+    _getTargets(action, args) {
+      // If using an ID, just give back a single item
+      let selection;
+      if (typeof action.on === 'string') {
+        selection = document.querySelectorAll(action.on);
+      } else if (typeof action.on === 'function') {
+        selection = action.on(args);
+        if (!(selection instanceof Array)) {
+          if (selection) {
+            selection = [selection];
+          } else {
+            selection = [];
+          }
+        }
+      } else throw new Error(action._tag + ' on is not a string or function');
 
-/* Allows us to disable this page for testing purposes */
-// TESTING disable for prod
-(function () {
-    // if (true) {
-    if (localStorage.getItem('devAccount') !== 'true') {
-        window.addEventListener('onload', editorStyles);
-        document.addEventListener('DOMContentLoaded', main);
+      return selection;
+    },
+    run(tag /* , ...additional arguments to pass on */) {
+      if (this.actions[tag] === undefined) throw new Error(`No action defined with '${tag}' tag`);
+      const action = this.actions[tag];
+      const additionalargs = [];
+      for (let i = 1; arguments[i] !== undefined; i += 1) {
+        additionalargs.push(arguments[i]);
+      }
+      const targets = this._getTargets(action, additionalargs);
+      if (targets.length) {
+        waitForAll(this, action.dependencies, this.getResourceValue, (err) => {
+          if (err) {
+            console.error(err); // eslint-disable-line no-console
+            verbose('❌ ' + tag);
+            return;
+          }
+          // Add dependency values
+          let anyfailed = false;
+          const dependencies = action.dependencies.map(n => this.resources[n]._value);
+          targets.forEach((target) => {
+            try {
+              action.run.apply(target, dependencies.concat(additionalargs));
+            } catch (e) {
+              e.message = `(from ${tag} action) ${e.message}`;
+              console.warn(e); // eslint-disable-line no-console
+              anyfailed = true;
+            }
+          });
+          if (anyfailed) verbose('❌ ' + tag);
+          else verbose('⚫ ' + tag);
+        });
+      } else {
+        verbose('⚪ ' + tag);
+      }
+    },
+    onload(){
+      Object.keys(this.actions).forEach(tag => loader.run(tag))
+    }
+  };
+
+  /* Additional consoles if in testing */
+  verbose('Resources:', loader.resources);
+  verbose('Actions:', loader.actions);
+
+  /* Deal with competing versions */
+  if(window.ByuiThemeLoader){
+    var other = window.ByuiThemeLoader
+    if(loader.mode == 'development' || isLesserVersionNum(other.version,loader.version)){
+      /* If they have a smaller version slice their throat */
+      other.onload = () => {
+        console.warn(`ByuiThemeLoader@${other.version} was replaced by version @${loader.version}`)
+        loader.onload() // piggy back off their event
+      }
     } else {
-        console.warn('byui.js disabled for testing');
+      console.warn(`Couldn't use ByuiThemeLoader@${loader.version} higher version @${other.version} exists on the page`)
+    }
+  } else {
+    window.ByuiThemeLoader = loader
+    window.addEventListener('load',() => loader.onload())
+  }
+
+  /* -------- RESOURCES -------- */
+
+  /* Prism */
+  loader.defineResource('Prism', {
+    scripts: ['https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.js'],
+    styles: ['https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css'],
+    findValue() {
+      return window.Prism;
+    },
+  });
+
+  /* Tippy */
+  loader.defineResource('Tippy', {
+    scripts: ['https://content.byui.edu/integ/gen/a422cccd-35b7-4087-9329-20698cf169b0/0/tippy.all.min.js'],
+    findValue() {
+      return window.tippy;
+    },
+  });
+
+  /* Slick */
+  loader.defineResource('Slick', {
+    dependencies: ['jQuery'],
+    scripts: ['https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js'],
+    styles: [
+      'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css',
+      'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css',
+    ],
+  });
+
+  /* JQuery */
+  loader.defineResource('jQuery', {
+    scripts: ['https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'],
+    hasExistingInstance() {
+      /* If jQuery is already on the page */
+      if (window.jQuery !== undefined && window.jQuery().jquery !== undefined) {
+        // check to see if version is above our minimum
+        return isLesserVersionNum('1.7.0', window.jQuery().jquery);
+      }
+      return false;
+    },
+    findValue() {
+      return window.jQuery.noConflict();
+    },
+  });
+
+  /* Canvas API Modules */
+  loader.defineResource('Modules', {
+    xhr: () => `/api/v1/courses/${document.location.pathname.split('/')[2]}/modules?per_page=100`,
+  })
+
+  /* Canvas API Teachers */
+  loader.defineResource('Teachers', {
+    xhr: () => `/api/v1/courses/${document.location.pathname.split('/')[2]}/enrollments?type%5B%5D=TeacherEnrollment`,
+  })
+
+
+  /* -------- ACTIONS (alphabetical order) ------------ */
+
+  /* Accordions */
+  loader.defineAction('Accordions', {
+    on: '.byui div.accordion',
+    dependencies: ['jQuery'],
+    run($) {
+      $(this).accordion({
+        heightStyle: 'content',
+        collapsible: true,
+        active: false,
+      });
+    },
+  });
+
+  /* Bread Crumbs */
+  loader.defineAction('Breadcrumbs', {
+    on() {
+      /* If there are 4 total, AND we're inside a course AND we're not in a group tab */
+      return document.querySelectorAll('#breadcrumbs li').length === 4
+        && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href);
+    },
+    run() {
+      document.querySelector('#breadcrumbs li:nth-child(3) span').innerHTML = 'Modules';
+
+      /* update the link */
+      const link = document.querySelector('#breadcrumbs li:nth-child(3) a');
+      link.href = link.href.replace(/\/\w+$/i, '/modules');
+    },
+  });
+
+  /* Carousels */
+  loader.defineAction('Carousels', {
+    on: '.byui .carousel',
+    dependencies: ['jQuery', 'Slick'],
+    run($) {
+      $(this).slick({
+        dots: true,
+      });
+    },
+  });
+
+  /* Code Highlighting */
+  loader.defineAction('CodeHighlighting', {
+    on: '.byui pre code',
+    dependencies: ['Prism'], // No action needs to be run, just Prism loaded
+  });
+
+  /* Copyright Footer */
+  loader.defineAction('CopyrightFooter', {
+    on() {
+      /* don't add one if it already exists */
+      return !document.querySelector('p.copyright')
+          && !document.querySelector('p#byui-copyright')
+          && document.querySelector('#content');
+    },
+    run() {
+      this.insertAdjacentHTML('beforeend', `<p id='byui-copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
+    },
+  });
+
+  /* Dialog */
+  loader.defineAction('Dialog', {
+    on: '.byui .Button[id^="link_"]',
+    dependencies: ['jQuery'],
+    run($) {
+      const matchingDialogId = this.id.replace('link_', '');
+      const dialogBox = $('.byui #dialog_for_link_' + matchingDialogId);
+
+      if (!dialogBox.length) throw new Error('No Associated Dialog Found');
+
+      /* instantiate dialog */
+      dialogBox.dialog({
+        autoOpen: false,
+      });
+
+      /* add event listener to open dialog */
+      this.addEventListener('click', (e) => {
+        e.preventDefault();
+        dialogBox.dialog('open');
+      });
+    },
+  });
+
+  /* Tiny MCE style changes */
+  loader.defineAction('EditorStyles', {
+    on() {
+      return window.tinyMCE;
+    },
+    run() {
+      /* our css, canvas common css, canvas color vars css */
+      const cssNames = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
+
+      /* Collect list of hrefs that match one of the cssNames */
+      const cssHrefs = [];
+      document.querySelectorAll('link[rel=stylesheet]').forEach((linkTag) => {
+        const href = linkTag.getAttribute('href');
+        /* only keep the link if it matches one of the regExes */
+        if (cssNames.some(cssName => cssName.test(href))) {
+          cssHrefs.push(href);
+        }
+      });
+      /* For each editor, inject each stylesheet */
+      window.tinyMCE.editors.forEach((editor) => {
+        cssHrefs.forEach((href) => {
+          editor.dom.styleSheetLoader.load(href);
+        });
+      });
+    },
+  });
+
+  /* HomePage - Start */
+  loader.defineAction('Homepage.Start', {
+    on: '.byui #navigation .steps #start',
+    dependencies:['Modules'],
+    run(modules) {
+      this.href = `/courses/${COURSE_NUMBER}/modules#module_${modules[0].id}`;
+    },
+  });
+
+  /* HomePage - Tutorial */
+  loader.defineAction('Homepage.Tutorial', {
+    on: '.byui #navigation .steps #tutorial',
+    run() {
+      this.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+    },
+  });
+
+  /* HomePage - Resources */
+  loader.defineAction('Homepage.Resources', {
+    on: '.byui #navigation .steps #resources',
+    dependencies:['Modules'],
+    run(modules) {
+      const resourcesModule = modules.find(canvasModule => /student\s*resources/i.test(canvasModule.name));
+
+      // Report warning if we didn't run
+      if (!resourcesModule) throw new Error('Couldn\'t find student resources module');
+
+      this.href = `/courses/${COURSE_NUMBER}/modules#module_${resourcesModule.id}`;
+    },
+  });
+
+  /* HomePage - Instructor */
+  loader.defineAction('Homepage.Instructor', {
+    on: '.byui #navigation .steps #instructor',
+    dependencies:['Teachers'],
+    run(teachers) {
+      /* Remove duplicates */
+      const teacherIds = teachers.map(teacher => teacher.user_id).filter((teacherId, i, arr) => arr.indexOf(teacherId) === i);
+
+      // If there are multiple unique teachers
+      if (teacherIds.length > 1) throw new Error('Multiple teachers are enrolled in this course. Please add "Your Instructor" link manually.');
+      // If the teacher isn't enrolled for some reason
+      if (teacherIds.length === 0) throw new Error('Unable to find teacher enrollment.');
+      // If we have one teacher set the URL
+      this.href = `/courses/${COURSE_NUMBER}/users/${teacherIds[0]}`;
+    }
+  });
+
+  /* Home Page - Lessons */
+  loader.defineAction('Homepage.Lessons', {
+    on: '.byui #navigation .lessons.generate',
+    dependencies:['Modules'],
+    run(modules) {
+      /* Clear lesson wrapper */
+      this.innerHTML = '';
+
+      /* remove modules with invalid names & get modulesPerRow (limit 7) */
+      const validModules = modules.filter(canvasModule => /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name));
+      const modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
+
+      /* generate module links */
+      validModules.forEach((canvasModule, i) => {
+        const moduleCount = (i < 10 ? '0' : '') + (i + 1);
+        this.insertAdjacentHTML('beforeend', `<a href='/courses/${COURSE_NUMBER}/modules#module_${canvasModule.id}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${moduleCount}</a>`);
+      });
+    },
+  });
+
+  /* QuizzesNext NewQuiz ToolTip */
+  loader.defineAction('ToolTips.onNewQuiz', {
+    on: '#application .new_quiz_lti_wrapper',
+    dependencies: ['Tippy'],
+    run(tippy) {
+      insertToolTipHeaders('black', `Be sure to periodically review the <a href="${QUIZZES_NEXT_FAQ}" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features`);
+
+      tippy('#application .new_quiz_lti_wrapper', {
+        html: '#' + TOOLTIP_ID,
+        interactive: true,
+        placement: 'bottom-end',
+        theme: 'byui',
+        size: 'large',
+      });
+    },
+  });
+
+  /* QuizzesNext Settings ToolTip */
+  loader.defineAction('ToolTips.onSettings', {
+    on: '.course-feature-flags .quizzes_next',
+    dependencies: ['Tippy'],
+    run(tippy) {
+      insertToolTipHeaders('red', `Please review <a href="${QUIZZES_NEXT_FAQ}" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next`);
+
+      tippy('.course-feature-flags .quizzes_next', {
+        html: '#' + TOOLTIP_ID,
+        interactive: true,
+        placement: 'bottom-end',
+        theme: 'byui',
+        size: 'large',
+      });
+    },
+  });
+
+
+  // NOTE: google training course
+  /* Tabs */
+  loader.defineAction('Tabs', {
+    on: '.byui #styleguide-tabs-demo-minimal',
+    dependencies: ['jQuery'],
+    run($) {
+      $(this).tabs();
+    },
+  });
+
+  /* Video Tags */
+  loader.defineAction('VideoTags', {
+    on: '.byui-video',
+    run() {
+      if (this.dataset.source === 'youtube') {
+        this.innerHTML = `<iframe width="${this.dataset.width}px" height="${this.dataset.height}px" src="https://www.youtube.com/embed/${this.dataset.vidid}" frameborder="0" allowfullscreen></iframe>`;
+      } else if (this.dataset.source === 'kaltura') {
+        this.innerHTML = `<iframe width="${this.dataset.width}px" height="${this.dataset.height}px" src="https://cdnapisec.kaltura.com/p/1157612/sp/115761200/embedIframeJs/uiconf_id/29018071/partner_id/1157612?iframeembed=true&amp;playerId=kaltura_player_1485805514&amp;entry_id=${this.dataset.vidid}&amp;flashvars[streamerType]=auto" frameborder="0" allowfullscreen></iframe>`;
+      } else {
+        throw new Error('Video not from youtube or kaltura');
+      }
+    },
+  });
+
+  /* ------- UTILS -------- */
+  const TOOLTIP_ID = 'byui-quizzes-next-tooltip';
+  const QUIZZES_NEXT_FAQ = 'http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s';
+  const COURSE_NUMBER = document.location.pathname.split('/')[2];
+
+  function isLesserVersionNum(A,B){
+    A = A.split('.')
+    B = B.split('.')
+    while(A.length < B.length) A.unshift(0)
+    while(B.length < A.length) B.unshift(0)
+    for (let i = 0; i < A.length; i += 1) {
+      if (+A[i] > +B[i]) return false;
+      if (+A[i] < +B[i]) return true;
+    }
+    return false;
+  }
+
+  function waitForAll(that, datums, eachfn, cb) {
+    if (datums.length === 0) {
+      cb.call(that, null);
+      return;
     }
 
-    function checkForJquery(cb) {
-        function loadJquery() {
-            console.log('loading jQuery');
-            var jqueryScript = document.createElement('script');
-            jqueryScript.href = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js';
-            jqueryScript.onload = cb;
-            document.head.appendChild(jqueryScript);
+    let counter = 0;
+    let errorThrown = false;
+
+    function oneach(err) {
+      if (!errorThrown) {
+        if (err) {
+          errorThrown = true;
+          cb.call(that, err);
+        } else {
+          counter += 1;
+          if (counter === datums.length) cb.call(that, null);
         }
-        try {
-            if (typeof $ == 'undefined' || typeof $().jquery == 'undefined') {
-                loadJquery();
-            } else {
-                // check version
-                var minimumVersion = '1.7.0'.split('.');
-                var currentVersion = $().jquery.split('.');
-                var validVersion = true;
-
-                for (let i = 0; i < minimumVersion.length; i++) {
-                    if (currentVersion[i] > minimumVersion[i]) {
-                        break;
-                    } else if (currentVersion < minimumVersion) {
-                        validVersion = false;
-                        break;
-                    }
-                }
-
-                if (!validVersion) {
-                    loadJquery();
-                    return;
-                }
-
-                cb();
-            }
-        } catch (loadjQueryErr) {
-            console.error(loadjQueryErr);
-        }
+      }
     }
+    datums.forEach(data => eachfn.call(that, data, oneach));
+  }
 
-    /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
-    function editorStyles() {
-        try {
-            /* if there are no WYSIWYG's on the page, don't bother running */
-            if (typeof tinyMCE === 'undefined') {
-                return;
-            }
-            /* our css, canvas common css, canvas color vars css */
-            var regExes = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
-            var cssHrefs = [...document.querySelectorAll('link[rel=stylesheet]')].reduce((accum, linkTag) => {
-                var href = linkTag.getAttribute('href');
-
-                /* only keep the link if it matches one of the regExes */
-                if (regExes.some(regEx => href.match(regEx) !== null)) {
-                    accum.push(href);
-                }
-                return accum;
-            }, []);
-
-            tinyMCE.editors.forEach(editor => {
-                cssHrefs.forEach(href => {
-                    editor.dom.styleSheetLoader.load(href);
-                });
-            });
-        } catch (editorErr) {
-            console.error(editorErr);
-        }
+  function verbose(tag, object) {
+    /* eslint-disable no-console */
+    if (loader.mode == 'development') {
+      if (arguments.length === 2 && typeof tag === 'string' && typeof object === 'object') {
+        console.groupCollapsed(tag);
+        console.log(object);
+        console.groupEnd();
+      } else {
+        console.log(...arguments);
+      }
     }
+    /* eslint-enable no-console */
+  }
 
-    function main() {
-        var courseNumber = document.location.pathname.split('/')[2];
-
-        /* Initialize accordion - JQUERY UI */
-        function initializeAccordion() {
-            try {
-                if (document.querySelector('.byui div.accordion')) {
-                    checkForJquery(jQueryErr => {
-                        if (jQueryErr) {
-                            throw jQueryErr;
-                        }
-
-                        $('.byui div.accordion').accordion({
-                            heightStyle: 'content',
-                            collapsible: true,
-                            active: false
-                        });
-                    });
-                }
-            } catch (accordionErr) {
-                console.error(accordionErr);
-            }
-        }
-
-        /* Initialize dialog - JQUERY UI */
-        function initializeDialog() {
-            try {
-                if (document.querySelector('.byui div.dialog')) {
-                    checkForJquery(jQueryErr => {
-                        if (jQueryErr) {
-                            throw jQueryErr;
-                        }
-                        /* get all jQueryUI dialog boxes */
-                        document.querySelectorAll('.byui .Button[id^=\'link_\']').forEach(button => {
-                            /* Save linkID */
-                            let buttonId = /link_(\d+)/i.exec(button.id)[1];
-                            let $button = $(`.byui #dialog_for_link_${buttonId}`);
-
-                            /* instantiate dialog */
-                            $button.dialog({
-                                autoOpen: false
-                            });
-
-                            /* add event listener to open dialog */
-                            button.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                $button.dialog('open');
-                            });
-                        });
-                    });
-                }
-            } catch (dialogErr) {
-                console.error(dialogErr);
-            }
-        }
-
-        /* Initialize tabs - JQUERY UI */
-        function initializeTabs() {
-            try {
-                checkForJquery(jQueryErr => {
-                    if (jQueryErr) {
-                        throw jQueryErr;
-                    }
-
-                    $('.byui #styleguide-tabs-demo-minimal').tabs();
-                });
-            } catch (tabErr) {
-                console.error(tabErr);
-            }
-        }
-
-        /* Insert custom video tag generation scripts */
-        function insertVideoTag() {
-            try {
-                var videos = document.querySelectorAll('.byui-video');
-                for (var i = 0; i < videos.length; i++) {
-                    if (videos[i].dataset.source == 'youtube') {
-                        videos[i].innerHTML = `<iframe width="${videos[i].dataset.width}px" height="${videos[i].dataset.height}px" src="https://www.youtube.com/embed/${videos[i].dataset.vidid}" frameborder="0" allowfullscreen></iframe>`;
-                    } else if (videos[i].dataset.source == 'kaltura') {
-                        videos[i].innerHTML = `<iframe width="${videos[i].dataset.width}px" height="${videos[i].dataset.height}px" src="https://cdnapisec.kaltura.com/p/1157612/sp/115761200/embedIframeJs/uiconf_id/29018071/partner_id/1157612?iframeembed=true&amp;playerId=kaltura_player_1485805514&amp;entry_id=${videos[i].dataset.vidid}&amp;flashvars[streamerType]=auto" frameborder="0" allowfullscreen></iframe>`;
-                    }
-                }
-            } catch (videoErr) {
-                console.error(videoErr);
-            }
-        }
-
-        /* handles all functions required to generate the course homepage */
-        function generateHomePage() {
-            /* generate top buttons (under.steps) */
-            function generateSteps(modules) {
-                try {
-                    /* Get additional resources module item */
-                    var resourcesModule = modules.find(canvasModule => /student\s*resources/i.test(canvasModule.name));
-
-                    /* set home page buttons */
-                    var start = document.querySelector('.byui #start'),
-                        iLearnTutorial = document.querySelector('.byui #tutorial'),
-                        resources = document.querySelector('.byui #resources'),
-                        instructor = document.querySelector('.byui #instructor');
-
-                    if (start)
-                        start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
-                    if (iLearnTutorial)
-                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
-                    if (resources && resourcesModule)
-                        resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
-
-                    /* generate link to instructor bio - make the api call to get enrollments*/
-                    $.get(`https://byui.instructure.com/api/v1/courses/${courseNumber}/enrollments?type%5B%5D=TeacherEnrollment&per_page=50`, teachers => {
-                        /* check for multiple instances of the same teacher */
-                        // TODO which one of these is faster?
-                        // teachers = teachers.map(teacher => teacher.user_id).filter((teacherId, i, teachers) => teachers.indexOf(teacherId) === i);
-                        teachers = teachers.filter((teacher, i, teachers) => teachers.findIndex(teach => teach.user_id == teacher.user_id) == i);
-
-
-                        if (teachers.length > 1) {
-                            /* If there are multiple unique teachers */
-                            console.log('Multiple teachers are enrolled in this course. Please add "Your Instructor" link manually.');
-                        } else if (teachers.length === 0) {
-                            /* if the teacher isn't enrolled for some reason */
-                            console.log('Unable to find teacher enrollment.');
-                        } else {
-                            /* if we have one teacher set the URL */
-                            instructor.href = `/courses/${courseNumber}/users/${teachers[0].user_id}`;
-                        }
-                    });
-                } catch (generateStepsErr) {
-                    console.error(generateStepsErr);
-                }
-            }
-
-            /* generate lesson links (under .lessons) */
-            function generateLessons(modules) {
-                try {
-                    /* Generate a Module link - called by above try statement */
-                    function generateLessonLink(moduleId, moduleCount) {
-                        moduleCount++;
-                        /* append leading 0 */
-                        if (moduleCount < 10)
-                            moduleCount = `0${moduleCount}`;
-                        document.querySelector(lessonWrapperSelector).insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${moduleCount}</a>`);
-                    }
-
-                    var lessonWrapperSelector = '.byui #navigation .lessons';
-
-                    /* clear lesson div & generate module links if generate class exists */
-                    if ([...document.querySelector(lessonWrapperSelector).classList].includes('generate')) {
-                        document.querySelector(lessonWrapperSelector).innerHTML = '';
-                        /* remove modules with invalid names & get modulesPerRow (limit 7) */
-                        var validModules = modules.filter(canvasModule => {
-                                return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
-                            }),
-                            modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
-
-                        /* generate module links */
-                        validModules.forEach((canvasModule, i) => {
-                            generateLessonLink(canvasModule.id, i);
-                        });
-                    }
-                } catch (generateLessonErr) {
-                    console.error(generateLessonErr);
-                }
-            }
-
-            try {
-                /* quit if we are not on the course homepage OR the page is missing the expected format */
-                let stepsExist = document.querySelectorAll('.byui #navigation .steps').length > 0,
-                    lessonsExist = document.querySelectorAll('.byui #navigation .lessons').length > 0;
-                if (!stepsExist || !lessonsExist) {
-                    return;
-                }
-
-                checkForJquery(jQueryErr => {
-                    if (jQueryErr) {
-                        throw jQueryErr;
-                    }
-                    /* get course modules */
-                    $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
-                        /* Don't run steps if they don't exist (or lessons) */
-                        if (stepsExist) {
-                            generateSteps(modules);
-                        }
-                        if (lessonsExist) {
-                            generateLessons(modules);
-                        }
-                    });
-                });
-            } catch (selectorErr) {
-                console.error(selectorErr);
-            }
-        }
-
-        /* Hide the 3rd breadcrumb */
-        function alterBreadcrumb() {
-            try {
-                /* If there are 4 total, AND we're inside a course AND we're not in a group tab */
-                if (document.querySelectorAll('#breadcrumbs li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href)) {
-                    document.querySelectorAll('#breadcrumbs li:nth-child(3) span')[0].innerHTML = 'Modules';
-                    /* update the link */
-                    document.querySelectorAll('#breadcrumbs li:nth-child(3) a')[0].href = document.querySelectorAll('#breadcrumbs li:nth-child(3) a')[0].href.replace(/\/\w+$/i, '/modules');
-                }
-            } catch (breadcrumbErr) {
-                console.error(breadcrumbErr);
-            }
-        }
-
-        /* enable prism pre > code highlighting */
-        function prismHighlighting() {
-            try {
-                let codeUsed = document.querySelector('.byui pre code');
-                if (codeUsed == null) return;
-
-                let jsEle = document.createElement('script'),
-                    cssEle = document.createElement('link');
-                jsEle.src = 'https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.js';
-                cssEle.href = 'https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css';
-                cssEle.rel = 'stylesheet';
-                document.head.appendChild(jsEle);
-                document.head.appendChild(cssEle);
-
-            } catch (prismErr) {
-                console.error(prismErr);
-            }
-        }
-
-        /* Insert copyright footer */
-        function addCopyrightFooter() {
-            try {
-                var page = document.getElementById('content');
-                if (page) {
-                    /* don't add one if it already exists */
-                    if (!document.querySelector('p.copyright') && !document.querySelector('p#byui-copyright'))
-                        page.insertAdjacentHTML('beforeend', `<p id='byui-copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
-                } else {
-                    throw new Error('unable to add copyright footer to page');
-                }
-            } catch (copyrightErr) {
-                console.error(copyrightErr);
-            }
-        }
-
-        /* add quiz.next tooltips where needed */
-        function addTooltips() {
-            try {
-                let borderColor = 'black';
-                const divId = 'byui-quizzes-next-tooltip';
-                const assignmentsHTML = `<div id="${divId}" style="display: none;">Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>`;
-                const settingsHTML = `<div id="${divId}" style="display: none;">Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>`;
-
-                /* Add appropriate tooltip OR return if we're on the wrong page */
-                if (window.location.href.includes('settings')) {
-                    document.head.insertAdjacentHTML('beforeend', settingsHTML);
-                    borderColor = 'red';
-                } else if (window.location.href.includes('assignments')) {
-                    document.head.insertAdjacentHTML('beforeend', assignmentsHTML);
-                } else {
-                    return;
-                }
-
-                /* Add tooltip styles to DOM with appropriate border color */
-                const styleGuts = `<style>.tippy-tooltip.byui-theme {border: 2px solid ${borderColor};background-color: white;color: black;max-width: 200px;}.tippy-backdrop {background: white;}</style>`;
-
-                document.head.insertAdjacentHTML('beforeend', styleGuts);
-
-                /* create a script tag, add the tooltip JavaScript to it, and add the tag to the document */
-                const script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.async = true;
-                script.src = 'https://content.byui.edu/integ/gen/a422cccd-35b7-4087-9329-20698cf169b0/0/tippy.all.min.js';
-                script.onload = () => {
-                    tippy('.quizzes_next, .new_quiz_lti_wrapper', {
-                        html: `#${divId}`,
-                        interactive: true,
-                        placement: 'bottom-end',
-                        theme: 'byui',
-                        size: 'large'
-                    });
-                };
-                document.head.appendChild(script);
-            } catch (tooltipErr) {
-                console.error(tooltipErr);
-            }
-        }
-
-        /* load JS & CSS needed for image carousels if there is one on the page */
-        function loadSlickJS() {
-            try {
-                /* don't load scripts if they aren't being used on the current page */
-                if (document.querySelectorAll('.byui .carousel').length === 0) {
-                    return;
-                }
-                var slickScript = document.createElement('script');
-                slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
-                /* Initialize carousels if any are present on page */
-                slickScript.onload = () => {
-                    checkForJquery(jQueryErr => {
-                        if (jQueryErr) {
-                            throw jQueryErr;
-                        }
-
-                        $('.byui .carousel').slick({
-                            dots: true,
-                        });
-                    });
-                };
-                document.head.appendChild(slickScript);
-                
-                var slickScriptCss = document.createElement('link');
-                slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
-                slickScriptCss.rel = 'stylesheet';
-                document.head.appendChild(slickScriptCss);
-                
-                var slickScriptTheme = document.createElement('link');
-                slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
-                slickScriptTheme.rel = 'stylesheet';
-                document.head.appendChild(slickScriptTheme);
-            } catch (slickErr) {
-                console.error(slickErr);
-            }
-        }
-
-        initializeAccordion();
-        initializeDialog();
-        initializeTabs();
-        insertVideoTag();
-        generateHomePage();
-        alterBreadcrumb();
-        prismHighlighting();
-        addCopyrightFooter();
-        addTooltips();
-        loadSlickJS();
+  function loadScript(href, cb) {
+    if(!document.querySelector('script[src="' + href + '"]')) {
+      verbose('Loading Script from ' + href);
+      const script = document.createElement('script');
+      script.dataset.readyState = 'loading'
+      script.src = href;
+      // Call the callback once it is done loading
+      if (cb) {
+        script.addEventListener('load', () => cb(null), {
+          once: true,
+        });
+        script.addEventListener('error', () => cb(new Error('Error loading ' + href)), {
+          once: true,
+        });
+      }
+      // Append to head of document
+      document.head.appendChild(script);
     }
-})();
+  }
+  function loadStyle(href) {
+    // Already injected?
+    if (document.querySelector('link[href="' + href + ']"') === null) {
+      verbose('Loading Stylesheet from ' + href);
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = href;
+      // Append to head of document
+      document.head.appendChild(link);
+    } else {
+      verbose('Already Loaded Stylesheet from ' + href);
+    }
+  }
+
+  function xhttpRequest(url, cb) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function onreadystatechange() {
+      try {
+        if (this.readyState === 4) {
+          if (this.status === 200) {
+            const data = JSON.parse(xhttp.responseText);
+            cb(null, data);
+          } else {
+            cb(new Error('Failed to retrieve, got a status code ' + this.status));
+          }
+        }
+      } catch (err) {
+        cb(err);
+      }
+    };
+    xhttp.open('GET', url, true);
+    xhttp.setRequestHeader('accept', 'application/json, text/javascript, application/json+canvas-string-ids, */*; q=0.01');
+    xhttp.send();
+  }
+
+  function insertToolTipHeaders(color, tip) {
+    document.head.insertAdjacentHTML('beforeend', `<div id="${TOOLTIP_ID}" style="display: none;">${tip}</div>`);
+    document.head.insertAdjacentHTML('beforeend', `
+      <style>
+          .tippy-tooltip.byui-theme {
+              border: 2px solid ${color};
+              background-color: white;
+              color: black;
+              max-width: 200px;
+          }
+          .tippy-backdrop {
+              background: white;
+          }
+      </style>
+    `);
+  }
+
+})(); // End IFFY
