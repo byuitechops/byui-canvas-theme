@@ -486,8 +486,10 @@ span.caption {
 /******************************************
                  Callouts
 ********************************************/
+/* TODO Potential fix for #73 & #72 */
 /* @media screen and (max-width: 785px) {
-  .byui .callout {
+  .byui .callout,
+  .byui .callout img {
       width: 100%;
       max-width: 100%;
   }
