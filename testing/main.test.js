@@ -1,38 +1,81 @@
-// const puppeteerHandler = require('./puppeteerHandler')
-// const path = require('path')
-// const DIR = path.join(__dirname,'../src')
-/* Specify which requests to redirect where */
-// puppeteerHandler.redirect(/byui\.(js|css)$/,DIR)
+const puppeteerHandler = require('./puppeteerHandler')
+const fs = require('fs')
+const path = require('path')
 
-// let browser,page
+const readFile = filename => fs.readFileSync(path.join(__dirname,filename),'utf-8')
 
-// /* Handle opening and closing the browser */
-// beforeAll(async () => {
-//   browser = await puppeteerHandler.open({ headless:true });
-//   [ page ] = await browser.pages();
-// })
-// afterAll(() => browser.close())
+let browser,page
+
+const evaluate = (...args) => () => page.evaluate(...args)
+
+jest.setTimeout(15000)
+
+const DEBUGGING = false
+
+/* Handle opening and closing the browser */
+beforeAll(async () => {
+  browser = await puppeteerHandler.open({ headless:!DEBUGGING });
+  [ page ] = await browser.pages();
+
+
+  await page.setRequestInterception(true)
+  page.on('request',request => {
+    if(path.basename(request.url()) == 'byui.js'){
+      request.abort('blockedbyclient')
+    } else {
+      request.continue()
+    }
+  })
+
+  page.on('load',() => page.evaluate(readFile('../src/byui.js')))
+  await page.evaluateOnNewDocument(readFile('../node_modules/sinon/pkg/sinon.js'))
+  await page.evaluateOnNewDocument(readFile('./expect.min.js'))
+
+})
+!DEBUGGING && afterAll(() => browser.close())
 
 /* Test the homepage menu */
 describe('homepage',async () => {
 
-  // beforeAll(() => page.goto('https://byui.instructure.com/courses/92'))
+  var actions = ['CopyrightFooter','Homepage.Tutorial','Homepage.Start','Homepage.Lessons','Homepage.Resources','Homepage.Instructor']
 
-  test('contains elements',async () => {
+  beforeAll(() => page.goto('https://byui.instructure.com/courses/92'))
 
-    const map = {};
+  test('ThemeLoader exists on page',evaluate(() => {
+    expect(window.ByuiThemeLoader).toBeTruthy()
+  }))
 
-    window.addEventListener = jest.fn((event,cb) => map[event] = cb)
+  describe('Actions are present',async () => {
+    actions.forEach(action => {
+      test(action+' got wrapped',evaluate(action => {
+        expect(window.ByuiThemeLoader.actions[action]).toBeTruthy()
+        sinon.spy(ByuiThemeLoader.actions[action],'run')
+      },action))
+    })
+  })
 
-    // const initializeCarousel = jest.fn()
+  test('ThemeLoader successfully ran',async () => {
+    await page.evaluate(() => ByuiThemeLoader.onload())
+    // await page.waitForNavigation({waitUntil:'networkidle0'})
+    await page.waitForFunction(function(){
+      return Object.values(ByuiThemeLoader.resources).every(n => n._readyState != 'loading')
+    },{polling:'mutation'})
+  })
 
-    require('../src/byui.js')
+  // test('Actions are present',evaluate(actions => {
+  //   actions.forEach(action => {
+  //     expect(window.ByuiThemeLoader.actions[action]).toBeTruthy()
+  //     sinon.spy(ByuiThemeLoader.actions[action],'run')
+  //   })
+  // },actions))
 
-    console.log(initializeCarousel)
-    // map.load()
-    // expect(initializeCarousel).toBeCalled()
-    // var puppydog = await page.evaluate(() => window.puppydog)
-    // console.log(puppydog)
+  describe('Testing actions',() => {
+    actions.forEach(action => {
+      test(action+' successfully ran',evaluate(action => {
+        expect(ByuiThemeLoader.actions[action].run.called).toBeTruthy()
+        expect(ByuiThemeLoader.actions[action].run.threw()).toBeFalsy()
+      },action))
+    })
   })
 
 })

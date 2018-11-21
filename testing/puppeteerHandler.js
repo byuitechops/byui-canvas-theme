@@ -1,6 +1,7 @@
 const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
+const chalk = require('chalk')
 const Enquirer = require('enquirer')
 const https = require('https')
 const puppeteer = require('puppeteer')
@@ -15,7 +16,7 @@ enquirer.question('save','Would you like to save credentials to auth.json?',{typ
 
 const authfile = path.resolve(__dirname,'auth.json')
 const cookiefile = path.resolve(__dirname,'.cookie')
-const Redirects = []
+let RedirectFolder = ''
 
 /* Set userDataDir for settings to be saved */
 const userDataDir = path.join(os.tmpdir(),'testing-user-data')
@@ -116,58 +117,24 @@ async function setIntercepters (page){
   await page.setRequestInterception(true);
   
   page.on('request',request => {
-    var url = request.url()
-    /* Find the best match */
-    // console.log(path.basename(url))
-    var redirector = Redirects.find(redirect => redirect.isMatch(url))
-    /* If there was a match */
-    if(redirector){
-      var resourcepath = redirector.getPath(url)
-      try {
-        request.respond({
-          headers: request.headers(),
-          body: fs.readFileSync(resourcepath)
-        })
-      } catch(e){
-        request.respond({
-          status:'404',
-          contentType:'text/plain',
-          body:`${resourcepath} does not exist`
-        })
-      }
+    var filename = path.basename(request.url())
+    var resourcePath = path.join(RedirectFolder,filename)
+    if(RedirectFolder && fs.existsSync(resourcePath)){
+      console.log(chalk.green('redirecting'),filename)
+      request.respond({
+        headers: request.headers(),
+        body: fs.readFileSync(resourcePath)
+      })
     } else {
       request.continue()
     }
   })
 }
 
-module.exports.redirect = function (match,filepath){
-  var isMatch,getPath
-
-  if(match.test != undefined){
-    isMatch = url => match.test(url)
-  } else if(typeof match == 'string'){
-    isMatch = url => url.endsWith(match)
-  } else {
-    throw new Error('Redirect must have \'match\' property')
-  }
-
-  if(typeof filepath == 'string'){
-    if(fs.existsSync(filepath)){
-      if(fs.statSync(filepath).isDirectory()){
-        /* If they gave us a directory, then use the file paths name */
-        getPath = url => path.join(filepath,path.basename(url))
-      } else {
-        getPath = () => filepath
-      }
-    } else {
-      throw new Error('resource does not exist')
-    }
-  } else {
-    throw new Error('Was expectng Resource path to be a string')
-  }
-
-  Redirects.push({isMatch,getPath})
+module.exports.setRedirectFolder = function(folder){
+  folder = path.join(__dirname,folder)
+  if(!fs.statSync(folder).isDirectory()) throw new Error(folder+" is not a valid folder")
+  RedirectFolder = folder
 }
 
 module.exports.open = async function(settings={}){
@@ -194,7 +161,9 @@ module.exports.open = async function(settings={}){
       these by the resource timing out and the entire page going blank after
       a couple of seconds after navigation
   */
-  await setIntercepters(page).catch(console.error)
+  if(RedirectFolder){
+    await setIntercepters(page).catch(console.error)
+  }
 
   return browser
 }

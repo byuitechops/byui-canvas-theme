@@ -4,7 +4,8 @@
   "description": "",
   "main": "byui.js",
   "scripts": {
-    "start": "node ./testing/explore.js ./src",
+    "start": "node ./testing/explore.js",
+    "explore": "node ./testing/explore.js",
     "test": "jest",
     "lint": "eslint ./src --fix",
     "build": "gulp"
@@ -20,10 +21,13 @@
   },
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
   "dependencies": {
+    "chalk": "^2.4.1",
     "enquirer": "^1.0.3",
+    "expect": "^23.6.0",
     "fuzzyurl": "^0.9.0",
     "prompt-confirm": "^2.0.4",
-    "prompt-password": "^1.2.0"
+    "prompt-password": "^1.2.0",
+    "sinon": "^7.1.1"
   },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",
