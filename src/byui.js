@@ -249,7 +249,7 @@
                 /* quit if we are not on the course homepage OR the page is missing the expected format */
                 let stepsExist = document.querySelectorAll('.byui #navigation .steps').length > 0,
                     lessonsExist = document.querySelectorAll('.byui #navigation .lessons').length > 0;
-                if (!stepsExist || !lessonsExist) {
+                if (!stepsExist && !lessonsExist) {
                     return;
                 }
 
