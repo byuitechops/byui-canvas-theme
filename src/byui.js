@@ -184,7 +184,7 @@
                     if (start)
                         start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
                     if (iLearnTutorial)
-                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation';
                     if (resources && resourcesModule)
                         resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
 
