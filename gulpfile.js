@@ -6,8 +6,7 @@ const postcssCustomProperties = require('postcss-custom-properties');
 const cssnano = require('cssnano');
 const fs = require('fs');
 const path = require('path');
-
-
+const headerComment = require('gulp-header-comment');
 
 
 
@@ -27,6 +26,7 @@ gulp.task('compressJS', (cb) => {
         sourcemaps.init(),
         babel({ presets: [['env', { 'modules': false, 'targets': { 'ie': 11 } }], 'minify'] }),
         sourcemaps.write('.'),
+        gulp.pipe(headerComment(`version ${versionNumber}`)),
         gulp.dest('./prod/')
     ], cb);
 });
