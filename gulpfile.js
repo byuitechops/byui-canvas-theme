@@ -16,7 +16,7 @@ gulp.task('compressJS', (cb) => {
     pump([
         gulp.src('src/**/*.js'),
         sourcemaps.init(),
-        babel({presets: [['env', {'modules': false, 'targets': {'ie': 11}}], 'minify']}),
+        babel({ presets: [['env', { 'modules': false, 'targets': { 'ie': 11 } }], 'minify'] }),
         sourcemaps.write('.'),
         gulp.dest('./prod/')
     ], cb);
