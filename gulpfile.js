@@ -4,6 +4,15 @@ const sourcemaps = require('gulp-sourcemaps');
 const postcss = require('gulp-postcss');
 const postcssCustomProperties = require('postcss-custom-properties');
 const cssnano = require('cssnano');
+const fs = require('fs');
+const path = require('path');
+
+
+
+
+
+var file = fs.readFileSync(path.resolve('./gulpfile.js'), { encoding: "utf8" });
+var versionNumber = file.version;
 
 
 const gulp = require('gulp');
