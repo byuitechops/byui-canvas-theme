@@ -4,7 +4,6 @@ import { runInContext } from "vm";
 /* eslint no-console:0 */
 /* global tinyMCE, tippy, $ */
 
-
 (function () {
 
     /* Allows us to disable this page for testing purposes */
@@ -211,12 +210,10 @@ import { runInContext } from "vm";
         });
     }
 
-
     /* generate lesson links (under .lessons) */
     function generateLessons(courseNumber, modules) {
 
         var lessonWrapper = document.querySelector('.byui #navigation .lessons');
-
         /* clear lesson div & generate module links if generate class exists */
         if (lessonWrapper.classList.contains('generate')) {
             lessonWrapper.innerHTML = '';
@@ -242,7 +239,6 @@ import { runInContext } from "vm";
         var lessons = document.querySelector('.byui #navigation .lessons');
         if (steps && lessons) {
             var courseNumber = document.location.pathname.split('/')[2];
-
             /* get course modules */
             getjQuery($ => {
                 $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
@@ -255,7 +251,6 @@ import { runInContext } from "vm";
         }
     }
 
-
     /* Hide the 3rd breadcrumb */
     function alterBreadcrumb() {
         /* If there are 4 total, AND we're inside a course AND we're not in a group tab */
@@ -265,7 +260,6 @@ import { runInContext } from "vm";
             var link = document.querySelector('#breadcrumbs li:nth-child(3) a');
             link.href = link.href.replace(/\/\w+$/i, '/modules');
         }
-
     }
 
     /* enable prism pre > code highlighting */
@@ -275,7 +269,6 @@ import { runInContext } from "vm";
             loadStyle('https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css');
         }
     }
-
 
     /* Insert copyright footer */
     function addCopyrightFooter() {
@@ -288,7 +281,6 @@ import { runInContext } from "vm";
             console.warn('unable to add copyright footer to page');
         }
     }
-
 
     /* add quiz.next tooltips where needed */
     function addTooltips() {
@@ -345,7 +337,6 @@ import { runInContext } from "vm";
             /* Theme */
             loadStyle('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css');
         }
-
     }
 
     /* Initialize tabs - JQUERY UI */
@@ -356,6 +347,5 @@ import { runInContext } from "vm";
 
         });
     }
-
 
 })();
