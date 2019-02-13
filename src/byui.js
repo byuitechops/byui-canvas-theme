@@ -184,7 +184,7 @@ import { runInContext } from "vm";
         if (start)
             start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
         if (iLearnTutorial)
-            iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+            iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation';
         if (resources && resourcesModule)
             resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
 
@@ -300,7 +300,7 @@ import { runInContext } from "vm";
             borderColor = 'red';
             tip = 'Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next';
         } else if (window.location.href.includes('assignments')) {
-            tip = tip = 'Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features';
+            tip = `<div id="${divId}" style="display: none;">Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features</div>`;
         } else {
             return;
         }
