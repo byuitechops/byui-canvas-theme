@@ -275,7 +275,7 @@ import { runInContext } from "vm";
         var page = document.getElementById('content');
         if (page) {
             /* don't add one if it already exists */
-            if (!document.querySelector('p.copyright') && !document.querySelector('p#byui-copyright'))
+            if (!document.querySelector('p.copyright') && !document.querySelector('p#byui-copyright') && !window.location.pathname.includes('speed_grader'))
                 page.insertAdjacentHTML('beforeend', `<p id='byui-copyright'>Copyright ${new Date().getFullYear()} Brigham Young University-Idaho</p>`);
         } else {
             console.warn('unable to add copyright footer to page');
