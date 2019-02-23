@@ -4,14 +4,12 @@
 
 /* Allows us to disable this page for testing purposes */
 // TESTING disable for prod
+
 (function () {
-    // if (true) {
-    if (localStorage.getItem('devAccount') !== 'true') {
-        window.addEventListener('onload', editorStyles);
-        document.addEventListener('DOMContentLoaded', main);
-    } else {
-        console.warn('byui.js disabled for testing');
-    }
+    
+    window.addEventListener('onload', editorStyles);
+    document.addEventListener('DOMContentLoaded', main);
+
 
     function checkForJquery(cb) {
         function loadJquery() {
@@ -373,7 +371,7 @@
                     return;
                 }
                 var slickScript = document.createElement('script');
-                slickScript.src = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick.min.js';
+                slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
                 /* Initialize carousels if any are present on page */
                 slickScript.onload = () => {
                     checkForJquery(jQueryErr => {
@@ -387,14 +385,14 @@
                     });
                 };
                 document.head.appendChild(slickScript);
-                
+
                 var slickScriptCss = document.createElement('link');
-                slickScriptCss.href = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick.css';
+                slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
                 slickScriptCss.rel = 'stylesheet';
                 document.head.appendChild(slickScriptCss);
-                
+
                 var slickScriptTheme = document.createElement('link');
-                slickScriptTheme.href = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick-theme.css';
+                slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
                 slickScriptTheme.rel = 'stylesheet';
                 document.head.appendChild(slickScriptTheme);
             } catch (slickErr) {
