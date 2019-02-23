@@ -8,21 +8,27 @@ const cssnano = require('cssnano');
 
 const gulp = require('gulp');
 
-gulp.task('default', () => {
-    // Nothing to see here
-});
 
-gulp.task('compressJS', (cb) => {
+function compressJS(cb) {
     pump([
         gulp.src('src/**/*.js'),
         sourcemaps.init(),
-        babel({presets: [['env', {'modules': false, 'targets': {'ie': 11}}], 'minify']}),
+        babel({
+            presets: [
+                ['env', {
+                    'modules': false,
+                    'targets': {
+                        'ie': 11
+                    }
+                }], 'minify'
+            ]
+        }),
         sourcemaps.write('.'),
         gulp.dest('./prod/')
     ], cb);
-});
+}
 
-gulp.task('compressCSS', (cb) => {
+function compressCSS(cb) {
     pump([
         gulp.src('src/**/*.css'),
         sourcemaps.init(),
@@ -35,7 +41,10 @@ gulp.task('compressCSS', (cb) => {
         sourcemaps.write('./'),
         gulp.dest('./prod/')
     ], cb);
-});
+}
 
-gulp.watch('src/**/*.js', ['compressJS']);
-gulp.watch('src/**/*.css', ['compressCSS']);
+
+exports.default = () => {
+    gulp.watch('src/**/*.js', compressJS);
+    gulp.watch('src/**/*.css', compressCSS);
+}
