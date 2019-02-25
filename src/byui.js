@@ -231,8 +231,8 @@
                         document.querySelector(lessonWrapperSelector).innerHTML = '';
                         /* remove modules with invalid names & get modulesPerRow (limit 7) */
                         var validModules = modules.filter(canvasModule => {
-                                return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
-                            }),
+                            return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
+                        }),
                             modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
 
                         /* generate module links */
@@ -387,12 +387,12 @@
                     });
                 };
                 document.head.appendChild(slickScript);
-                
+
                 var slickScriptCss = document.createElement('link');
                 slickScriptCss.href = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick.css';
                 slickScriptCss.rel = 'stylesheet';
                 document.head.appendChild(slickScriptCss);
-                
+
                 var slickScriptTheme = document.createElement('link');
                 slickScriptTheme.href = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick-theme.css';
                 slickScriptTheme.rel = 'stylesheet';
