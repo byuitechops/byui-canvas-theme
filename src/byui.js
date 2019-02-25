@@ -2,11 +2,8 @@
 /* eslint no-console:0 */
 /* global tinyMCE, tippy, $ */
 
-/* Allows us to disable this page for testing purposes */
-// TESTING disable for prod
-
 (function () {
-    
+
     window.addEventListener('onload', editorStyles);
     document.addEventListener('DOMContentLoaded', main);
 
