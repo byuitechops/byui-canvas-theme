@@ -6,29 +6,24 @@ import { runInContext } from "vm";
 
 (function () {
 
-    /* Allows us to disable this page for testing purposes */
-    // TESTING disable for prod
-    if (localStorage.getItem('devAccount') !== 'true') {
-        window.addEventListener('load', function () {
-            run(initializeCarousel);
-            run(editorStyles);
-        });
+    window.addEventListener('load', function () {
+        run(initializeCarousel);
+        run(editorStyles);
+    });
 
-        document.addEventListener('DOMContentLoaded', function () {
-            run(initializeAccordion);
-            run(initializeDialog);
-            run(insertVideoTag);
-            run(generateHomePage);
-            run(alterBreadcrumb);
-            run(prismHighlighting);
-            run(addCopyrightFooter);
-            run(addTooltips);
-            run(loadSlickJS);
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        run(initializeAccordion);
+        run(initializeDialog);
+        run(insertVideoTag);
+        run(generateHomePage);
+        run(alterBreadcrumb);
+        run(prismHighlighting);
+        run(addCopyrightFooter);
+        run(addTooltips);
+        run(loadSlickJS);
+    });
 
-    } else {
-        console.warn('byui.js disabled for testing');
-    }
+
 
     function run(fn) { try { fn(); } catch (e) { console.error(e); } }
 
