@@ -3,10 +3,8 @@
 /* global tinyMCE, tippy, $ */
 
 (function () {
-
     window.addEventListener('onload', editorStyles);
     document.addEventListener('DOMContentLoaded', main);
-
 
     function checkForJquery(cb) {
         function loadJquery() {
@@ -285,8 +283,8 @@
         /* enable prism pre > code highlighting */
         function prismHighlighting() {
             try {
-                let codeUsed = document.querySelector('.byui pre code');
-                if (codeUsed == null) return;
+                let codeUsed = document.querySelector('pre code');
+                if (codeUsed == null) return; 
 
                 let jsEle = document.createElement('script'),
                     cssEle = document.createElement('link');
@@ -295,7 +293,7 @@
                 cssEle.rel = 'stylesheet';
                 document.head.appendChild(jsEle);
                 document.head.appendChild(cssEle);
-
+ 
             } catch (prismErr) {
                 console.error(prismErr);
             }
