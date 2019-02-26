@@ -2,9 +2,7 @@
 /* eslint no-console:0 */
 /* global tinyMCE, tippy, $ */
 
-/* Allows us to disable this page for testing purposes */
-// TESTING disable for prod
-(function () {   
+(function () {
     window.addEventListener('onload', editorStyles);
     document.addEventListener('DOMContentLoaded', main);
 
@@ -226,8 +224,8 @@
                         document.querySelector(lessonWrapperSelector).innerHTML = '';
                         /* remove modules with invalid names & get modulesPerRow (limit 7) */
                         var validModules = modules.filter(canvasModule => {
-                                return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
-                            }),
+                            return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
+                        }),
                             modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
 
                         /* generate module links */
