@@ -3,7 +3,7 @@
 /* global tinyMCE, tippy, $ */
 
 (function () {
-    window.addEventListener('onload', editorStyles);
+    window.addEventListener('load', editorStyles);
     document.addEventListener('DOMContentLoaded', main);
 
     function checkForJquery(cb) {
@@ -284,7 +284,7 @@
         function prismHighlighting() {
             try {
                 let codeUsed = document.querySelector('pre code');
-                if (codeUsed == null) return; 
+                if (codeUsed == null) return;
 
                 let jsEle = document.createElement('script'),
                     cssEle = document.createElement('link');
@@ -293,7 +293,7 @@
                 cssEle.rel = 'stylesheet';
                 document.head.appendChild(jsEle);
                 document.head.appendChild(cssEle);
- 
+
             } catch (prismErr) {
                 console.error(prismErr);
             }
