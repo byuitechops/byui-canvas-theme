@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "version": "git add package.json",
-    "postversion": "git push && git checkout master && git merge dev && git push"
+    "postversion": "git push origin dev && git checkout master && git merge dev && git push"
   },
   "repository": {
     "type": "git",
