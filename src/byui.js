@@ -24,6 +24,7 @@
         run(loadSlickJS);
     });
 
+    console.log("hello");
 
     function run(fn) { try { fn(); } catch (e) { console.error(e); } }
 

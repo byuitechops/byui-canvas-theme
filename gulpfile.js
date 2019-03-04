@@ -10,8 +10,6 @@ const headerComment = require('gulp-header-comment');
 
 var browserSync = require('browser-sync');
 
-var reload = browserSync.reload;
-
 var file = fs.readFileSync(path.resolve('./gulpfile.js'), { encoding: "utf8" });
 var versionNumber = file.version;
 
@@ -19,17 +17,35 @@ var versionNumber = file.version;
 const gulp = require('gulp');
 
 
-gulp.task('serve', function () {
-    browserSync.init({
-        port: 8000,
-        // host: "127.0.0.1",
+// gulp.task('serve', function () {
+//     browserSync.init({
+//         injectChanges: true,
+//         port: 8000,
+//         server: {
+//             baseDir: './'
+//         },
+//         files: ['src/**/*.js']
+//         // startPath: 'index.html'
+//     });
+//     gulp.watch('src/**/*.js', compressJS);
+//     gulp.watch('src/**/*.css', compressCSS);
+//     gulp.watch('src/**/*.js', ['js-watch']);
+// });
+
+function reload(done) {
+    server.reload();
+    done();
+}
+
+function serve(done) {
+    server.init({
         server: {
-            baseDir: 'prod'
-        },
-        startPath: './index.html'
+            baseDir: './'
+        }
     });
-    gulp.watch(['src/**/*.js', 'src/**/*.css'], { cwd: 'prod' }, [reload, compressJS, compressCSS]);
-});
+    done();
+}
+
 
 
 
