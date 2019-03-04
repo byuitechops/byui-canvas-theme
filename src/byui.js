@@ -1,4 +1,4 @@
-import { runInContext } from "vm";
+// import { runInContext } from "vm";
 
 /*eslint-env browser */
 /* eslint no-console:0 */
@@ -14,6 +14,7 @@ import { runInContext } from "vm";
     document.addEventListener('DOMContentLoaded', function () {
         run(initializeAccordion);
         run(initializeDialog);
+        run(initializeTabs);
         run(insertVideoTag);
         run(generateHomePage);
         run(alterBreadcrumb);
@@ -28,12 +29,15 @@ import { runInContext } from "vm";
     function run(fn) { try { fn(); } catch (e) { console.error(e); } }
 
     function loadScript(href, cb) {
+
         /* Checks if the script is already injected. If not, it will add it */
         if (document.querySelector('script[src="' + href + '"]') === null) {
+
             var script = document.createElement('script');
             script.src = href;
             /* Call the callback once it is done loading */
             if (cb) {
+
                 script.addEventListener('load', cb, { once: true });
             }
             /* Append script to the head of the document */
@@ -45,7 +49,7 @@ import { runInContext } from "vm";
         /* Checks if the style is already injected. If not, it will add it */
         if (document.querySelector('link[href="' + href + '"]') === null) {
             var link = document.createElement('link');
-            link.ref = 'stylesheet';
+            link.rel = 'stylesheet';
             link.type = 'text/css';
             link.href = href;
             /* Call the callback once it is done loading */
@@ -146,8 +150,22 @@ import { runInContext } from "vm";
     /* Initialize dialog - JQUERY UI */
     function initializeDialog() {
         if (document.querySelector('.byui div.dialog')) {
-            getjQuery($ => {
-                $('.byui div.dialog').dialog();
+
+            document.querySelectorAll('.byui .Button[id^=\'link_\']').forEach(button => {
+                /* Save linkID */
+                let buttonId = /link_(\d+)/i.exec(button.id)[1];
+                let $button = $(`.byui #dialog_for_link_${buttonId}`);
+
+                /* instantiate dialog */
+                $button.dialog({
+                    autoOpen: false
+                });
+
+                /* add event listener to open dialog */
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    $button.dialog('open');
+                });
             });
         }
     }
@@ -220,8 +238,8 @@ import { runInContext } from "vm";
 
             /* generate module links */
             validModules.forEach((canvasModule, i) => {
-                var moduleCount = (i < 10 ? '0' : '') + (i + 1);
-                lessonWrapper.insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${moduleId}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${moduleCount}</a>`)
+                var moduleCount = (i < 9 ? '0' : '') + (i + 1);
+                lessonWrapper.insertAdjacentHTML('beforeend', `<a href='/courses/${courseNumber}/modules#module_${canvasModule.id}' style='width: calc(100% / ${modulesPerRow} - 20px);'>${moduleCount}</a>`)
             });
         }
     }
@@ -259,7 +277,7 @@ import { runInContext } from "vm";
 
     /* enable prism pre > code highlighting */
     function prismHighlighting() {
-        if (document.querySelector('.byui pre code')) {
+        if (document.querySelector('pre code')) {
             loadScript('https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.js');
             loadStyle('https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css');
         }
@@ -279,15 +297,17 @@ import { runInContext } from "vm";
 
     /* add quiz.next tooltips where needed */
     function addTooltips() {
-        var tip, divId = 'byui-quizzes-next-tooltip';
+        var tip = '';
+        var divId = 'byui-quizzes-next-tooltip';
         var borderColor = 'black';
 
         /* Add appropriate tooltip OR return if we're on the wrong page */
         if (window.location.href.includes('settings')) {
-            borderColor = 'red';
             tip = 'Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next';
+            borderColor = 'red';
+
         } else if (window.location.href.includes('assignments')) {
-            tip = `<div id="${divId}" style="display: none;">Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features</div>`;
+            tip = tip = `Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features`;
         } else {
             return;
         }
