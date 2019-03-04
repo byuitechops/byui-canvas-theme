@@ -61,7 +61,7 @@ Now remember, the BYU-Idaho theme is still trickling down into development, so y
 1. This particular extension will appear in Developer Tools under the Overrides tab
     * For the tab URL, enter \*byui.instructure.com/* or \*byui.test.instructure.com/* depending on if you are in the test instance or not
     * In the 'From' section, you will put the name of the file you are trying to replace. In this case, either \*byui.js or \*byui.css
-    * In the 'To' section, you will put the URL of your JS or CSS file generated from live-server
+    * In the 'To' section, you will put the URL of your JS or CSS file generated from live-server (most likely port 8000)
     * Make sure you disable the cache under the Network tab as well, or the tool will not always work
     * When you reload the page, the tool should replace the current byui.js or byui.css file with the file URL you have provided
 
