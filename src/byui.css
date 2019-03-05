@@ -26,6 +26,7 @@
 **************************************************/
 .ic-app-course-menu {
   position: sticky;
+  
   /* if the content stops sitting next to the menu on smaller screens, ensure margin-left is up to date */
   margin-left: -192px;
   float: left;

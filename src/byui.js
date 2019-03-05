@@ -1,8 +1,7 @@
-// import { runInContext } from "vm";
-
 /*eslint-env browser */
 /* eslint no-console:0 */
 /* global tinyMCE, tippy, $ */
+
 
 (function () {
 
@@ -24,7 +23,7 @@
         run(loadSlickJS);
     });
 
-    console.log("hello");
+
 
     function run(fn) { try { fn(); } catch (e) { console.error(e); } }
 
@@ -61,6 +60,7 @@
             document.head.appendChild(link);
         }
     }
+
 
     function getjQuery(cb) {
         /* If jQuery is already saved, use that */
