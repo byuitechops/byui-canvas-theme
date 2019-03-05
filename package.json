@@ -1,12 +1,12 @@
 {
   "name": "byui-canvas-theme",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "",
   "main": "byui.js",
   "scripts": {
     "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "version": "git add package.json",
+    "version": "gulp updateVersion && git add .",
     "postversion": "git push origin dev && git checkout master && git merge dev && git push"
   },
   "repository": {

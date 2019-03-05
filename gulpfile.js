@@ -58,9 +58,10 @@ function compressCSS(cb) {
         ]),
         header(`/*v ${versionNumber}*/`),
         sourcemaps.write('./'),
-        header('hello emma'),
         gulp.dest('./prod/')
     ], cb);
 }
 
 exports.default = gulp.series(serve);
+
+exports.updateVersion = gulp.series(compressCSS, compressJS);

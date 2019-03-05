@@ -1,2 +1,2 @@
-/*v 1.1.0*/
+/*v 1.2.0*/
 //# sourceMappingURL=online.js.map
