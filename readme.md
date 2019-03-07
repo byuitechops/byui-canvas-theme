@@ -51,7 +51,7 @@ definition:
     ```bash
     version major
     ```
-1. Submit a CAB request and wait for approval. Read more about the process [here](.)
+1. Submit a CAB request and wait for approval. Read more about the process [here](https://webmailbyui.sharepoint.com/sites/IT/Policies%20and%20Standards/Change%20Management%20Documentation/Change%20Management%20Standard.pdf)
 1. Contact Dane Bohman and have him upload the new files to the top level in Canvas with Josh there as well to make sure it happens correctly
 1. If this fix has been requested by someone outside the office, send them an email to let them know that the change has been implemented
 
