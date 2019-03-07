@@ -6,3 +6,5 @@
 
 Use the `npm start` command to open a live server of your JS and CSS files and start watching for changes in those files.
 The `src` directory contains human-readable code while the `prod` directory contains the optimized code for Canvas.
+
+Make sure you edit the package.json to include the name of the branch you are on in the scripts section wherever 'dev' appears
