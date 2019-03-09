@@ -3,7 +3,7 @@
 /* global tinyMCE, tippy, $ */
 
 (function () {
-    window.addEventListener('load', editorStyles);
+    window.addEventListener('onload', editorStyles);
     document.addEventListener('DOMContentLoaded', main);
 
     function checkForJquery(cb) {
@@ -236,7 +236,7 @@
                 } catch (generateLessonErr) {
                     console.error(generateLessonErr);
                 }
-            }
+            } 
 
             try {
                 /* quit if we are not on the course homepage OR the page is missing the expected format */
