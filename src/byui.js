@@ -277,7 +277,8 @@
 
     /* enable prism pre > code highlighting */
     function prismHighlighting() {
-        if (document.querySelector('pre code')) {
+        // add .byui as a selector
+        if (document.querySelector('.byui pre code')) {
             loadScript('https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.js');
             loadStyle('https://content.byui.edu/integ/gen/a40c34d7-9f6f-4a18-a41d-2f40e2b2a18e/0/codeHighlighter.css');
         }
