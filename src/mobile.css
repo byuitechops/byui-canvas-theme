@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+.ui-accordion .ui-accordion-content {
+  padding: 1em;
+}
+
+.ui-accordion .ui-accordion-header {
+  margin-bottom: 0;
+  padding: 16px 24px 12px 30px;
+  padding-left: 30px;
+}
+
+.ic-Table.ic-Table--rubric tr td:first-child,
+.ic-Table.ic-Table--rubric tr th {
+  background-color: #2d5d94;
+  color: #ffffff;
+}
+
+.ic-Table.ic-Table--rubric tr:first-child th {
+  background-color: #1e435d;
+  color: #ffffff;
+}
+
+/***************************************************
+         BYUI THEME RULES DO-NOT-EDIT!!
+***************************************************/
+.byui {
+  max-width: 960px;
+  padding-bottom: 3px;
+}
+
+/*These are the default theme colors, to be overridden by individual courses */
+:root {
+  --color35: #0076C6;
+  --color24: #525252;
+  --button-color: #525252;
+}
+
+.byui h2,
+.byui h4 {
+  color: var(--color24);
+}
+
+.byui h3,
+.byui h5 {
+  color: var(--color35);
+}
+
+.byui .Button--primary {
+  background: var(--button-color);
+  border: none;
+}
+
+.byui .ui-accordion .ui-accordion-header.ui-state-default.ui-state-active,
+.byui .ui-accordion .ui-accordion-header.ui-state-default {
+  background: var(--color35);
+  color: #fff;
+}
+
+.byui .pad-box-mini {
+  color: var(--color24)
+}
+
+.byui .caption {
+  position: relative;
+  top: -12px;
+  background: #fff;
+  border: #c7cdd1 solid;
+  border-width: 0 1px 1px 1px;
+  font-style: normal;
+  font-size: .9rem;
+  border-radius: 0 0 4px 4px;
+  color: var(--color24);
+}
+
+.byui #header img {
+  width: 100%;
+}
+
+.byui span.todo {
+  color: red
+}
+
+
+/******************************************
+             Course Home Page
+********************************************/
+#course_home_content .byui {
+  max-width: none;
+}
+
+.byui .welcome,
+.byui .title {
+  border: solid var(--color24);
+  border-width: 2px 0 0 0;
+}
+
+.byui .welcome {
+  padding-top: 20px;
+}
+
+.byui .title {
+  margin-bottom: 0;
+}
+
+.byui .welcome img {
+  width: 100%;
+}
+
+.byui .lessons,
+.byui .steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 -10px;
+  /* align-items: center; */
+  /* flex: 1; */
+}
+
+.lessons {
+  padding: 5px;
+}
+
+.byui .lessons a {
+  background: var(--button-color);
+  border-radius: 3px;
+  color: #fff;
+  font-size: 1.8em;
+  margin: 5px;
+  padding: 5px 5px 3px;
+  text-align: center;
+  text-decoration: none !important;
+  word-wrap: normal;
+}
+
+.byui .steps a {
+  /* width: calc(25% - 20px); */
+  margin: 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
+  flex-grow: 1;
+}
+
+.byui .steps .external span {
+  text-decoration: none;
+}
+
+.copyright,
+#byui-copyright {
+  clear: both;
+  color: var(--ic-brand-font-color-dark-lightened-15);
+  font-size: .7em;
+  padding-top: 5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* copyright border top */
+.copyright::before,
+#byui-copyright::before {
+  background: linear-gradient(90deg, transparent 15%, #b7b7b7 30%, #b7b7b7 70%, transparent 85%);
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: 3px;
+  width: 100%;
+}
+
+.byui #navigation .ui-icon-extlink {
+  display: none;
+}
+

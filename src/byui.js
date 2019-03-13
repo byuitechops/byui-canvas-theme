@@ -1,8 +1,6 @@
 /*eslint-env browser */
 /* eslint no-console:0 */
 /* global tinyMCE, tippy, $ */
-
-
 (function () {
 
     window.addEventListener('load', function () {
@@ -199,6 +197,9 @@
             iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation';
         if (resources && resourcesModule)
             resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
+        else if (resources && !resourcesModule) {
+            resources.remove();
+        }
 
         getjQuery($ => {
             /* generate link to instructor bio - make the api call to get enrollments*/
