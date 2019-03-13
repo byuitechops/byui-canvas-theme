@@ -7,7 +7,7 @@
     "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1",
     "version": "gulp updateVersion && git add .",
-    "postversion": "git push origin dev && git checkout master && git merge dev && git push"
+    "postversion": "node runGit.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,10 @@
     "url": "https://github.com/byuitechops/byui-canvas-theme/issues"
   },
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
-  "dependencies": {},
+  "dependencies": {
+    "prompts": "^2.0.3",
+    "simple-git": "^1.107.0"
+  },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",
     "babel-core": "^6.26.3",

@@ -270,18 +270,18 @@
 }
 
 /* Images / Floating */
-.left {
+img.left {
   float: left;
   display: block;
   margin: 12px 15px 12px 0;
 }
 
-.center {
+img.center {
   display: block;
   margin: 12px auto;
 }
 
-.right {
+img.right {
   float: right;
   display: block;
   margin: 12px 0 12px 15px;
