@@ -13,3 +13,7 @@ Upload the updated JS and CSS files to the test instance of Canvas as a new them
 You can now observe how your changes affect the look and functionality of Canvas
 
 If needed, follow Canvas's docs [here](https://community.canvaslms.com/docs/DOC-10862-4214724282) for more information and a step-by-step tutorial with visuals
+
+
+### Testing Mobile
+* Use Google Analytics?

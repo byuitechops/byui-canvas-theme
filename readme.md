@@ -7,7 +7,7 @@ This is Brigham Young University-Idaho's custom CSS and JS for their Canvas inst
 You need to get the proper permissions to upload to Canvas. Contact Dane Bohman to get access to change the theme in the test instance and development subaccount of Canvas.
 
 ## Theme Change Requests
-Change Requests are submitted via Google Form and can be found [here](.). There are three categories of fixes, and each has a slightly different process. Please carefully follow the instructions below for each of the types of fixes:
+Change Requests are submitted via Google Forms/Microsoft Forms/Team Dynamics? and can be found [here](.). There are three categories of fixes, and each has a slightly different process. Please carefully follow the instructions below for each of the types of fixes:
 
 
 ### Simple Existing Solution
