@@ -1,6 +1,5 @@
 ## Testing using the Resource Override Extension
 
-
 This is the process used to disable the JS or CSS file in prod Canvas in order to test changes we've made to the code.
 This process can also be used in initial testing as a way of seeing live updates of the code and how they affect the LMS.
 
@@ -18,3 +17,8 @@ Remember, the BYU-Idaho theme trickles down into development and every other sub
     * In the 'To' section, you will put the URL of your JS or CSS file generated from live-server (most likely port 8000)
     * Make sure you disable the cache under the Network tab as well, or the tool will not always work
     * When you reload the page, the tool should replace the current byui.js or byui.css file with the file URL you have provided
+
+
+### Testing Mobile
+> TODO: figure this out
+* Use Google Analytics?

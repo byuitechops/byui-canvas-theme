@@ -15,8 +15,8 @@ async function getValidBranches() {
 async function getUserInput(branches) {
     let response = await prompts({
         type: 'text',
-        name: 'repo',
-        message: 'What is your current repo?',
+        name: 'branch',
+        message: 'Enter the name of the branch you are on:',
         validate: value => branches.includes(value) ? true : "That branch doesn't exist"
     })
     return response;
@@ -34,6 +34,6 @@ async function doGitStuff(branch) {
 /* Calls all the functions in the correct order, passing what each function returns to the next function */
 getValidBranches()
     .then((branches) => getUserInput(branches))
-    .then((res) => doGitStuff(res.repo))
+    .then((res) => doGitStuff(res.branch))
 
 
