@@ -19,7 +19,7 @@ Change Requests are submitted via Google Forms/Microsoft Forms/Team Dynamics? an
 ### Bug Fix
 > TODO: definition:
 1. If a local copy of this repo doeesn't exist on your computer, [Install](#how-to-install) 
-1. Create a new branch with the name of the bug fix
+1. Create a new branch with the name of the bug fix (or name the branch 'dev')
 1. Solve the problem
 1. Build the code following [this process](#how-to-build)
 1. Test the code in the test instance of Canvas using [these step-by-step instructions](./test.md)
@@ -43,7 +43,7 @@ Change Requests are submitted via Google Forms/Microsoft Forms/Team Dynamics? an
 1. Email the requestor to let them know if it's been approved or denied
 1. If denied, stop here. If approved, continue with the rest of the steps
 1. If a local copy of this repo doeesn't exist on your computer, [Install](#how-to-install) 
-1. Create a new branch with the name of the update
+1. Create a new branch with the name of the update (for example, if you are writing code to add a banner, anme the branch 'banner')
 1. Solve the problem
 1. Build the code following [this process](#how-to-build)
 1. Test the code in the test instance of Canvas using [these step-by-step instructions](./test.md)

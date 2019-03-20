@@ -35,5 +35,3 @@ async function doGitStuff(branch) {
 getValidBranches()
     .then((branches) => getUserInput(branches))
     .then((res) => doGitStuff(res.branch))
-
-
