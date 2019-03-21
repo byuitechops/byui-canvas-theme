@@ -1,15 +1,24 @@
 /*eslint-env browser */
 /* eslint no-console:0 */
 /* global tinyMCE, tippy, $ */
-
-
 (function () {
 
+    window.addEventListener('load', function () {
+        run(initializeCarousel);
+        run(editorStyles);
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
+        run(initializeAccordion);
         run(initializeDialog);
+        run(initializeTabs);
+        run(insertVideoTag);
         run(generateHomePage);
+        run(alterBreadcrumb);
         run(prismHighlighting);
         run(addCopyrightFooter);
+        run(addTooltips);
+        run(loadSlickJS);
     });
 
 
@@ -53,39 +62,68 @@
 
     function getjQuery(cb) {
         /* If jQuery is already saved, use that */
-        if (this.jQuery) return cb(this.jQuery);
 
-        function lessThan(A, B) {
-            if (A.length != B.length) throw new Error('Comparing two different sizes');
+        loadScript('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', function () {
+            this.jQuery = jQuery.noConflict();
+            console.log(this.jQuery);
+            console.log(jQuery);
 
-            for (var i = 0; i < A.length; i++) {
-                /* A is greater than B */
-                if (A[i] > B[i]) return false;
-                /* A is less than B */
-                else if (A[i] < B[i]) return true;
-            }
-            /* If A and B are equal */
-            return false;
-        }
-
-        var needToLoad = true;
-
-        if (typeof jQuery != 'undefined' || typeof jQuery().jquery != 'undefined') {
-            var currentVersion = jQuery().jquery.split('.');
-            needToLoad = lessThan(currentVersion, [1, 7, 0]);
-        }
-
-        if (needToLoad) {
-            loadScript('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', function () {
-                this.jQuery = jQuery.noConflict();
+            loadScript('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js', function () {
                 cb(this.jQuery);
             })
-        } else {
-            this.jQuery = jQuery;
-            cb(jQuery);
+        })
+
+    }
+
+    /* Initialize carousels if any are present on page */
+    function initializeCarousel() {
+        if (document.querySelector('.byui .carousel')) {
+            getjQuery($ => {
+                $('.byui .carousel').slick({
+                    /* Shows dot indicators in the carousel */
+                    dots: true
+                });
+            });
         }
     }
 
+    /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
+    function editorStyles() {
+        /* if there are no WYSIWYG's on the page, don't bother running */
+        if (typeof tinyMCE != 'undefined') {
+            /* our css, canvas common css, canvas color vars css */
+            var cssNames = [/byui\.css$/, /online\.css$/, /common[\w-]*\.css$/, /variables[\w-]*\.css$/, /campus\.css$/, /pathway\.css$/];
+            var cssHrefs = [];
+            /* Collect list of hrefs that match one of the cssNames */
+            (document.querySelectorAll('link[rel=stylesheet]')).forEach(function (linkTag) {
+                var href = linkTag.getAttribute('href');
+                /* only keep the link if it matches one of the regExes */
+                if (cssNames.some(cssName => href.match(cssName) !== null)) {
+                    cssHrefs.push(href);
+                }
+            });
+
+            /* For each editor, inject each stylesheet */
+            tinyMCE.editors.forEach(editor => {
+                cssHrefs.forEach(href => {
+                    editor.dom.styleSheetLoader.load(href);
+                });
+            });
+        }
+    }
+
+    /* Initialize accordion - JQUERY UI */
+    function initializeAccordion() {
+        if (document.querySelector('.byui div.accordion')) {
+            getjQuery($ => {
+                $('.byui div.accordion').accordion({
+                    heightStyle: 'content',
+                    collapsible: true,
+                    active: false
+                });
+            });
+        }
+    }
 
     /* Initialize dialog - JQUERY UI */
     function initializeDialog() {
@@ -111,6 +149,17 @@
     }
 
 
+    /* Insert custom video tag generation scripts */
+    function insertVideoTag() {
+        document.querySelectorAll('.byui-video').forEach(video => {
+            if (video.dataset.source == 'youtube') {
+                video.innerHTML = `<iframe width="${video.dataset.width}px" height="${video.dataset.height}px" src="https://www.youtube.com/embed/${video.dataset.vidid}" frameborder="0" allowfullscreen></iframe>`;
+            } else if (video.dataset.source == 'kaltura') {
+                video.innerHTML = `<iframe width="${video.dataset.width}px" height="${video.dataset.height}px" src="https://cdnapisec.kaltura.com/p/1157612/sp/115761200/embedIframeJs/uiconf_id/29018071/partner_id/1157612?iframeembed=true&amp;playerId=kaltura_player_1485805514&amp;entry_id=${video.dataset.vidid}&amp;flashvars[streamerType]=auto" frameborder="0" allowfullscreen></iframe>`;
+            }
+        });
+    }
+
     /* generate top buttons (under.steps) */
     function generateSteps(courseNumber, modules) {
         /* Get additional resources module item */
@@ -128,6 +177,9 @@
             iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation';
         if (resources && resourcesModule)
             resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
+        else if (resources && !resourcesModule) {
+            resources.remove();
+        }
 
         getjQuery($ => {
             /* generate link to instructor bio - make the api call to get enrollments*/
@@ -193,6 +245,17 @@
         }
     }
 
+    /* Hide the 3rd breadcrumb */
+    function alterBreadcrumb() {
+        /* If there are 4 total, AND we're inside a course AND we're not in a group tab */
+        if (document.querySelectorAll('#breadcrumbs li').length === 4 && /\.com\/courses\/\d+\/(?!groups)/i.test(window.location.href)) {
+            document.querySelector('#breadcrumbs li:nth-child(3) span').innerHTML = 'Modules';
+            /* update the link */
+            var link = document.querySelector('#breadcrumbs li:nth-child(3) a');
+            link.href = link.href.replace(/\/\w+$/i, '/modules');
+        }
+    }
+
     /* enable prism pre > code highlighting */
     function prismHighlighting() {
         // add .byui as a selector
@@ -212,6 +275,75 @@
         } else {
             console.warn('unable to add copyright footer to page');
         }
+    }
+
+    /* add quiz.next tooltips where needed */
+    function addTooltips() {
+        var tip = '';
+        var divId = 'byui-quizzes-next-tooltip';
+        var borderColor = 'black';
+
+        /* Add appropriate tooltip OR return if we're on the wrong page */
+        if (window.location.href.includes('settings')) {
+            tip = 'Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next';
+            borderColor = 'red';
+
+        } else if (window.location.href.includes('assignments')) {
+            tip = tip = `Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features`;
+        } else {
+            return;
+        }
+
+        /* Inject the tooltip */
+        document.head.insertAdjacentHTML('beforeend', `<div id="${divId}" style="display: none;">${tip}</div>`);
+
+        /* Add tooltip styles to DOM with appropriate border color */
+        document.head.insertAdjacentHTML('beforeend', `
+        <style>
+            .tippy-tooltip.byui-theme {
+                border: 2px solid ${borderColor};
+                background-color: white;
+                color: black;
+                max-width: 200px;
+            }
+            .tippy-backdrop {
+                background: white;
+            }
+        </style>
+    `);
+
+        /* Load Tippy */
+        loadScript('https://content.byui.edu/integ/gen/a422cccd-35b7-4087-9329-20698cf169b0/0/tippy.all.min.js', function () {
+            tippy('.quizzes_next, .new_quiz_lti_wrapper', {
+                html: `#${divId}`,
+                interactive: true,
+                placement: 'bottom-end',
+                theme: 'byui',
+                size: 'large'
+            });
+        });
+    }
+
+    /* load JS & CSS needed for image carousels if there is one on the page */
+    function loadSlickJS() {
+        if (document.querySelector('.byui .carousel')) {
+            /* Script */
+            loadScript('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js');
+            /* Css */
+            loadStyle('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css');
+            /* Theme */
+            loadStyle('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css');
+        }
+    }
+
+    /* Initialize tabs - JQUERY UI */
+    function initializeTabs() {
+
+        getjQuery(() => {
+            console.log(jQuery)
+            $('.byui #styleguide-tabs-demo-minimal').tabs();
+
+        });
     }
 
 })();
