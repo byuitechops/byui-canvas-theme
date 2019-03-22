@@ -51,7 +51,7 @@
             link.href = href;
             /* Call the callback once it is done loading */
             if (cb) {
-                script.addEventListener('load', cb, { once: true });
+                link.addEventListener('load', cb, { once: true });
 
             }
             /* Append style to the head of the document */
@@ -62,16 +62,42 @@
 
     function getjQuery(cb) {
         /* If jQuery is already saved, use that */
+        if (window.jQuery) return cb(window.jQuery)
 
-        loadScript('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', function () {
-            this.jQuery = jQuery.noConflict();
-            console.log(this.jQuery);
-            console.log(jQuery);
+        function lessThan(A, B) {
+            if (A.length != B.length) throw new Error('Comparing two different sizes');
 
-            loadScript('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js', function () {
-                cb(this.jQuery);
+            for (var i = 0; i < A.length; i++) {
+                /* A is greater than B */
+                if (A[i] > B[i]) return false;
+                /* A is less than B */
+                else if (A[i] < B[i]) return true;
+            }
+            /* If A and B are equal */
+            return false;
+        }
+
+        var needToLoad = true;
+
+        if (typeof jQuery != 'undefined') {
+            if (typeof jQuery().jquery != 'undefined') {
+                var currentVersion = jQuery().jquery.split('.');
+                needToLoad = lessThan(currentVersion, [1, 7, 0]);
+            }
+
+        }
+
+        if (needToLoad) {
+            loadScript('https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', function () {
+                loadStyle('https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css', function () {
+                    loadScript('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js', function () {
+                        cb(jQuery);
+                    })
+                });
             })
-        })
+        } else {
+            cb(jQuery);
+        }
 
     }
 
@@ -129,22 +155,27 @@
     function initializeDialog() {
         if (document.querySelector('.byui div.dialog')) {
 
-            document.querySelectorAll('.byui .Button[id^=\'link_\']').forEach(button => {
-                /* Save linkID */
-                let buttonId = /link_(\d+)/i.exec(button.id)[1];
-                let $button = $(`.byui #dialog_for_link_${buttonId}`);
+            getjQuery($ => {
+                document.querySelectorAll('.byui .Button[id^=\'link_\']').forEach(button => {
 
-                /* instantiate dialog */
-                $button.dialog({
-                    autoOpen: false
-                });
+                    /* Save linkID */
+                    let buttonId = /link_(\d+)/i.exec(button.id)[1];
+                    let $button = $(`.byui #dialog_for_link_${buttonId}`);
 
-                /* add event listener to open dialog */
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    $button.dialog('open');
+                    /* instantiate dialog */
+                    $button.dialog({
+                        autoOpen: false
+                    });
+
+                    /* add event listener to open dialog */
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        $button.dialog('open');
+                    });
                 });
-            });
+            })
+
+
         }
     }
 
@@ -233,10 +264,13 @@
         var lessons = document.querySelector('.byui #navigation .lessons');
         if (steps && lessons) {
             var courseNumber = document.location.pathname.split('/')[2];
+            console.log(window)
             /* get course modules */
+            debugger;
             getjQuery($ => {
+                console.log("inside getjqquery")
                 $.get('/api/v1/courses/' + courseNumber + '/modules?per_page=30', (modules) => {
-
+                    console.log('inside get')
                     /* Don't run steps or lessons if they don't exist */
                     if (steps) generateSteps(courseNumber, modules);
                     if (lessons) generateLessons(courseNumber, modules);
@@ -339,8 +373,7 @@
     /* Initialize tabs - JQUERY UI */
     function initializeTabs() {
 
-        getjQuery(() => {
-            console.log(jQuery)
+        getjQuery($ => {
             $('.byui #styleguide-tabs-demo-minimal').tabs();
 
         });
