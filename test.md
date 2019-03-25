@@ -15,6 +15,19 @@ You can now observe how your changes affect the look and functionality of Canvas
 If needed, follow Canvas's docs [here](https://community.canvaslms.com/docs/DOC-10862-4214724282) for more information and a step-by-step tutorial with visuals
 
 
-### Testing Mobile
-> TODO: figure this out
-* Use Google Analytics?
+### Testing Canvas Mobile App
+
+#### Android
+
+1. Turn on developer options by following the directions [here](https://developer.android.com/studio/debug/dev-options)
+1. Make sure USB debugging is enabled on the device, within developer options
+1. **Change the setting to Audio Source** - elaborate on this
+1. Plug the device into the USB port of the computer
+1. **If a popup appears on the device, accept it** - elaborate on this
+1. Inspect a webpage to open Chrome devtools on the computer
+1. In the Elements window, clikc the three little dots in the right corner to open the dropdown menu
+1. Click more tools > remote devices
+1. Make sure the 'discover USB devices' box is checked
+1. Your device should show up as connected in this window
+1. Open the web[age or webview you are trying to inspect
+1. Click on that link in the devtools and inspect away!
