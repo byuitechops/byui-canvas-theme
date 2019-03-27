@@ -21,8 +21,8 @@ Change Requests are submitted via Google Forms/Microsoft Forms/Team Dynamics? an
 1. Create a new branch with the name of the bug fix (or name the branch 'dev')
 1. Solve the problem
 1. Build the code following [this process](#how-to-build)
-1. Test the code in the test instance of Canvas using [these step-by-step instructions](./test.md#How-to-Test-in-the-test-instance-of-Canvas)
-1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./test.md#Testing-using-the-Resource-Override-Extension)
+1. Test the code in the test instance of Canvas using [these step-by-step instructions](./docs/test.md#How-to-Test-in-the-test-instance-of-Canvas)
+1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./docs/test.md#Testing-using-the-Resource-Override-Extension)
 1. If you are working with mobile changes, see [this file](./testmobile.md)
 1. Once you are certain the bug is fixed, you need to up the version number and merge your branch with master using the command:
     ```bash
@@ -46,8 +46,8 @@ definition: adding features, making changes, breaking things, or major refactori
 1. Create a new branch with the name of the update (for example, if you are writing code to add a banner, name the branch 'banner')
 1. Solve the problem
 1. Build the code following [this process](#how-to-build)
-1. Test the code in the test instance of Canvas using [these step-by-step instructions](../test.md#How-to-Test-in-the-test-instance-of-Canvas)
-1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./test.md#Testing-using-the-Resource-Override-Extension)
+1. Test the code in the test instance of Canvas using [these step-by-step instructions](./docs/test.md#How-to-Test-in-the-test-instance-of-Canvas)
+1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./docs/test.md#Testing-using-the-Resource-Override-Extension)
 1. If you are working with mobile changes, see [this file](./testmobile.md)
 1. Once you are certain the code works and is production quality, you need to up the version number and merge your branch with master using the command:
     ```bash
