@@ -2,16 +2,9 @@
 /* eslint no-console:0 */
 /* global tinyMCE, tippy, $ */
 
-/* Allows us to disable this page for testing purposes */
-// TESTING disable for prod
 (function () {
-    // if (true) {
-    if (localStorage.getItem('devAccount') !== 'true') {
-        window.addEventListener('onload', editorStyles);
-        document.addEventListener('DOMContentLoaded', main);
-    } else {
-        console.warn('byui.js disabled for testing');
-    }
+    window.addEventListener('load', editorStyles);
+    document.addEventListener('DOMContentLoaded', main);
 
     function checkForJquery(cb) {
         function loadJquery() {
@@ -184,7 +177,7 @@
                     if (start)
                         start.href = `/courses/${courseNumber}/modules#module_${modules[0].id}`;
                     if (iLearnTutorial)
-                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation?token=aq7F_UOmeDIj-6lBVDaXBdOQ01pfx1jw';
+                        iLearnTutorial.href = 'http://byu-idaho.screenstepslive.com/s/16998/m/76692/l/865828-canvas-student-orientation';
                     if (resources && resourcesModule)
                         resources.href = `/courses/${courseNumber}/modules#module_${resourcesModule.id}`;
 
@@ -231,8 +224,8 @@
                         document.querySelector(lessonWrapperSelector).innerHTML = '';
                         /* remove modules with invalid names & get modulesPerRow (limit 7) */
                         var validModules = modules.filter(canvasModule => {
-                                return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
-                            }),
+                            return /(Week|Lesson|Unit)\s*(1[0-9]|0?\d(\D|$))/gi.test(canvasModule.name);
+                        }),
                             modulesPerRow = validModules.length > 7 ? 7 : validModules.length;
 
                         /* generate module links */
@@ -249,7 +242,7 @@
                 /* quit if we are not on the course homepage OR the page is missing the expected format */
                 let stepsExist = document.querySelectorAll('.byui #navigation .steps').length > 0,
                     lessonsExist = document.querySelectorAll('.byui #navigation .lessons').length > 0;
-                if (!stepsExist || !lessonsExist) {
+                if (!stepsExist && !lessonsExist) {
                     return;
                 }
 
@@ -290,7 +283,7 @@
         /* enable prism pre > code highlighting */
         function prismHighlighting() {
             try {
-                let codeUsed = document.querySelector('.byui pre code');
+                let codeUsed = document.querySelector('pre code');
                 if (codeUsed == null) return;
 
                 let jsEle = document.createElement('script'),
@@ -327,7 +320,7 @@
             try {
                 let borderColor = 'black';
                 const divId = 'byui-quizzes-next-tooltip';
-                const assignmentsHTML = `<div id="${divId}" style="display: none;">Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features/div>`;
+                const assignmentsHTML = `<div id="${divId}" style="display: none;">Be sure to periodically review the <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">Quizzes.Next FAQs</a> to keep updated on new features</div>`;
                 const settingsHTML = `<div id="${divId}" style="display: none;">Please review <a href="http://byu-idaho.screenstepslive.com/s/14177/m/73336/l/970385-quizzes-next-faq-s" target="_blank">these FAQs</a> to see the benefits and cautions before using Quizzes.Next</div>`;
 
                 /* Add appropriate tooltip OR return if we're on the wrong page */
@@ -373,7 +366,7 @@
                     return;
                 }
                 var slickScript = document.createElement('script');
-                slickScript.src = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick.min.js';
+                slickScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js';
                 /* Initialize carousels if any are present on page */
                 slickScript.onload = () => {
                     checkForJquery(jQueryErr => {
@@ -387,14 +380,14 @@
                     });
                 };
                 document.head.appendChild(slickScript);
-                
+
                 var slickScriptCss = document.createElement('link');
-                slickScriptCss.href = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick.css';
+                slickScriptCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css';
                 slickScriptCss.rel = 'stylesheet';
                 document.head.appendChild(slickScriptCss);
-                
+
                 var slickScriptTheme = document.createElement('link');
-                slickScriptTheme.href = 'https://content.byui.edu/integ/gen/16e8881c-6500-43ca-a809-7af4a382668d/0/slick-theme.css';
+                slickScriptTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css';
                 slickScriptTheme.rel = 'stylesheet';
                 document.head.appendChild(slickScriptTheme);
             } catch (slickErr) {
