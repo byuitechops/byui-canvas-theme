@@ -1,11 +1,13 @@
 {
   "name": "byui-canvas-theme",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "byui.js",
   "scripts": {
+    "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/gulp.cmd"
+    "version": "gulp updateVersion && git add .",
+    "postversion": "node runGit.js"
   },
   "repository": {
     "type": "git",
@@ -17,21 +19,26 @@
     "url": "https://github.com/byuitechops/byui-canvas-theme/issues"
   },
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
-  "dependencies": {},
+  "dependencies": {
+    "prompts": "^2.0.3",
+    "simple-git": "^1.107.0"
+  },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",
     "babel-core": "^6.26.3",
     "babel-helper-function-name": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-minify": "^0.4.3",
+    "browser-sync": "^2.26.3",
     "cssnano": "^4.1.0",
-    "gulp": "^4.0.0",
+    "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",
+    "gulp-header": "^2.0.7",
+    "gulp-header-comment": "^0.4.0",
     "gulp-postcss": "^8.0.0",
     "gulp-sourcemaps": "^2.6.4",
     "postcss-custom-properties": "^8.0.5",
     "postcss-load-config": "^2.0.0",
-    "pump": "^3.0.0",
-    "live-server": "^1.2.1"
+    "pump": "^3.0.0"
   }
 }
