@@ -1,7 +1,7 @@
 # BYU-I CANVAS THEME
 
 ## Purpose
-This is Brigham Young University-Idaho's custom CSS and JS for their Canvas instance. These files are used by students from BYU-Idaho, LDS Business College, and Pathway Worldwide and are distributed across the globe. For this reason it is imperative that these files remain as minimal as possible.
+This is Brigham Young University-Idaho's custom CSS and JS for their Canvas instance. These files are used by students from BYU-Idaho, LDS Business College, and Pathway Worldwide and are distributed across the globe. For this reason it is imperative that these files remain as minimal as possible. See [this Google Slides](https://docs.google.com/presentation/d/1iTmfZkQzmQgSC2WqcPf2IH2QCsUWShA3V-DDAuP5ybo/edit#slide=id.p) for more information.
 
 ## Permissions
 You need to get the proper permissions to upload to Canvas. Contact Dane Bohman to get access to change the theme in the test instance and development subaccount of Canvas.
