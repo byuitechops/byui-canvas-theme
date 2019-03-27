@@ -7,23 +7,23 @@ This is Brigham Young University-Idaho's custom CSS and JS for their Canvas inst
 You need to get the proper permissions to upload to Canvas. Contact Dane Bohman to get access to change the theme in the test instance and development subaccount of Canvas.
 
 ## Theme Change Requests
-> TODO: add link to the way we collect problems
+> TODO: Figure out the way we will collect problems
+
 Change Requests are submitted via Google Forms/Microsoft Forms/Team Dynamics? and can be found [here](#). There are three categories of fixes, and each has a slightly different process. Please carefully follow the instructions below for each of the types of fixes:
 
 
 ### Simple Existing Solution
-definition: 
 1. Simply email the requestor with an explanation
 
 
 ### Bug Fix
-> TODO: definition:
 1. If a local copy of this repo doeesn't exist on your computer, [Install](#how-to-install) 
 1. Create a new branch with the name of the bug fix (or name the branch 'dev')
 1. Solve the problem
 1. Build the code following [this process](#how-to-build)
-1. Test the code in the test instance of Canvas using [these step-by-step instructions](./test.md)
-1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./testprod.md)
+1. Test the code in the test instance of Canvas using [these step-by-step instructions](./test.md#How-to-Test-in-the-test-instance-of-Canvas)
+1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./test.md#Testing-using-the-Resource-Override-Extension)
+1. If you are working with mobile changes, see [this file](./testmobile.md)
 1. Once you are certain the bug is fixed, you need to up the version number and merge your branch with master using the command:
     ```bash
     version patch
@@ -33,7 +33,7 @@ definition:
 
 
 ### Minor or Major Change/Update
-> TODO: definition:
+definition: adding features, making changes, breaking things, or major refactoring
 1. Research the problem, find examples
 1. Make a small presentation explaining the problem as well as potential fixes
 1. Meet with the change committee, get change either approved or denied
@@ -46,8 +46,9 @@ definition:
 1. Create a new branch with the name of the update (for example, if you are writing code to add a banner, name the branch 'banner')
 1. Solve the problem
 1. Build the code following [this process](#how-to-build)
-1. Test the code in the test instance of Canvas using [these step-by-step instructions](./test.md)
-1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./testprod.md)
+1. Test the code in the test instance of Canvas using [these step-by-step instructions](../test.md#How-to-Test-in-the-test-instance-of-Canvas)
+1. Test the code in the prod instance of Canvas using [these step-by-step instructions](./test.md#Testing-using-the-Resource-Override-Extension)
+1. If you are working with mobile changes, see [this file](./testmobile.md)
 1. Once you are certain the code works and is production quality, you need to up the version number and merge your branch with master using the command:
     ```bash
     version minor
@@ -60,7 +61,6 @@ depending on the size of the change
 1. Submit a CAB request and wait for approval. Read more about the process [here](https://webmailbyui.sharepoint.com/sites/IT/Policies%20and%20Standards/Change%20Management%20Documentation/Change%20Management%20Standard.pdf)
 1. Contact Dane Bohman and have him upload the new files to the top level in Canvas with Josh there as well to make sure it happens correctly
 1. If this fix has been requested by someone outside the office, send them an email to let them know that the change has been implemented
-
 
 
 ## How to Install
