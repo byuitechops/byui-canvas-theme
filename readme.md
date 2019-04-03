@@ -4,7 +4,7 @@
 This is Brigham Young University-Idaho's custom CSS and JS for their Canvas instance. These files are used by students from BYU-Idaho, LDS Business College, and Pathway Worldwide and are distributed across the globe. For this reason it is imperative that these files remain as minimal as possible. See [this Google Slides](https://docs.google.com/presentation/d/1iTmfZkQzmQgSC2WqcPf2IH2QCsUWShA3V-DDAuP5ybo/edit#slide=id.p) for more information.
 
 ## Permissions
-You need to get the proper permissions to upload to Canvas. Contact Dane Bohman to get access to change the theme in the test instance and development subaccount of Canvas.
+You need to get the proper permissions to upload to Canvas. Contact Dane Bohman or Ben Wilson to get access to change the theme in the top level test instance of Canvas.
 
 ## Theme Change Requests
 > TODO: Figure out the way we will collect problems
@@ -36,7 +36,7 @@ Change Requests are submitted via Google Forms/Microsoft Forms/Team Dynamics? an
 definition: adding features, making changes, breaking things, or major refactoring
 1. Research the problem, find examples
 1. Make a small presentation explaining the problem as well as potential fixes
-1. Meet with the change committee, get change either approved or denied
+1. Meet with the LMS Look and Feel committee, get change either approved or denied
 1. Email the requestor to let them know if it's been approved or denied
 1. If denied, stop here. If approved, continue with the rest of the steps
 1. Meet with the iLearn governance council, get change either approved or denied 
@@ -93,3 +93,25 @@ The `src` directory contains human-readable code while the `prod` directory cont
 - CSS & JS files for the Canvas mobile apps have their own upload location in Canvas. Many of these features will not work on the Mobile app.
 - JS files cascade, so a JS file at the top of an account will also run in all sub-accounts. The Dev account is currently being used for testing.
 - Please be aware that `byui.js` lives at the very top level of our Canvas instance, and applies to many places that no other sub-account will (ex: the login page). Just know that this script is liable to create bugs that cannot be found in the Dev sub-account.
+
+
+##Emma's Notes
+- People that should be in the LMS Look and Feel Committee:
+    * Corey
+    * Someone from matt's group
+    * Online development
+    * Tim
+    * Shaun Short
+    * UX person
+    * QC person
+
+- To do:
+    * Mobile code
+    * Refactor code
+    * Simplify code
+    * Fail elegantly
+
+- other stuff to do
+    * go line-by-line in the CSS to make sure everything we are changing is documented in the PowerPoint
+    * improve the comments throughout the code, especially in the CSS
+    * document the brnaches and what each contains better (talk to Josh)
