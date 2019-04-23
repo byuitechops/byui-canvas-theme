@@ -44,6 +44,24 @@
         }
     }
 
+    function checkJQueryUIAccordion(callback) {
+        // first make sure we have jquery
+        checkForJquery(function () {
+            try {
+                // if we don't have accordion code add it
+                if ($().accordion === undefined) {
+                    var jqueryUIScript = document.createElement('script');
+                    // call the callback when it is loaded
+                    jqueryUIScript.addEventListener("load", () => { callback()});
+                    jqueryUIScript.src = 'https://content.byui.edu/file/525e5166-d654-4340-b9b5-d15945a85d4a/1/jquery.ui.1.8.21.accordion.min.js';
+                    document.head.appendChild(jqueryUIScript);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        })
+    }
+
     /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
     function editorStyles() {
         try {
@@ -84,12 +102,13 @@
                         if (jQueryErr) {
                             throw jQueryErr;
                         }
-
-                        $('.byui div.accordion').accordion({
-                            heightStyle: 'content',
-                            collapsible: true,
-                            active: false
-                        });
+                        checkJQueryUIAccordion(function () {
+                            $('.byui div.accordion').accordion({
+                                heightStyle: 'content',
+                                collapsible: true,
+                                active: false
+                            });
+                        })
                     });
                 }
             } catch (accordionErr) {
@@ -395,25 +414,12 @@
             }
         }
 
-        function injectJQueryUI() {
-            console.log('loading jQueryUI');
-            // script
-            var jqueryuiScript = document.createElement('script');
-            jqueryuiScript.addEventListener("load", () => {initializeAccordion(); initializeTabs();});
-            jqueryuiScript.src = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js';
-            document.head.appendChild(jqueryuiScript);
-            // css
-            var jqueryuiCss = document.createElement('link');
-            jqueryuiCss.href = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css";
-            jqueryuiCss.rel = 'stylesheet'
-            // document.head.appendChild(jqueryuiCss);
-            
-        }
 
-        injectJQueryUI();
-        // initializeAccordion();
+
+        // injectJQueryUI();
+        initializeAccordion();
         initializeDialog();
-        // initializeTabs();
+        initializeTabs();
         insertVideoTag();
         generateHomePage();
         alterBreadcrumb();
