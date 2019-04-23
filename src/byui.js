@@ -414,9 +414,6 @@
             }
         }
 
-
-
-        // injectJQueryUI();
         initializeAccordion();
         initializeDialog();
         initializeTabs();
