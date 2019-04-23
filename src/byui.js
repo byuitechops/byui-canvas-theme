@@ -395,9 +395,25 @@
             }
         }
 
-        initializeAccordion();
+        function injectJQueryUI() {
+            console.log('loading jQueryUI');
+            // script
+            var jqueryuiScript = document.createElement('script');
+            jqueryuiScript.addEventListener("load", () => {initializeAccordion(); initializeTabs();});
+            jqueryuiScript.src = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js';
+            document.head.appendChild(jqueryuiScript);
+            // css
+            var jqueryuiCss = document.createElement('link');
+            jqueryuiCss.href = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css";
+            jqueryuiCss.rel = 'stylesheet'
+            // document.head.appendChild(jqueryuiCss);
+            
+        }
+
+        injectJQueryUI();
+        // initializeAccordion();
         initializeDialog();
-        initializeTabs();
+        // initializeTabs();
         insertVideoTag();
         generateHomePage();
         alterBreadcrumb();
