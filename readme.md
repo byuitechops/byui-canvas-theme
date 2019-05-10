@@ -95,12 +95,12 @@ The `src` directory contains human-readable code while the `prod` directory cont
 - Please be aware that `byui.js` lives at the very top level of our Canvas instance, and applies to many places that no other sub-account will (ex: the login page). Just know that this script is liable to create bugs that cannot be found in the Dev sub-account.
 
 
-##Emma's Notes
+## Emma's Notes
 - People that should be in the LMS Look and Feel Committee:
-    * Corey
-    * Someone from matt's group
+    * Corey Moore
+    * Someone from Matt's group
     * Online development
-    * Tim
+    * Tim Tanner
     * Shaun Short
     * UX person
     * QC person
@@ -114,4 +114,4 @@ The `src` directory contains human-readable code while the `prod` directory cont
 - other stuff to do
     * go line-by-line in the CSS to make sure everything we are changing is documented in the PowerPoint
     * improve the comments throughout the code, especially in the CSS
-    * document the brnaches and what each contains better (talk to Josh)
+    * document the branches and what each contains better (talk to Josh)
