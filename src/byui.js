@@ -6,6 +6,21 @@
     window.addEventListener('load', editorStyles);
     document.addEventListener('DOMContentLoaded', main);
 
+    function loadFeedbackPopup() {
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "ZN_cNsMCdO1KsDGTlP");
+        (function () {
+            var g = function (e, h, f, g) {
+                this.get = function (a) { for (var a = a + "=", c = document.cookie.split(";"), b = 0, e = c.length; b < e; b++) { for (var d = c[b]; " " == d.charAt(0);)d = d.substring(1, d.length); if (0 == d.indexOf(a)) return d.substring(a.length, d.length) } return null };
+                this.set = function (a, c) { var b = "", b = new Date; b.setTime(b.getTime() + 6048E5); b = "; expires=" + b.toGMTString(); document.cookie = a + "=" + c + b + "; path=/; " };
+                this.check = function () { var a = this.get(f); if (a) a = a.split(":"); else if (100 != e) "v" == h && (e = Math.random() >= e / 100 ? 0 : 100), a = [h, e, 0], this.set(f, a.join(":")); else return !0; var c = a[1]; if (100 == c) return !0; switch (a[0]) { case "v": return !1; case "r": return c = a[2] % Math.floor(100 / c), a[2]++ , this.set(f, a.join(":")), !c }return !0 };
+                this.go = function () { if (this.check()) { var a = document.createElement("script"); a.type = "text/javascript"; a.src = g + "&t=" + (new Date()).getTime(); document.body && document.body.appendChild(a) } };
+                this.start = function () { var a = this; window.addEventListener ? window.addEventListener("load", function () { a.go() }, !1) : window.attachEvent && window.attachEvent("onload", function () { a.go() }) }
+            };
+            try { (new g(100, "r", "QSI_S_ZN_cNsMCdO1KsDGTlP", "https://zncnsmcdo1ksdgtlp-byui.siteintercept.qualtrics.com/WRSiteInterceptEngine/?Q_ZID=ZN_cNsMCdO1KsDGTlP")).start() } catch (i) { }
+        })();
+    }
+
     function checkForJquery(cb) {
         function loadJquery() {
             console.log('loading jQuery');
@@ -46,6 +61,7 @@
 
     /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
     function editorStyles() {
+        
         try {
             /* if there are no WYSIWYG's on the page, don't bother running */
             if (typeof tinyMCE === 'undefined') {
@@ -405,5 +421,7 @@
         addCopyrightFooter();
         addTooltips();
         loadSlickJS();
+        loadFeedbackPopup();
+        
     }
 })();
