@@ -44,6 +44,24 @@
         }
     }
 
+    function checkJQueryUIAccordion(callback) {
+        // first make sure we have jquery
+        checkForJquery(function () {
+            try {
+                // if we don't have accordion code add it
+                if ($().accordion === undefined) {
+                    var jqueryUIScript = document.createElement('script');
+                    // call the callback when it is loaded
+                    jqueryUIScript.addEventListener("load", () => { callback() });
+                    jqueryUIScript.src = 'https://content.byui.edu/file/525e5166-d654-4340-b9b5-d15945a85d4a/1/jquery.ui.1.8.21.accordion.min.js';
+                    document.head.appendChild(jqueryUIScript);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        })
+    }
+
     /* inject css into tinyMCE editors on page. Has to wait till tinyMCE is done loading */
     function editorStyles() {
         try {
@@ -84,13 +102,13 @@
                         if (jQueryErr) {
                             throw jQueryErr;
                         }
-
-                        $('.byui div.accordion').accordion({
-                            autoHeight: false,
-                            heightStyle: 'content',
-                            collapsible: true,
-                            active: false
-                        });
+                        checkJQueryUIAccordion(function () {
+                            $('.byui div.accordion').accordion({
+                                heightStyle: 'content',
+                                collapsible: true,
+                                active: false
+                            });
+                        })
                     });
                 }
             } catch (accordionErr) {

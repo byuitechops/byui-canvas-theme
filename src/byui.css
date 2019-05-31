@@ -66,8 +66,8 @@
   border: none;
 }
 
-.byui .ui-accordion .ui-accordion-header.ui-state-default.ui-state-active,
-.byui .ui-accordion .ui-accordion-header.ui-state-default {
+.byui .ui-accordion .ui-accordion-header.ui-state-default,
+.byui .ui-accordion .ui-accordion-header.ui-state-active {
   background: var(--color35);
   color: #fff;
 }
