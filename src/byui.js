@@ -104,6 +104,7 @@
                         }
                         checkJQueryUIAccordion(function () {
                             $('.byui div.accordion').accordion({
+                                autoHeight: false,
                                 heightStyle: 'content',
                                 collapsible: true,
                                 active: false
