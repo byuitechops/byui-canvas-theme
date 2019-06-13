@@ -28,6 +28,7 @@ const negativeHoverColor = "rgba(255, 0, 0, 0.2)";
         addMouseEvents(thumbsDown, negativeClickColor, negativeHoverColor, defaultBackgroundColor);
         addClickEvent(thumbsDown, newDiv, negativeClickColor, "Negative");
 
+        // Append elements to page
         newDiv.appendChild(thumbsUp);
         newDiv.appendChild(thumbsDown);
         document.querySelector("#content").appendChild(newDiv);
@@ -71,10 +72,10 @@ const negativeHoverColor = "rgba(255, 0, 0, 0.2)";
         });
     }
 
-    function addClickEvent(obj, div, color, feedback) {
+    function addClickEvent(button, div, color, feedback) {
         var lineBreak = document.createElement("br");
 
-        obj.addEventListener("click", (event) => {
+        button.addEventListener("click", (event) => {
             event.target.style.backgroundColor = color
             var data = {
                 feedback: feedback,
@@ -85,7 +86,7 @@ const negativeHoverColor = "rgba(255, 0, 0, 0.2)";
             div.appendChild(lineBreak);
             createSurvey(div, data);
             // Loops through all the OTHER buttons and sets their dispay to "none"
-            Array.from(document.querySelector("#inlineFeedback").querySelectorAll("button")).filter(b => b != obj).map(b => b.style.display = "none");
+            Array.from(document.querySelector("#inlineFeedback").querySelectorAll("button")).filter(b => b != button).map(b => b.style.display = "none");
         }, { once: true });
 
     }
