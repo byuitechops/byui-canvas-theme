@@ -89,7 +89,7 @@
     function createSurvey(location, data) {
         var surveyFrame = document.createElement("iframe");
         var courseID = data.contextAssetID.replace("course_", "");
-        var queryString = `?initialFeedback=${data.feedback}&url=${data.url}&userID=${data.userID}&courseID=${courseID}`
+        var queryString = `?initialFeedback=${data.feedback}&URL=${data.url}&userID=${data.userID}&courseID=${courseID}`
         surveyFrame.src = "https://byui.az1.qualtrics.com/jfe/form/SV_9mJ5ihWFBSa6IMl" + queryString;
         surveyFrame.width = "50%";
         surveyFrame.height = "400px";
