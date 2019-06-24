@@ -4,7 +4,8 @@
 
 (function () {
     window.addEventListener('load', editorStyles);
-    document.addEventListener('DOMContentLoaded', main);
+    // document.addEventListener('DOMContentLoaded', main);
+    window.addEventListener('load', main);
 
     function checkForJquery(cb) {
         function loadJquery() {
@@ -417,7 +418,7 @@
 
         initializeAccordion();
         initializeDialog();
-        initializeTabs();
+        // initializeTabs();
         insertVideoTag();
         generateHomePage();
         alterBreadcrumb();
