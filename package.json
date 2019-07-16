@@ -5,7 +5,7 @@
   "main": "byui.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/gulp.cmd"
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,10 @@
     "url": "https://github.com/byuitechops/byui-canvas-theme/issues"
   },
   "homepage": "https://github.com/byuitechops/byui-canvas-theme#readme",
-  "dependencies": {},
+  "dependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp-header": "^2.0.9"
+  },
   "devDependencies": {
     "autoprefixer": "git+https://github.com/postcss/autoprefixer.git",
     "babel-core": "^6.26.3",

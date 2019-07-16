@@ -4,7 +4,8 @@
 
 (function () {
     window.addEventListener('load', editorStyles);
-    document.addEventListener('DOMContentLoaded', main);
+    // document.addEventListener('DOMContentLoaded', main);
+    window.addEventListener('load', main);
 
     function checkForJquery(cb) {
         function loadJquery() {
@@ -52,8 +53,27 @@
                 if ($().accordion === undefined) {
                     var jqueryUIScript = document.createElement('script');
                     // call the callback when it is loaded
-                    jqueryUIScript.addEventListener("load", () => { callback()});
+                    jqueryUIScript.addEventListener("load", () => { callback() });
                     jqueryUIScript.src = 'https://content.byui.edu/file/525e5166-d654-4340-b9b5-d15945a85d4a/1/jquery.ui.1.8.21.accordion.min.js';
+                    document.head.appendChild(jqueryUIScript);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        })
+    }
+
+    function checkJQueryUITab(callback) {
+        // first make sure we have jquery
+        checkForJquery(function () {
+            try {
+                console.log($().tabs);
+                // if we don't have tabs code add it
+                if ($().tabs === undefined) {
+                    var jqueryUIScript = document.createElement('script');
+                    // call the callback when it is loaded
+                    jqueryUIScript.addEventListener("load", () => { callback() });
+                    jqueryUIScript.src = "https://raw.githubusercontent.com/jquery/jquery-ui/1.8.21/ui/jquery.ui.tabs.js";
                     document.head.appendChild(jqueryUIScript);
                 }
             } catch (error) {
@@ -104,6 +124,7 @@
                         }
                         checkJQueryUIAccordion(function () {
                             $('.byui div.accordion').accordion({
+                                autoHeight: false,
                                 heightStyle: 'content',
                                 collapsible: true,
                                 active: false
@@ -156,7 +177,7 @@
                         throw jQueryErr;
                     }
 
-                    $('.byui #styleguide-tabs-demo-minimal').tabs();
+                    $('.byui #styleguide-tabs-demo-minimal, .byui .tabs').tabs();
                 });
             } catch (tabErr) {
                 console.error(tabErr);
