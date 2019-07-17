@@ -2,6 +2,7 @@
 
 .ui-accordion .ui-accordion-content {
   padding: 1em;
+  width: 95%;
 }
 
 .ui-accordion .ui-accordion-header {
@@ -13,7 +14,7 @@
 .byui .ui-accordion .ui-accordion-header {
   display: inline-flex;
   padding: 1em;
-  width: 97%;
+  width: 95%;
 }
 
 .ic-Table.ic-Table--rubric tr td:first-child,
